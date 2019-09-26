@@ -50,21 +50,19 @@ config.mongo = {
 
 config.partnerOnly = env.PARTNER_ONLY;
 config.port      = env.PORT
-config.trxApi    = env.TRX_API
-config.tomoApi   = env.TOMO_API
-config.ontApi    = env.ONT_API
-config.cosmosApi = env.COSMOS_API
+config.trxApi    = env.TRX_WITNESS_API || 'https://apilist.tronscan.org/api/witness'
+config.tomoApi   = env.TOMO_CANDIDATES_API || 'https://master.tomochain.com/api/candidates'
+config.ontApi    = env.ONT_NODES_API || 'https://explorer.ont.io/v2/nodes/current-stakes'
+config.cosmosApi = env.COSMOS_VALIDATORS_API
 config.consul    = {
   enable            : env.CONSUL_ENABLE,
   host              : env.CONSUL_HOST || '127.0.0.1',
   port              : env.CONSUL_PORT || 8500,
   token             : env.CONSUL_TOKEN || '',
   nodeIp            : env.CONSUL_NODE_IP,
-  insight           : env.CONSUL_INSIGHT_NAME || 'sv_insight_xlm',
-  insightInterval   : env.CONSUL_INSIGHT_INTERVAL || '2s',
-  insightDeregister : env.CONSUL_INSIGHT_DEREGISTER || '10s',
-  monitorHost       : env.CONSUL_MONITOR_HOST,
-  monitorPort       : env.CONSUL_MONITOR_PORT
+  name              : env.CONSUL_INSIGHT_NAME || 'sv_staking_api',
+  interval          : env.CONSUL_INTERVAL || '2s',
+  deregister        : env.CONSUL_DEREGISTER || '10s',
 }
 
 module.exports = config;

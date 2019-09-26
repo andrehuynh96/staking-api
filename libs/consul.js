@@ -12,50 +12,20 @@ let consul = new Consul({
     }
 })
 
-let insightAddr = config.consul.nodeIp
-let insightPort = parseInt(config.port)
-
-let fullnodeHost = config.consul.nodeIp
-let fullnodeRpcPort = parseInt(config.consul.rpcPort)
-let fullnodeSocketPort = parseInt(config.consul.socketPort)
-
-let insightId = crypto.createHash('md5').update(`${config.consul.insight}:${insightAddr}:${insightPort}`).digest("hex")
-let rpcId = crypto.createHash('md5').update(`${config.consul.rpc}:${fullnodeHost}:${fullnodeRpcPort}`).digest("hex")
-let socketId = crypto.createHash('md5').update(`${config.consul.socket}:${fullnodeHost}:${fullnodeSocketPort}`).digest("hex")
-
-let tags = [`{"insight": "${insightId}", "rpc": "${rpcId}", "socket": "${socketId}" }`]
+let ip = config.consul.nodeIp
+let port = parseInt(config.port)
+let id = crypto.createHash('md5').update(`${config.consul.name}:${ip}:${port}`).digest("hex")
+let tags = [`{"id": "${id}"}`]
 
 let services = [{
-    name      : config.consul.insight,
-    address   : insightAddr,
-    port      : insightPort,
-    id        : insightId,
+    name      : config.consul.name,
+    address   : ip,
+    port      : port,
+    id        : id,
     check     : {
-        tcp     : `${insightAddr}:${insightPort}`,
-        interval: config.consul.insightInterval || '2s',
-        deregister_critical_service_after: config.consul.insightDeregister || '10s'
-    },
-    tags      : tags
-}, {
-    name      : config.consul.rpc,
-    address   : fullnodeHost,
-    port      : fullnodeRpcPort,
-    id        : rpcId,
-    check     : {
-        tcp     : `${fullnodeHost}:${fullnodeRpcPort}`,
-        interval: config.consul.rpcInterval || '2s',
-        deregister_critical_service_after: config.consul.rpcDeregister || '10s'
-    },
-    tags      : tags
-}, {
-    name      : config.consul.socket,
-    address   : fullnodeHost,
-    port      : fullnodeSocketPort,
-    id        : socketId,
-    check     : {
-        tcp     : `${fullnodeHost}:${fullnodeSocketPort}`,
-        interval: config.consul.socketInterval || '2s',
-        deregister_critical_service_after: config.consul.socketDeregister || '10s'
+        tcp     : `${ip}:${port}`,
+        interval: config.consul.interval || '2s',
+        deregister_critical_service_after: config.consul.deregister || '10s'
     },
     tags      : tags
 }]
@@ -73,7 +43,6 @@ function deregisterService (service, callback) {
 
 exports.register = () => {
     return new Promise((resolve, reject) => {
-        // assuming openFiles is an array of file names
         async.each(services, (service, callback) => {
             if (isNaN(service.port) || service.port <= 0) {
               return
@@ -112,30 +81,12 @@ exports.register = () => {
 
 exports.deregister = () => {
     return new Promise((resolve, reject) => {
-        // assuming openFiles is an array of file names
         async.each(services, (service, callback) => {
             deregisterService(service, (err) => {
                 return callback(null)
             })
         }, (err) => {
             return resolve(null)
-        });
-    })
-}
-
-exports.deregisterRequest = () => {
-    return new Promise((resolve, reject) => {
-        request.post({
-          headers: { 'Content-Type': 'application/json' },
-          url: `http://${config.consul.monitorHost}:${config.consul.monitorPort}/insight/deregister`,
-          body: services[0],
-          json: true
-        }, (err, response, body) => {
-            if (err) {
-              Logger.error(`Request deregister services failed: ${err.message}`)
-            }
-
-            return resolve()
         });
     })
 }

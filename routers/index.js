@@ -10,6 +10,7 @@ class Config {
         var ctrl = new Controller();
 
         router.get('/validators/:platform', ctrl.getValidators.bind(ctrl));
+        router.post('/tx/:platform', ctrl.sendTransaction.bind(ctrl));
         return router;
     };
 }

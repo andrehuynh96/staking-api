@@ -20,8 +20,11 @@ class Service {
       }
 
       query.platform = params.platform || '';
-      query.name     = params.name ? { "$regex": params.name, "$options": "i" } : '';
-      if (config.partnerOnly) {
+      if (params.name) {
+        query.name   = { "$regex": params.name, "$options": "i" };
+      }
+
+      if (config.partnerOnly == true || config.partnerOnly == 'true') {
         query.partner = true;
       }
 
@@ -30,7 +33,7 @@ class Service {
           ValidatorModel.find(query, { '_id': 0, '__v': 0 })
             .skip(offset)
             .limit(limit)
-            .sort({ rank: -1 })
+            .sort({ rank: 1 })
             .exec((err, tokens) => {
               if (err) {
                 return cb(err)
@@ -54,7 +57,7 @@ class Service {
           return cb(err)
         }
 
-        return cb({ total: results[1], from: offset, to: offset + results[0].length - 1, validators: results[0] });
+        return cb(null, { total: results[1], from: offset, to: offset + results[0].length - 1, validators: results[0] });
       })
     }
 }

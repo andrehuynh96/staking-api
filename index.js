@@ -10,7 +10,7 @@ const Logger = require("./libs/logger.js");
 const Routers = require('./routers');
 const ip = require('ip');
 const { tracker } = require('./middleware/response.tracking');
-const {register, deregisterRequest} = require("./libs/consul");
+const {register, deregister} = require("./libs/consul");
 const SyncValidators = require('./services/validators.sync.js');
 
 // Constants.VERSION = require('child_process').execSync(`cd ${__dirname} && git describe --tag`).toString().trim();
@@ -53,7 +53,7 @@ process.on('SIGINT', () => {
     app.server.close((err) => {
         if (isConsuleEnable) {
             Logger.info('SIGINT. De-Registering...');
-            deregisterRequest().then(err => {
+            deregister().then(err => {
                 if (err) {
                     Logger.error(`SIGINT. De-Registering failed: ${err.message}`);
                 }
@@ -73,7 +73,7 @@ mongoose.connect(mongoUrl, (err, db) => {
         return process.exit()
     }
 
-    new SyncValidators().getCosmosValidators();
+    // new SyncValidators().getCosmosValidators();
     app.server.listen(config.port, () => {
         Logger.info(`Started on port ${config.port}`);
         if (isConsuleEnable) {
