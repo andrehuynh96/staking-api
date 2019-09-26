@@ -54,6 +54,7 @@ config.trxApi    = env.TRX_WITNESS_API || 'https://apilist.tronscan.org/api/witn
 config.tomoApi   = env.TOMO_CANDIDATES_API || 'https://master.tomochain.com/api/candidates'
 config.ontApi    = env.ONT_NODES_API || 'https://explorer.ont.io/v2/nodes/current-stakes'
 config.cosmosApi = env.COSMOS_VALIDATORS_API
+config.schedule = env.SCHEDULE_SYNC || '*/5 * * * *'
 config.consul    = {
   enable            : env.CONSUL_ENABLE,
   host              : env.CONSUL_HOST || '127.0.0.1',

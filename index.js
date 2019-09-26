@@ -3,6 +3,7 @@ const Http = require('http');
 const Express = require('express');
 const Cors = require('cors');
 const Morgan = require('morgan');
+const CronJob = require('cron').CronJob;
 const BodyParser = require('body-parser');
 const config = require("./config/config.js");
 const Constants = require("./config/constants.js");
@@ -73,9 +74,13 @@ mongoose.connect(mongoUrl, (err, db) => {
         return process.exit()
     }
 
-    // new SyncValidators().getCosmosValidators();
+    let sync = new SyncValidators();
     app.server.listen(config.port, () => {
         Logger.info(`Started on port ${config.port}`);
+        new CronJob(config.schedule, function() {
+          sync.start();
+        }, null, true, 'America/Los_Angeles', null, true);
+
         if (isConsuleEnable) {
             Logger.info("Consul enable, start registering");
             register().catch(err => {

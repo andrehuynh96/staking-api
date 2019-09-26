@@ -214,6 +214,12 @@ class SyncValidators {
     });
   }
 
+  start () {
+    this.getTrxWitness();
+    this.getOntNodes();
+    this.getTomoNodes();
+    this.getCosmosValidators();
+  }
 }
 
 module.exports = SyncValidators;
