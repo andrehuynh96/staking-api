@@ -70,7 +70,7 @@ Log4js.configure({
         }
     }
 });
-const instance = Log4js.getLogger('INFINITO-XLM-INSIGHT');
+const instance = Log4js.getLogger('INFINITO-STAKING-API');
 
 instance.getLogger = function(name) {
     return Log4js.getLogger(name);

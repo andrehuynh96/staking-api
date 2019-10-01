@@ -31,12 +31,13 @@ class Response {
      * @memberof BaseApiController
      */
     static fail(data) {
+        console.log("data = ", data)
         // check to see if this error is from fullnode
-        if (data && data.code != null && data.code != undefined && typeof(data.code) == "number" && data.name && data.what) {
+        if (data && data.message) {
             let result = {
                 cd   : 1,
                 msg  : "",
-                data : data
+                data : data.message
             }
 
             return result

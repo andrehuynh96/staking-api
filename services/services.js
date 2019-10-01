@@ -12,7 +12,7 @@ class Service {
     getValidators (params, cb) {
       let offset = 0, limit = 50, query = {};
       if (params.offset) {
-          offset = parseInt(req.query.offset) || 0;
+          offset = parseInt(params.offset) || 0;
       }
 
       if (params.limit) {

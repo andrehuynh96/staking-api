@@ -133,7 +133,7 @@ class SyncValidators {
       }
 
 
-      logger.info(`Saving ${body.result.length} trx witness`);
+      logger.info(`Saving ${body.result.length} ont candidate nodes`);
       body.result.forEach((node, i) => {
         if (!node.name || !node.address || !node.public_key) {
           return
