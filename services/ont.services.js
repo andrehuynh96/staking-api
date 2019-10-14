@@ -34,34 +34,9 @@ class OntService {
 				}
 				let result = []
 				if(bodyJson.data && bodyJson.data.length > 0){
-					let delegations = bodyJson.data;
-					async.eachLimit(delegations, 5, function(delegation, callback){
-						let query = {};
-						query.public_key = { "$regex": delegation.validator.public_key, "$options": "i" };
-						ValidatorModel.findOne(query, { '_id': 0, '__v': 0 })
-							.sort({ rank: 1 })
-							.lean()
-							.exec((err, token) => {
-								if (err) {
-									return callback(err)
-								}
-
-								result.push({validator: token,
-											delegator: delegation.delegator})
-								callback()
-							})
-					}, function(error) {
-						if(error) {
-							console.log('A request failed to process');
-							return cb(err)
-						} else {
-							console.log('All request have been processed successfully');
-							return cb(null, result);
-						}
-					});
-				} else {
-					return cb(null, result);
+          result = bodyJson.data;
 				}
+        return cb(null, result);
 			} catch (error) {
 				logger.error(error);
 				return cb(error, null);
