@@ -9,8 +9,9 @@ class Config {
         var router = Router();
         var ctrl = new Controller();
 
-        router.get('/validators/:platform', ctrl.getValidators.bind(ctrl));
-        router.post('/tx/:platform', ctrl.sendTransaction.bind(ctrl));
+        router.get('/:platform/validators/', ctrl.getValidators.bind(ctrl));
+        router.get('/:platform/addr/:addr/delegations/', ctrl.getDelegations.bind(ctrl));
+        router.post('/:platform/tx/send', ctrl.sendTransaction.bind(ctrl));
         return router;
     };
 }

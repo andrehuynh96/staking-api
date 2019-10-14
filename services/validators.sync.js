@@ -9,7 +9,7 @@ class SyncValidators {
   }
 
   getTrxWitness () {
-    logger.info(`Processing trx witness`);
+    console.log(`Processing trx witness`);
     let options = { method: 'GET',
       url     : config.trxApi,
       json    : true,
@@ -25,7 +25,7 @@ class SyncValidators {
         return logger.error(`Get trx witness failed: ${error.message}`)
       };
 
-      logger.info(`Saving ${body.length} trx witness`);
+      console.log(`Saving ${body.length} trx witness`);
       if (body[1].votes > body[0].votes) {
         logger.error(`Tron scan should return witness in asc order of votes but it not.`)
       }
@@ -64,7 +64,7 @@ class SyncValidators {
     async.until(function test(cb) {
       cb(null, processed >= total);
     }, function iter(next) {
-      logger.info(`Processing tomochain page ${page}`);
+      console.log(`Processing tomochain page ${page}`);
       let options = {
         method  : 'GET',
         url     : config.tomoApi,
@@ -87,7 +87,7 @@ class SyncValidators {
         return logger.error(`Get tomochain master nodes error: ${err.message}`)
       }
 
-      logger.info(`Saving ${results.length} tomo masternodes`);
+      console.log(`Saving ${results.length} tomo masternodes`);
       results.forEach((node, i) => {
         if (!node.candidate || !node.name || !node.isMasternode) {
           return
@@ -133,15 +133,17 @@ class SyncValidators {
       }
 
 
-      logger.info(`Saving ${body.result.length} ont candidate nodes`);
+      console.log(`Saving ${body.result.length} ont candidate nodes`);
+      // console.log('body.result :', body.result);
       body.result.forEach((node, i) => {
         if (!node.name || !node.address || !node.public_key) {
+          console.log('node :', node);
           return
         }
 
         // tronscan return in order
         ValidatorModel.findOneAndUpdate({
-          address         : node.address
+          public_key         : node.public_key
         }, {
           $setOnInsert    : {
             partner       : false
@@ -156,7 +158,7 @@ class SyncValidators {
           commission      : node.node_proportion,
         }, { upsert: true }, (err, res) => {
           if (err) {
-            return logger.error(`Failed to insert/update trx witness: ${err.message}`)
+            return logger.error(`Failed to insert/update ont witness: ${err.message}`)
           }
         })
       })
@@ -180,7 +182,7 @@ class SyncValidators {
       }
 
 
-      logger.info(`Saving ${body.length} cosmos validators`);
+      console.log(`Saving ${body.length} cosmos validators`);
       body.sort(function(a, b) {
         return parseInt(b.tokens) - parseInt(a.tokens);
       });

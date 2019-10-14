@@ -3,92 +3,106 @@ const async = require("async");
 const logger = require("./../libs/logger");
 const Message = require("./../libs/messages");
 const config = require("./../config/config.js");
+const ValidatorModel = require("../models/Validator.js");
 
 class OntService {
-  constructor() {
-    var self = this;
-    this.rpcUrl = config.ontRpc.url;
-    this.sendRawEndPoints = [];
-    
-    logger.info(`RPC url: ${config.ontRpc.url}`)
-    
-    if (config.sendRawEndPoints && config.sendRawEndPoints.length > 0) {
-      this.sendRawEndPoints = config.sendRawEndPoints.split(",");
-    }
+	constructor() {
+		var self = this;
+    self.baseURL = config.ontRpc.insight;
+    self.rpcURL = config.ontRpc.url;
+		self.sendRawTransaction         = self.baseURL  + "/tx/send";
+		self.getAddrDelegationsURL      = self.baseURL  + "/addr/{address}/delegations";
+		self.getAddressRewardsURL       = self.baseURL  + "/addr/{address}/rewards";
+		logger.info(`Connect to Insight:  ONT ${this.baseURL}`);
+	}
 
-    let isConsuleEnable = parseInt(config.consul.enable) === 1 ? true : false
-    if (isConsuleEnable) {
-      watch(config.ontRpc.name, (err, nodes) => {
-        if (err) {
-          return logger.error(`Watch consul's nodes change failed: ${err.message}`)
-        }
+  getDelegations(address, cb){
+		var self = this;
+		var url = self.getAddrDelegationsURL;
+		url = url.replace("{address}", address);
+		request(url, function (err, response, body){
+			try {
+				//have error
+				if (response.statusCode !== 200) {
+					return cb(body, null);
+				}
 
-        nodes.forEach(node => {
-          this.sendRawEndPoints.push(`http://${node.ServiceAddress}:${node.ServicePort}`)
-        })
-      })
-    } else {
-      this.sendRawEndPoints.push(this.rpcUrl);
-    }
-  }
+				var bodyJson = JSON.parse(body);
+				if (bodyJson.cd != 0) {
+					// do not process data if cd != 0 ~ error
+					return cb(bodyJson, null);
+				}
+				let result = []
+				if(bodyJson.data && bodyJson.data.length > 0){
+					let delegations = bodyJson.data;
+					async.eachLimit(delegations, 5, function(delegation, callback){
+						let query = {};
+						query.public_key = { "$regex": delegation.validator.public_key, "$options": "i" };
+						ValidatorModel.findOne(query, { '_id': 0, '__v': 0 })
+							.sort({ rank: 1 })
+							.lean()
+							.exec((err, token) => {
+								if (err) {
+									return callback(err)
+								}
+
+								result.push({validator: token,
+											delegator: delegation.delegator})
+								callback()
+							})
+					}, function(error) {
+						if(error) {
+							console.log('A request failed to process');
+							return cb(err)
+						} else {
+							console.log('All request have been processed successfully');
+							return cb(null, result);
+						}
+					});
+				} else {
+					return cb(null, result);
+				}
+			} catch (error) {
+				logger.error(error);
+				return cb(error, null);
+			}
+		});
+	}
 
   /**
-     * To send raw transaction to blockchian
-     * @param hexData Hex encoded data
-     * @param preExec Decides if it is a pre-execute transaction
-     * @param userId  User's id
-     */
-    sendRawTx(params, cb){
-      var body = {
-          Action: 'sendrawtransaction',
-          Version: 'v1.0.0',
-          Data: params.rawtx
-      };
-      console.log("\sendRawEndPoints: \n", this.sendRawEndPoints);
+   * To send raw transaction to blockchian
+   * @param hexData Hex encoded data
+   * @param preExec Decides if it is a pre-execute transaction
+   * @param userId  User's id
+   */
+  sendRawTx(params, cb){
+    var self = this;
+    var rawtx = params.rawtx;
+		var url = self.sendRawTransaction;
+		logger.getLogger("rawtx").info("rawtx", "ONT", rawtx);
 
-      let result = {}
-      let error  = null
-
-      async.each(this.sendRawEndPoints, function (endPoint, callback) {
-        logger.info(`\nPush raw to: ${endPoint} done.`);
-          request.post({
-              headers: {'content-type': 'application/x-www-form-urlencoded'},
-              url: endPoint + '/api/v1/transaction',
-              body: JSON.stringify(body),
-              timeout: 15000,
-              json: true
-          }, (err, response, body) => {
-              if(err){
-                logger.error(`Make push_transaction request to ${endPoint} failed: ${err.message}`);
-                  error = Message.E00015;
-                  return callback();
-              }
-
-              console.log("body = ", body)
-
-              if (!body.Error) {
-                  // if one of requests return success, return immediately
-                  result = body.Result;
-                  return callback(new Error("Success"));
-              }
-
-              // because we call many request, so only return error if all of them was failed
-              if (body.Error) {
-                logger.error(`Send raw to ${endPoint} failed: `, body.Result);
-                  let bodySplit = body.Result.split("!:"); 
-                  error = bodySplit[bodySplit.length - 1];
-                  return callback();
-              }
-          });
-      }, (err) => {
-          // if any of the request processing produced an error, that mean one of them has success
-          if (err) {
-              return cb(null, result)
-          }
-
-          return cb({message: error}, null)
-      });
-  }
+		request.post({ url: url, form: { hexData: rawtx } }, function (err, response, body) {
+			if (err) {
+				return cb(err, null);
+			}
+			
+			if (response.statusCode == 200) {
+        body = JSON.parse(body);
+        console.log('body :', body);
+				if (body) {
+					if (body.cd == 0) {
+						let data = {
+							tx_id: body.data
+						};
+						return cb(null, data);
+					} else {
+						return cb({message: body.msg}, null);
+					}
+				}
+			}
+			return cb(response.statusCode, null);
+		});
+	}
 }
 
 module.exports = OntService;

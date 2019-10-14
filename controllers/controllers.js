@@ -7,7 +7,6 @@ const TomoService = require("../services/tomo.services");
 const CosmosService = require("../services/cosmos.services");
 const Response = require("../libs/response.js");
 const Message = require("./../libs/messages");
-const logger = require("./../libs/logger");
 
 class Controller {
 
@@ -45,6 +44,58 @@ class Controller {
   }
 
   /**
+   * Get Delegations
+   *
+   * @param {any} req
+   * @param {any} res
+   * @memberof Controller
+   */
+  getDelegations(req, res) {
+    let platform = req.params.platform;
+    let address  = req.params.addr;
+    switch (platform) {
+      case 'TRX':
+        this.trxService.getDelegations(address, (err, data) => {
+          if (err) {
+              return res.send(Response.fail(err));
+          }
+  
+          return res.send(Response.ok(data));
+        });
+        break;
+      case 'ONT':
+        this.ontService.getDelegations(address, (err, data) => {
+          if (err) {
+              return res.send(Response.fail(err));
+          }
+  
+          return res.send(Response.ok(data));
+        });
+        break;
+      case 'COSMOS':
+          this.cosmosService.getDelegations(address, (err, data) => {
+            if (err) {
+                return res.send(Response.fail(err));
+            }
+    
+            return res.send(Response.ok(data));
+          });
+        break;
+      // case 'TOMO':
+      //     this.tomoService.getDelegations(params, (err, data) => {
+      //       if (err) {
+      //           return res.send(Response.fail(err));
+      //       }
+    
+      //       return res.send(Response.ok(data));
+      //     });
+      //   break;
+      default:
+        return res.send(Response.fail(new Error(`Unsupported platform ${params.platform}`)));
+    }
+  }
+
+  /**
    * sendTransaction
    *
    * @param {any} req
@@ -59,33 +110,29 @@ class Controller {
 
     let sendTx = null;
     params.platform = req.params.platform;
-    logger.info(`Parameters to stake: ${params}`);
     switch (params.platform) {
       case 'TRX':
         this.trxService.sendRawTx(params, (err, data) => {
           if (err) {
-              return res.send(Response.fail(err));
+            return res.send(Response.fail(err));
           }
-  
           return res.send(Response.ok(data));
         });
         break;
       case 'ONT':
         this.ontService.sendRawTx(params, (err, data) => {
           if (err) {
-              return res.send(Response.fail(err));
+            return res.send(Response.fail(err));
           }
-  
           return res.send(Response.ok(data));
         });
         break;
       case 'COSMOS':
           this.cosmosService.sendRawTx(params, (err, data) => {
             if (err) {
-                return res.send(Response.fail(err));
+                return res.send(err);
             }
-    
-            return res.send(Response.ok(data));
+            return res.send(data);
           });
         break;
       case 'TOMO':
@@ -93,7 +140,6 @@ class Controller {
             if (err) {
                 return res.send(Response.fail(err));
             }
-    
             return res.send(Response.ok(data));
           });
         break;

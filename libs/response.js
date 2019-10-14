@@ -31,7 +31,6 @@ class Response {
      * @memberof BaseApiController
      */
     static fail(data) {
-        console.log("data = ", data)
         // check to see if this error is from fullnode
         if (data && data.message) {
             let result = {

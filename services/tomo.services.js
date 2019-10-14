@@ -46,6 +46,8 @@ class TomoService {
 
   async sendRawTx(params, cb) {
     let self = this;
+    let rawtx = params.rawtx;
+    delete params.rawtx;
     try {
         let options = {
             method: 'POST',
@@ -57,7 +59,7 @@ class TomoService {
             body: {
                 jsonrpc: '2.0',
                 method: 'eth_sendRawTransaction',
-                params: [ '0x' + params.rawtx ],
+                params: [ '0x' + rawtx ],
                 id: 1
             },
             json: true
@@ -67,11 +69,14 @@ class TomoService {
         console.log("body = ", body);
 
         if(body.error) {
-          logger.error(`Send raw to ${self.rpcUrl} failed, msg: `, body.error);
+          params.error = body.error;
+          logger.error(JSON.stringify(params));
           return cb(new Error(body.error.message), null);
         }
 
         if(body.result){
+          params.tx_id = body.result;
+          logger.info(JSON.stringify(params));
           return cb(null, {tx_id: body.result});
         }
 

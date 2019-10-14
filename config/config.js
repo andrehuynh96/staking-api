@@ -68,6 +68,7 @@ config.consul    = {
 
 config.trxRpc = {
   name : env.TRX_CONSUL_RPC_NAME || 'sv_fullnode_rpc_trx',
+  insight: env.TRX_INSIGHT_DEFAULT || "127.0.0.1:3001",
   url  : env.TRX_RPC_DEFAULT || '127.0.0.1:3000',
 }
 
@@ -77,12 +78,14 @@ config.tomoRpc = {
 }
 
 config.ontRpc = {
-  name : env.ONT_CONSUL_RPC_NAME || 'sv_fullnode_rpc_ont',
-  url  : env.ONT_RPC_DEFAULT || '127.0.0.1:3000',
+  name    : env.ONT_CONSUL_RPC_NAME || 'sv_fullnode_rpc_ont',
+  insight : env.ONT_INSIGHT_DEFAULT || "127.0.0.1:3001",
+  url     : env.ONT_RPC_DEFAULT || '127.0.0.1:3000',
 }
 
 config.cosmosRpc = {
   name    : env.COSMOS_CONSUL_RPC_NAME || 'sv_insight_rpc_cosmos',
+  insight : env.COSMOS_INSIGHT_DEFAULT || "127.0.0.1:3001",
   url     : env.COSMOS_RPC_DEFAULT || '127.0.0.1:3000',
   chainId : env.COSMOS_CHAIN_ID || 'cosmoshub-2'
 }
