@@ -77,49 +77,47 @@ class CosmosService {
 	}
 
 
-	sendRawTx(params, cb) {
-		{
-			var self = this;
-			var url = self.sendRawTransaction;
-			var rawtx = params.rawtx;
-			var data = {
-				"rawtx" : rawtx
+	sendRawTx(params, cb){
+		var self = this;
+		var url = self.sendRawTransaction;
+		var rawtx = params.rawtx;
+		var data = {
+			"rawtx" : rawtx
+		}
+		logger.getLogger("rawtx").info("rawtx", "ATOM", rawtx);
+
+		request.post({
+			headers  : { 'content-type': 'application/json' },
+			url      : url,
+			body     : data,
+			timeout  : 15000,
+			json     : true
+		}, (err, response, body) => {
+			if(err){
+				console.log(err.message);
+				return cb(err, null);
 			}
-			logger.getLogger("rawtx").info("rawtx", "ATOM", rawtx);
-	
-			request.post({
-				headers  : { 'content-type': 'application/json' },
-				url      : url,
-				body     : data,
-				timeout  : 15000,
-				json     : true
-			}, (err, response, body) => {
-				if(err){
-					console.log(err.message);
-					return cb(err, null);
-				}
-	
-				if(response.statusCode != 200)  {
-					return cb(new Error(`ATOM insight is unreachable, status code: ${response.statusCode}`), null);
-				}
-				console.log('body :', body);
-				if (response.statusCode == 200) {
-					if (body) {
-						if (body.cd == 0) {
-							let data = {
-								tx_id: body.data.tx_id
-							};
-							return cb(null, data);
-						} else {
-							if(body.msg){
-								cb({message: body.msg}, null);
-							}
-							return cb({message: body.data.message}, null);
+
+			if(response.statusCode != 200)  {
+				return cb(new Error(`ATOM insight is unreachable, status code: ${response.statusCode}`), null);
+			}
+			console.log('body :', body);
+			if (response.statusCode == 200) {
+				if (body) {
+					if (body.cd == 0) {
+						let data = {
+							tx_id: body.data.tx_id
+						};
+						return cb(null, data);
+					} else {
+						if(body.msg){
+							cb({message: body.msg}, null);
 						}
+						return cb({message: body.data.message}, null);
 					}
 				}
-			});
-		}
+			}
+		});
 	}
 	
 }

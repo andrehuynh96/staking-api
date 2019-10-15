@@ -8,15 +8,15 @@ const ValidatorModel = require("../models/Validator.js");
 class OntService {
 	constructor() {
 		var self = this;
-    self.baseURL = config.ontRpc.insight;
-    self.rpcURL = config.ontRpc.url;
+		self.baseURL = config.ontRpc.insight;
+		self.rpcURL = config.ontRpc.url;
 		self.sendRawTransaction         = self.baseURL  + "/tx/send";
 		self.getAddrDelegationsURL      = self.baseURL  + "/addr/{address}/delegations";
 		self.getAddressRewardsURL       = self.baseURL  + "/addr/{address}/rewards";
 		logger.info(`Connect to Insight:  ONT ${this.baseURL}`);
 	}
 
-  getDelegations(address, cb){
+	getDelegations(address, cb){
 		var self = this;
 		var url = self.getAddrDelegationsURL;
 		url = url.replace("{address}", address);
@@ -34,9 +34,9 @@ class OntService {
 				}
 				let result = []
 				if(bodyJson.data && bodyJson.data.length > 0){
-          result = bodyJson.data;
+					result = bodyJson.data;
 				}
-        return cb(null, result);
+				return cb(null, result);
 			} catch (error) {
 				logger.error(error);
 				return cb(error, null);
@@ -44,15 +44,15 @@ class OntService {
 		});
 	}
 
-  /**
+	/**
    * To send raw transaction to blockchian
    * @param hexData Hex encoded data
    * @param preExec Decides if it is a pre-execute transaction
    * @param userId  User's id
    */
-  sendRawTx(params, cb){
-    var self = this;
-    var rawtx = params.rawtx;
+	sendRawTx(params, cb){
+		var self = this;
+		var rawtx = params.rawtx;
 		var url = self.sendRawTransaction;
 		logger.getLogger("rawtx").info("rawtx", "ONT", rawtx);
 
@@ -62,8 +62,8 @@ class OntService {
 			}
 			
 			if (response.statusCode == 200) {
-        body = JSON.parse(body);
-        console.log('body :', body);
+				body = JSON.parse(body);
+				console.log('body :', body);
 				if (body) {
 					if (body.cd == 0) {
 						let data = {

@@ -9,14 +9,14 @@ const ValidatorModel = require("../models/Validator.js");
 class TrxService {
 	constructor() {
 		var self = this;
-    self.baseURL = config.trxRpc.insight;
+		self.baseURL = config.trxRpc.insight;
 		self.sendRawTransaction         = self.baseURL  + "/tx/send";
 		self.getAddrDelegationsURL      = self.baseURL  + "/addr/{address}/delegations";
 		self.getAddressRewardsURL       = self.baseURL  + "/addr/{address}/rewards";
 		logger.info(`Connect to Insight:  TRX ${this.baseURL}`);
 	}
 
-  getDelegations(address, cb){
+	getDelegations(address, cb){
 		var self = this;
 		var url = self.getAddrDelegationsURL;
 		url = url.replace("{address}", address);
@@ -27,8 +27,8 @@ class TrxService {
 					return cb(body, null);
 				}
 
-        var bodyJson = JSON.parse(body);
-        console.log('bodyJson :', bodyJson);
+				var bodyJson = JSON.parse(body);
+				console.log('bodyJson :', bodyJson);
 				if (bodyJson.cd != 0) {
 					// do not process data if cd != 0 ~ error
 					return cb(bodyJson, null);
@@ -49,10 +49,10 @@ class TrxService {
 
 								result.push({validator: token,
 											delegator: {
-                        address: address,
-                        vote_amount: delegation.vote_count
-                      }})
-								callback()
+											address: address,
+											vote_amount: delegation.vote_count
+										}})
+								callback();
 							})
 					}, function(error) {
 						if(error) {
@@ -73,10 +73,10 @@ class TrxService {
 		});
 	}
 
-  sendRawTx(params, cb) {
+	sendRawTx(params, cb) {
 		var self = this;
-    var url = self.sendRawTransaction;
-    var rawtx = params.rawtx;
+		var url = self.sendRawTransaction;
+		var rawtx = params.rawtx;
 		var data = {
             "rawtx" : rawtx
         }
