@@ -90,4 +90,6 @@ config.cosmosRpc = {
   chainId : env.COSMOS_CHAIN_ID || 'cosmoshub-2'
 }
 
+config.everstakeUrl = env.EVERSTAKE_URL
+
 module.exports = config;

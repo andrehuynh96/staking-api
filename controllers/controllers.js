@@ -165,6 +165,54 @@ class Controller {
     });*/
   }
 
+  everstakeGetOrders(req, res){
+    let address = req.params.addr;
+    let platform = req.params.platform;
+    let offset = 0, limit = 50;
+
+		if (req.query.offset) {
+			offset = req.query.offset <= 0 ? 0 : parseInt(req.query.offset);
+		}
+
+		if (req.query.limit) {
+			limit = req.query.limit <= 0 || req.query.limit > 50 ? 50 : parseInt(req.query.limit);
+		}
+
+    switch(platform) {
+      case "COSMOS":
+        this.cosmosService.everstakeGetOrders(address, offset, limit, (err, data) => {
+          if (err) {
+              return res.send(Response.fail(err));
+          }
+          return res.send(Response.ok(data));
+        });
+        break;
+      
+      default:
+        return res.send(Response.fail(new Error(`Unsupported platform ${platform}`)));
+    }
+  }
+
+  everstakeOrder(req, res){
+    let delegator  = req.body.delegator;
+    let validator  = req.body.validator;
+    let platform   = req.body.platform;
+    let amount     = req.body.amount;
+
+    switch (platform) {
+      case "COSMOS":
+        this.cosmosService.everstakeOrder(delegator, validator, amount, (err, data) => {
+          if (err) {
+              return res.send(Response.fail(err));
+          }
+          return res.send(Response.ok(data));
+        });
+        break;
+
+      default:
+        return res.send(Response.fail(new Error(`Unsupported platform ${platform}`)));
+    }
+  }
 }
 
 module.exports = Controller;
