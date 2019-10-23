@@ -5,6 +5,7 @@ const TrxService = require("../services/trx.services");
 const OntService = require("../services/ont.services");
 const TomoService = require("../services/tomo.services");
 const CosmosService = require("../services/cosmos.services");
+const IrisService = require("../services/iris.services");
 const Response = require("../libs/response.js");
 const Message = require("./../libs/messages");
 
@@ -20,6 +21,7 @@ class Controller {
     this.ontService = new OntService();
     this.tomoService = new TomoService();
     this.cosmosService = new CosmosService();
+    this.irisService = new IrisService();
   }
 
   /**
@@ -34,7 +36,8 @@ class Controller {
     let offset = req.query.offset;
     let limit = req.query.limit;
     let name = req.query.name ? req.query.name : '';
-    this.service.getValidators({ platform: platform, offset: offset, limit: limit, name: name }, (err, data) => {
+    let jailed = req.query.jailed ? req.query.jailed : false;
+    this.service.getValidators({ platform: platform, offset: offset, limit: limit, name: name, jailed: jailed }, (err, data) => {
       if (err) {
           return res.send(Response.fail(err));
       }
@@ -81,15 +84,15 @@ class Controller {
             return res.send(Response.ok(data));
           });
         break;
-      // case 'TOMO':
-      //     this.tomoService.getDelegations(params, (err, data) => {
-      //       if (err) {
-      //           return res.send(Response.fail(err));
-      //       }
+      case 'IRIS':
+          this.irisService.getDelegations(address, (err, data) => {
+            if (err) {
+                return res.send(err);
+            }
     
-      //       return res.send(Response.ok(data));
-      //     });
-      //   break;
+            return res.send(Response.ok(data));
+          });
+        break;
       default:
         return res.send(Response.fail(new Error(`Unsupported platform ${params.platform}`)));
     }
@@ -142,6 +145,15 @@ class Controller {
             }
             return res.send(Response.ok(data));
           });
+        break;
+
+      case 'IRIS':
+        this.irisService.sendRawTx(params, (err, data) => {
+          if (err) {
+              return res.send(err);
+          }
+          return res.send(data);
+        });
         break;
       default:
         return res.send(Response.fail(new Error(`Unsupported platform ${params.platform}`)));

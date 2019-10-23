@@ -166,33 +166,80 @@ class SyncValidators {
   }
 
   getCosmosValidators () {
-    let options = {
-      method  : 'GET',
-      url     : config.cosmosApi,
-      json    : true
-    };
+    let page = 1, results = [], done = false;;
+    async.until(function test(cb) {
+      cb(null, done);
+    }, function iter(next) {
+      console.log(`Processing cosmos page ${page}`);
+      let options = {
+        method  : 'GET',
+        url     : config.cosmosApi,
+        qs      : { page: page++ },
+        json    : true
+      };
 
-    request(options, (err, response, body) => {
+      request(options, (error, response, body) => {
+        if (error) {
+          return next(error);
+        }
+
+        if(body.length == 0){
+          done = true;
+        }
+
+        results = results.concat(body);
+        return next();
+      });
+    }, function done (err) {
       if (err) {
-        return logger.error(`Get cosmos validators failed: ${err.message}`)
+        return logger.error(`Get cosmos validators error: ${err.message}`)
       }
 
-      if (!body || body.length <= 0) {
-        return logger.error(`Invalid cosmos validators response: ${body}`)
-      }
+      console.log(`Saving ${results.length} cosmos validators`);
 
+      let jailedArray = results.filter(result => {
+        return result.jailed;
+      });
 
-      console.log(`Saving ${body.length} cosmos validators`);
-      body.sort(function(a, b) {
+      let unjailedArray = results.filter(result => {
+        return !result.jailed;
+      });
+
+      unjailedArray.sort(function(a, b) {
         return parseInt(b.tokens) - parseInt(a.tokens);
       });
 
-      body.forEach((node, i) => {
+      jailedArray.forEach((node, i) => {
         if (!node.description || !node.description.moniker || !node.operator_address || !node.commission) {
           return
         }
 
-        // tronscan return in order
+        ValidatorModel.findOneAndUpdate({
+          address         : node.operator_address
+        }, {
+          $setOnInsert    : {
+            partner       : false
+          },
+          name            : node.description.moniker || '',
+          website         : node.description.website || '',
+          rank            : 0,
+          address         : node.operator_address,
+          public_key      : node.consensus_pubkey,
+          platform        : 'COSMOS',
+          votes           : node.tokens || 0,
+          commission      : node.commission.rate ? parseFloat(node.commission.rate)*100 + "%" : '0%',
+          jailed          : node.jailed,
+        }, { upsert: true }, (err, res) => {
+          if (err) {
+            return logger.error(`Failed to insert/update cosmmos validators: ${err.message}`)
+          }
+        })
+      })
+
+      unjailedArray.forEach((node, i) => {
+        if (!node.description || !node.description.moniker || !node.operator_address || !node.commission) {
+          return
+        }
         ValidatorModel.findOneAndUpdate({
           address         : node.operator_address
         }, {
@@ -207,13 +254,113 @@ class SyncValidators {
           platform        : 'COSMOS',
           votes           : node.tokens || 0,
           commission      : node.commission.rate ? parseFloat(node.commission.rate)*100 + "%" : '0%',
+          jailed          : node.jailed,
         }, { upsert: true }, (err, res) => {
           if (err) {
-            return logger.error(`Failed to insert/update cosmos validators: ${err.message}`)
+            return logger.error(`Failed to insert/update cosmmos validators: ${err.message}`)
           }
         })
       })
-    });
+    })
+  }
+
+  getIrisValidators () {
+    let page = 1, results = [], done = false;;
+    async.until(function test(cb) {
+      cb(null, done);
+    }, function iter(next) {
+      console.log(`Processing iris page ${page}`);
+      let options = {
+        method  : 'GET',
+        url     : config.irisApi,
+        qs      : { page: page++ },
+        json    : true
+      };
+
+      request(options, (error, response, body) => {
+        if (error) {
+          return next(error);
+        }
+
+        if(body.length == 0){
+          done = true;
+        }
+
+        results = results.concat(body);
+        return next();
+      });
+    }, function done (err) {
+      if (err) {
+        return logger.error(`Get iris validators error: ${err.message}`)
+      }
+
+      console.log(`Saving ${results.length} iris validators`);
+
+      let jailedArray = results.filter(result => {
+        return result.jailed;
+      });
+
+      let unjailedArray = results.filter(result => {
+        return !result.jailed;
+      });
+
+      unjailedArray.sort(function(a, b) {
+        return parseInt(b.tokens) - parseInt(a.tokens);
+      });
+
+      jailedArray.forEach((node, i) => {
+        if (!node.description || !node.description.moniker || !node.operator_address || !node.commission) {
+          return
+        }
+
+        ValidatorModel.findOneAndUpdate({
+          address         : node.operator_address
+        }, {
+          $setOnInsert    : {
+            partner       : false
+          },
+          name            : node.description.moniker || '',
+          website         : node.description.website || '',
+          rank            : 0,
+          address         : node.operator_address,
+          public_key      : node.consensus_pubkey,
+          platform        : 'IRIS',
+          votes           : node.tokens || 0,
+          commission      : node.commission.rate ? parseFloat(node.commission.rate)*100 + "%" : '0%',
+          jailed          : node.jailed,
+        }, { upsert: true }, (err, res) => {
+          if (err) {
+            return logger.error(`Failed to insert/update iris validators: ${err.message}`)
+          }
+        })
+      })
+
+      unjailedArray.forEach((node, i) => {
+        if (!node.description || !node.description.moniker || !node.operator_address || !node.commission) {
+          return
+        }
+        ValidatorModel.findOneAndUpdate({
+          address         : node.operator_address
+        }, {
+          $setOnInsert    : {
+            partner       : false
+          },
+          name            : node.description.moniker || '',
+          website         : node.description.website || '',
+          rank            : i+1,
+          address         : node.operator_address,
+          public_key      : node.consensus_pubkey,
+          platform        : 'IRIS',
+          votes           : node.tokens || 0,
+          commission      : node.commission.rate ? parseFloat(node.commission.rate)*100 + "%" : '0%',
+          jailed          : node.jailed,
+        }, { upsert: true }, (err, res) => {
+          if (err) {
+            return logger.error(`Failed to insert/update iris validators: ${err.message}`)
+          }
+        })
+      })
+    })
   }
 
   start () {
@@ -221,6 +368,7 @@ class SyncValidators {
     this.getOntNodes();
     this.getTomoNodes();
     this.getCosmosValidators();
+    this.getIrisValidators();
   }
 }
 

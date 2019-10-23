@@ -54,6 +54,7 @@ config.trxApi    = env.TRX_WITNESS_API || 'https://apilist.tronscan.org/api/witn
 config.tomoApi   = env.TOMO_CANDIDATES_API || 'https://master.tomochain.com/api/candidates'
 config.ontApi    = env.ONT_NODES_API || 'https://explorer.ont.io/v2/nodes/current-stakes'
 config.cosmosApi = env.COSMOS_VALIDATORS_API
+config.irisApi   = env.IRIS_VALIDATORS_API
 config.schedule = env.SCHEDULE_SYNC || '*/5 * * * *'
 config.consul    = {
   enable            : env.CONSUL_ENABLE,
@@ -88,6 +89,13 @@ config.cosmosRpc = {
   insight : env.COSMOS_INSIGHT_DEFAULT || "127.0.0.1:3001",
   url     : env.COSMOS_RPC_DEFAULT || '127.0.0.1:3000',
   chainId : env.COSMOS_CHAIN_ID || 'cosmoshub-2'
+}
+
+config.irisRpc = {
+  name    : env.IRIS_CONSUL_RPC_NAME || 'sv_insight_rpc_iris',
+  insight : env.IRIS_INSIGHT_DEFAULT || "127.0.0.1:3001",
+  url     : env.IRIS_RPC_DEFAULT || '127.0.0.1:3000',
+  chainId : env.IRIS_CHAIN_ID || 'irishub'
 }
 
 config.everstakeUrl = env.EVERSTAKE_URL
