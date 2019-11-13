@@ -7,10 +7,10 @@ const cosmosjs   = require("@cosmostation/cosmosjs");
 const ValidatorModel = require("../models/Validator.js");
 const OrderModel = require("../models/Order.js")
 
-class CosmosService {
+class IrisService {
 	constructor() {
 		var self = this;
-		self.baseURL = config.cosmosRpc.insight;
+		self.baseURL = config.irisRpc.insight;
 		self.sendRawTransaction         = self.baseURL  + "/tx/send";
 		self.getAddrDelegationsURL      = self.baseURL  + "/addr/{address}/delegations";
 		self.getAddressRewardsURL       = self.baseURL  + "/addr/{address}/rewards";
@@ -30,6 +30,8 @@ class CosmosService {
 				}
 
 				var bodyJson = JSON.parse(body);
+
+				console.log('bodyJson :', bodyJson);
 				if (bodyJson.cd != 0) {
 					// do not process data if cd != 0 ~ error
 					return cb(bodyJson, null);
@@ -39,7 +41,7 @@ class CosmosService {
 					let delegations = bodyJson.data;
 					async.eachLimit(delegations, 5, function(delegation, callback){
 						let query = {};
-						query.address = { "$regex": delegation.validator_address, "$options": "i" };
+						query.address = { "$regex": delegation.validator_addr, "$options": "i" };
 						ValidatorModel.findOne(query, { '_id': 0, '__v': 0 })
 							.sort({ rank: 1 })
 							.lean()
@@ -48,11 +50,11 @@ class CosmosService {
 									return callback(err)
 								}
 								
-								delegation.address = delegation.delegator_address;
+								delegation.address = delegation.delegator_addr;
 								delegation.vote_amount = delegation.shares;
 								
-								delete delegation.delegator_address;
-								delete delegation.validator_address;
+								delete delegation.delegator_addr;
+								delete delegation.validator_addr;
 								delete delegation.shares;
 
 								result.push({validator: token,
@@ -86,7 +88,7 @@ class CosmosService {
 		var data = {
 			"rawtx" : rawtx
 		}
-		logger.getLogger("rawtx").info("rawtx", "ATOM", rawtx);
+		logger.getLogger("rawtx").info("rawtx", "IRIS", rawtx);
 
 		request.post({
 			headers  : { 'content-type': 'application/json' },
@@ -101,7 +103,7 @@ class CosmosService {
 			}
 
 			if(response.statusCode != 200)  {
-				return cb(new Error(`ATOM insight is unreachable, status code: ${response.statusCode}`), null);
+				return cb(new Error(`IRIS insight is unreachable, status code: ${response.statusCode}`), null);
 			}
 			console.log('body :', body);
 			if (response.statusCode == 200) {
@@ -114,7 +116,7 @@ class CosmosService {
 									tx_id: body.data.tx_id
 								}, { upsert: true }, (err, res) => {
 									if (err) {
-									return cb(new Error(`Failed to insert/update cosmos tx_id for order_id: ${err.message}`), null);
+									return cb(new Error(`Failed to insert/update iris tx_id for order_id: ${err.message}`), null);
 									}
 								})
 						}
@@ -133,104 +135,7 @@ class CosmosService {
 			}
 		});
 	}
-
-	everstakeGetOrders(address, offset, limit, cb){
-		let query = {};
-		query.delegator = address || '';
-
-		async.parallel([
-			function (cb) {
-				OrderModel.find(query, { '_id': 0, '__v': 0 })
-				.skip(offset)
-				.limit(limit)
-				.sort({ create_at: 1 })
-				.exec((err, tokens) => {
-				if (err) {
-					return cb(err)
-				}
-
-				return cb(null, tokens)
-				})
-			},
-			function (cb) {
-				OrderModel.count(query)
-				.exec((err, total) => {
-					if (err) {
-					return cb(err)
-					}
-
-					return cb(null, total)
-				})
-			}
-		], (err, results) => {
-			if (err) {
-			return cb(err)
-			}
-
-			return cb(null, { total: results[1], from: offset, to: offset + results[0].length - 1, validators: results[0] });
-		})
-	}
-
-	everstakeOrder(delegator, validator, amount, cb){
-		var self = this;
-		var url = self.everstakeOrderURL;
-		let id = "";
-		var data = {
-			"partner_tag": "InfinitoWallet",
-			"id": id,
-			"currency": "atom",
-			"amount": amount,
-			"address": delegator,
-			"baker": validator
-		}
-
-		logger.getLogger("order").info("order", "ATOM", validator, " | ", delegator);
-
-		request.post({
-			headers  : { 'content-type': 'application/json' },
-			url      : url,
-			body     : data,
-			timeout  : 15000,
-			json     : true
-		}, (err, response, body) => {
-			if(err){
-				console.log(err.message);
-				return cb(err, null);
-			}
-
-			if(response.statusCode != 200)  {
-				return cb(new Error(`Everstake is unreachable, status code: ${response.statusCode}`), null);
-			}
-			console.log('body :', body);
-			if (response.statusCode == 200) {
-				if (body) {
-					if(body.uuid){
-						let order = new OrderModel({
-							partner_tag : "InfinitoWallet",
-							external_id : id,
-							platform    : "COSMOS",
-							amount      : amount,
-							delegator   : delegator,
-							validator   : validator,
-							partner     : "everstake",
-							order_id    : body.uuid,
-							create_at   : Math.round(new Date().getTime()/1000)
-						})
-
-						order.save()
-							.then(doc => {
-								console.log(doc)
-								return cb(null, {order_id: body.uuid});
-							})
-							.catch(err => {
-								return cb(new Error(`Failed to insert/update cosmos order: ${err.message}`), null)
-							})
-					}
-				}
-			}
-		});
-	}
 	
 }
 
-module.exports = CosmosService;
+module.exports = IrisService;

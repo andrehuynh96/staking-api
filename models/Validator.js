@@ -9,12 +9,13 @@ const ValidatorSchema = new mongoose.Schema({
   address         : String,
   public_key      : String,
   platform        : String,
-  votes           : String,
+  votes           : Number,
   commission      : String,
   partner         : {
     type          : Boolean,
     default       : false
   },
+  jailed          : Boolean,
 });
 
 // Create the token model.

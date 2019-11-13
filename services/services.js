@@ -28,12 +28,17 @@ class Service {
         query.partner = true;
       }
 
+      // use for COSMOS and IRIS only
+      if (params.jailed) {
+        query.jailed = params.jailed
+      }
+
       async.parallel([
         function (cb) {
           ValidatorModel.find(query, { '_id': 0, '__v': 0 })
             .skip(offset)
             .limit(limit)
-            .sort({ rank: 1 })
+            .sort({ rank: 1, votes: -1 })
             .exec((err, tokens) => {
               if (err) {
                 return cb(err)
@@ -57,6 +62,9 @@ class Service {
           return cb(err)
         }
 
+        if(results[1] == 0){
+          return cb(null, { total: results[1], validators: results[0] });
+        }
         return cb(null, { total: results[1], from: offset, to: offset + results[0].length - 1, validators: results[0] });
       })
     }

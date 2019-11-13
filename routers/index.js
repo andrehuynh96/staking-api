@@ -12,6 +12,8 @@ class Config {
         router.get('/staking/:platform/validators/', ctrl.getValidators.bind(ctrl));
         router.get('/staking/:platform/addr/:addr/delegations/', ctrl.getDelegations.bind(ctrl));
         router.post('/staking/:platform/tx/send', ctrl.sendTransaction.bind(ctrl));
+        router.get('/everstake/:platform/:addr/orders', ctrl.everstakeGetOrders.bind(ctrl));
+        router.post('/everstake/order', ctrl.everstakeOrder.bind(ctrl));
         return router;
     };
 }
