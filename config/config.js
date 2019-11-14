@@ -98,6 +98,12 @@ config.irisRpc = {
   chainId : env.IRIS_CHAIN_ID || 'irishub'
 }
 
+config.tezosRpc = {
+  name    : env.TEZOS_CONSUL_RPC_NAME || 'sv_insight_rpc_tezos',
+  insight : env.TEZOS_INSIGHT_DEFAULT || '127.0.0.1:3001',
+  url     : env.TEZOS_RPC_DEFAULT || '127.0.0.1:3000'
+}
+
 config.everstakeUrl = env.EVERSTAKE_URL
 
 module.exports = config;

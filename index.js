@@ -68,7 +68,7 @@ process.on('SIGINT', () => {
 });
 
 let mongoUrl = `mongodb://${config.mongo.user}:${config.mongo.pass}@${config.mongo.host}:${config.mongo.port}/${config.mongo.dbname}`
-mongoose.connect(mongoUrl, (err, db) => {
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
     if (err) {
         Logger.error(`Mongo connection failed: ${err.message}`)
         return process.exit()
