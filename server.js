@@ -6,16 +6,16 @@ process.env.PORT = process.env.PORT || 3001;
 const express = require('express');
 const morgan = require('morgan');
 const http = require('http');
-const mongodb = require('app/lib/database/mongodb');
+const database = require('app/lib/database');
 const logger = require('app/lib/logger');
 const redis = require('app/lib/redis');
 
 const app = express();
 app.use(morgan('dev'));
 
-mongodb.init(async err => {
+database.init(async err => {
   if (err) {
-    logger.error(`mongodb start fail:`, err);
+    logger.error(`database start fail:`, err);
     return;
   }
 
@@ -32,7 +32,6 @@ mongodb.init(async err => {
       console.log(`server start successfully on port: ${process.env.PORT}`);
     });
     process.on('SIGINT', () => {
-      mongodb.close();
       if (redis) {
         redis.quit();
       }

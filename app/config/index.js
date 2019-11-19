@@ -20,9 +20,17 @@ const config = {
     appenders: ['CONSOLE', 'FILE', 'ERROR_ONLY'],
   },
   db: {
-    staking: `mongodb://${process.env.DB_USER}:${encodeURIComponent(
-      process.env.DB_PASS
-    )}@${process.env.DB_HOST}/${process.env.DB_NAME}`,
+    postpres: {
+      database: process.env.POSTPRES_DB_NAME,
+      username: process.env.POSTPRES_DB_USER,
+      password: process.env.POSTPRES_DB_PASS,
+      options: {
+        host: process.env.POSTPRES_DB_HOST,
+        port: process.env.POSTPRES_DB_PORT,
+        dialect: 'postgres',
+        logging: false
+      }
+    }
   },
   redis: {
     host: process.env.REDIS_HOST,
