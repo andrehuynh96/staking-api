@@ -17,5 +17,5 @@ module.exports = {
       callback(err);
     }
   },
-  instanse: sequelize,
+  instanse: sequelize
 };
