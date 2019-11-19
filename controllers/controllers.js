@@ -6,6 +6,7 @@ const OntService = require("../services/ont.services");
 const TomoService = require("../services/tomo.services");
 const CosmosService = require("../services/cosmos.services");
 const IrisService = require("../services/iris.services");
+const TezosService = require("../services/tezos.services");
 const Response = require("../libs/response.js");
 const Message = require("./../libs/messages");
 
@@ -22,6 +23,7 @@ class Controller {
     this.tomoService = new TomoService();
     this.cosmosService = new CosmosService();
     this.irisService = new IrisService();
+    this.tezosService = new TezosService();
   }
 
   /**
@@ -93,6 +95,15 @@ class Controller {
             return res.send(Response.ok(data));
           });
         break;
+      case 'TEZOS':
+          this.tezosService.getDelegations(address, (err, data) => {
+            if (err) {
+                return res.send(Response.fail(err));
+            }
+    
+            return res.send(Response.ok(data));
+          });
+        break;
       default:
         return res.send(Response.fail(new Error(`Unsupported platform ${params.platform}`)));
     }
@@ -146,13 +157,20 @@ class Controller {
             return res.send(Response.ok(data));
           });
         break;
-
       case 'IRIS':
         this.irisService.sendRawTx(params, (err, data) => {
           if (err) {
               return res.send(err);
           }
           return res.send(data);
+        });
+        break;
+      case 'TEZOS':
+        this.tezosService.sendRawTx(params, (err, data) => {
+          if (err) {
+              return res.send(Response.fail(err));
+          }
+          return res.send(Response.ok(data));
         });
         break;
       default:
