@@ -1,16 +1,15 @@
 const config = require('app/config');
 const Sequelize = require('sequelize');
 
-
+const sequelize = new Sequelize(
+  config.db.postpres.database,
+  config.db.postpres.username,
+  config.db.postpres.password,
+  config.db.postpres.options
+);
 module.exports = {
   init: async callback => {
     try {
-      const sequelize = new Sequelize(
-        config.postpres.database,
-        config.postpres.username,
-        config.postpres.password,
-        config.postpres.options
-      );
       await sequelize.authenticate();
       console.log('Connection has been established successfully.');
       callback(null);

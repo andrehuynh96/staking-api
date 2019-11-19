@@ -24,6 +24,11 @@ database.init(async err => {
       logger.error(`Redis start fail:`, err);
       return;
     }
+    require('app/model');
+    database.instanse.sync({ force: false }).then(() => {
+      logger.info('Resync data model and do not drop any data');
+    });
+
     app.set('trust proxy', 1);
     app.use('/', require('app/index'));
     app.use(express.static('public'));

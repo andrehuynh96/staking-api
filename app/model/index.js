@@ -1,7 +1,6 @@
-const config = require('app/config');
+const database = require('app/lib/database');
 const fs = require('fs');
 const path = require('path');
-const database = require('app/lib/database');
 
 const basename = path.basename(__filename);
 const db = {};
