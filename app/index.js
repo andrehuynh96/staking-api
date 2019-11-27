@@ -68,7 +68,7 @@ router.get('/', function (req, res) {
   res.json(result);
 });
 router.get('/health', (req, res) => res.send('OK!'));
-require('app/config/swagger')(router, '/staking');
+require('app/config/swagger')(router, '/staking-api');
 
 router.use('/api', require('app/feature'));
 

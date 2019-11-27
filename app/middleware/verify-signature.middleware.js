@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
   try {
     const signature = req.get('x-signature');
     const time = req.get('x-time');
-    const apiKey = req.body.api_key;
+    const apiKey = req.user.api_key;
     if (!signature) {
       return res.badRequest();
     }

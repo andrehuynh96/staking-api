@@ -61,7 +61,8 @@ const config = {
     },
     private: fs.readFileSync(path.resolve(__dirname, "../../key/private.key"), "utf8"),
     public: fs.readFileSync(path.resolve(__dirname, "../../key/public.key"), "utf8")
-  }
+  },
+  platform: process.env.PLATFORM ? process.env.PLATFORM.split(",") : ["ATOM"]
 };
 
 module.exports = config;
