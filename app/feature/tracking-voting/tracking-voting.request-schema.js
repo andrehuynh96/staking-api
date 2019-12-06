@@ -2,8 +2,9 @@ const Joi = require("joi");
 const config = require("app/config");
 
 const schema = Joi.object().keys({
+  voter_address: Joi.string().required(),
   tx_id: Joi.string().required(),
-  platform: Joi.string().required().valid(config.platform).insensitive().uppercase()
+  memo: Joi.string().required(),
 })
 
 module.exports = schema;

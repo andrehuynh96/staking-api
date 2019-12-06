@@ -35,7 +35,7 @@ route.post("/voting",
  *         type: string
  *         required: true
  *         description: signature
- *       - in: header
+*       - in: header
  *         name: x-time
  *         type: string
  *         required: true
@@ -49,7 +49,8 @@ route.post("/voting",
  *            example: 
  *               {
                         "tx_id":"3f76680510bcca07e7e011dcc1effb079d1d0a34",
-                        "platform":"ATOM"
+                        "voter_address":"cosmos18vwj2myc5l7taspq2nrmscldq7gzuxlv9m586h",
+                        "memo":"Infinito:ATOM"
                   } 
  *     produces:
  *       - application/json

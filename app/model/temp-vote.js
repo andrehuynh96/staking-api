@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: DataTypes.UUIDV4(),
     },
+    voter_address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     client_id: {
       type: DataTypes.UUID,
       allowNull: false
@@ -16,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     platform: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    memo: {
       type: DataTypes.STRING,
       allowNull: false
     }
