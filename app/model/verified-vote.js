@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define("temp_votes", {
+  return sequelize.define("verified_votes", {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,

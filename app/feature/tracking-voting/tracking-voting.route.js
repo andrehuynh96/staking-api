@@ -3,13 +3,11 @@ const controller = require("./tracking-voting.controller");
 const requestSchema = require("./tracking-voting.request-schema");
 const validator = require("app/middleware/validator.middleware");
 const authenticate = require('app/middleware/authenticate.middleware');
-const verifySignature = require("app/middleware/verify-signature.middleware");
 const route = express.Router();
 
 route.post("/voting",
   validator(requestSchema),
   authenticate,
-  verifySignature,
   controller
 )
 
@@ -30,16 +28,6 @@ route.post("/voting",
  *         type: string
  *         required: true
  *         description: Bearer {token}
- *       - in: header
- *         name: x-signature
- *         type: string
- *         required: true
- *         description: signature
-*       - in: header
- *         name: x-time
- *         type: string
- *         required: true
- *         description: 1574827292
  *       - in: body
  *         name: data
  *         description: Data for login.

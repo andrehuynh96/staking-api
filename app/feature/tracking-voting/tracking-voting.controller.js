@@ -5,16 +5,6 @@ const MemoClient = require("app/model").client_memos;
 
 module.exports = async (req, res, next) => {
   try {
-    let old = await TempVote.findOne({
-      where: {
-        tx_id: req.body.tx_id,
-        platform: req.body.platform
-      }
-    });
-    if (old) {
-      return res.badRequest(res.__("TX_REGISTERED_ALREADY"), "TX_REGISTERED_ALREADY");
-    }
-
     let clientMemo = await MemoClient.findOne({
       where: {
         memo: req.body.memo,
@@ -24,6 +14,16 @@ module.exports = async (req, res, next) => {
 
     if (!clientMemo) {
       return res.badRequest(res.__("NOT_FOUND_MEMO"), "NOT_FOUND_MEMO");
+    }
+
+    let old = await TempVote.findOne({
+      where: {
+        tx_id: req.body.tx_id,
+        platform: clientMemo.platform
+      }
+    });
+    if (old) {
+      return res.badRequest(res.__("TX_REGISTERED_ALREADY"), "TX_REGISTERED_ALREADY");
     }
 
     let result = await TempVote.create({
