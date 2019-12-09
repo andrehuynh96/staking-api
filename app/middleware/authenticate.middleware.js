@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
   if (token) {
     try {
       var legit = jwt.verify(token, config.jwt.public, config.jwt.options);
-      req.client_id = legit.client_id;
+      req.user = legit;
       return next();
     } catch (err) {
       return res.serverInternalError(err);
