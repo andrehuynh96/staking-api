@@ -4,7 +4,7 @@ const PlatformVote = require("app/model").platform_votes;
 
 module.exports = async (req, res, next) => {
   try {
-    let items = await PlatformVote.find({
+    let items = await PlatformVote.findAll({
       where: {
         active_flg: true
       }
