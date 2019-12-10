@@ -32,6 +32,7 @@ module.exports = async (req, res, next) => {
       platform: clientMemo.platform,
       client_id: req.user.client_id,
       memo: req.body.memo,
+      type: req.body.type,
     });
     if (result) {
       return res.ok(true);
