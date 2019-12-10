@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
     memo: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
       underscored: true,
