@@ -59,7 +59,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       default: true
-    }
+    },
+    validator_address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
   }, {
       underscored: true,
       timestamps: true,
