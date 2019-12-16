@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
 );
 module.exports = {
   init: async callback => {
-    try {
+    try { 
       await sequelize.authenticate();
       console.log('Connection has been established successfully.');
       callback(null);
