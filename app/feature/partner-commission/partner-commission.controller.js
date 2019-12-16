@@ -4,6 +4,8 @@ const config = require("app/config");
 const CosmosAccount = require("app/model").cosmos_accounts;
 const IrisAccount = require("app/model").iris_accounts;
 const Client = require("app/model").clients;
+const DistributeCommission = require("app/model").distribute_commission_histories;
+const Insight = require("app/insight");
 
 module.exports = {
   getAll: async (req, res, next) => {
@@ -47,6 +49,7 @@ module.exports = {
     }
   }
 }
+
 const commission = {
   ALL: {
     ATOM: async () => {

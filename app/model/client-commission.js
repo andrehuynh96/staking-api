@@ -18,7 +18,11 @@ module.exports = (sequelize, DataTypes) => {
     platform: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
   }, {
       underscored: true,
       timestamps: true,
