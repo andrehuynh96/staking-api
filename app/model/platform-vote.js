@@ -60,6 +60,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       default: true
     },
+    default: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      default: false
+    },
     validator_address: {
       type: DataTypes.STRING,
       allowNull: false
