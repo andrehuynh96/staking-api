@@ -62,7 +62,31 @@ const config = {
     private: fs.readFileSync(path.resolve(__dirname, "../../key/private.key"), "utf8"),
     public: fs.readFileSync(path.resolve(__dirname, "../../key/public.key"), "utf8")
   },
-  platform: process.env.PLATFORM ? process.env.PLATFORM.split(",") : ["ATOM"]
+  platform: process.env.PLATFORM ? process.env.PLATFORM.split(",") : ["ATOM"],
+  insight: {
+    ATOM: {
+      server: process.env.MULTICHAIN,
+      api: [
+        {
+          name: 'getDistributionOfValidator',
+          method: 'GET',
+          url: "/chains/v1/ATOM/distribution/validators/{validatorAddr}",
+          params: ['validatorAddr'],
+        }
+      ],
+    },
+    IRIS: {
+      server: process.env.MULTICHAIN,
+      api: [
+        {
+          name: 'getDistributionOfValidator',
+          method: 'GET',
+          url: "/chains/v1/IRIS/distribution/{address}/rewards",
+          params: ['address'],
+        }
+      ],
+    },
+  },
 };
 
 module.exports = config;
