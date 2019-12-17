@@ -3,10 +3,10 @@ const DistributeStatus = require("./value-object/distribute-status");
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define("distribute_commission_histories", {
     id: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
-      defaultValue: Sequelize.UUIDV4(),
+      defaultValue: DataTypes.UUIDV4(),
     },
     platform: {
       type: DataTypes.STRING,
