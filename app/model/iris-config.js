@@ -2,10 +2,10 @@
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define("iris_configs", {
     id: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
-      defaultValue: Sequelize.UUIDV4(),
+      defaultValue: DataTypes.UUIDV4(),
     },
     block_height_history_stake: {
       type: DataTypes.INTEGER,
@@ -40,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
     validator: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    default: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      default: false
     },
     active_flg: {
       type: DataTypes.BOOLEAN,

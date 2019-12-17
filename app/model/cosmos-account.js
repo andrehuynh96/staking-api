@@ -2,10 +2,10 @@
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define("cosmos_accounts", {
     id: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
-      defaultValue: Sequelize.UUIDV4(),
+      defaultValue: DataTypes.UUIDV4(),
     },
     address: {
       type: DataTypes.STRING,

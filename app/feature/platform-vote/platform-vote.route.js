@@ -4,7 +4,7 @@ const authenticate = require('app/middleware/authenticate.middleware');
 const route = express.Router();
 
 route.get("/platform-votes",
-  authenticate,
+  // authenticate,
   controller
 )
 
