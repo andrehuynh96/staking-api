@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define("cosmos_configs", {
+  return sequelize.define("cosmos_cfgs", {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       default: false
     },
-    active_flg: {
+    actived_flg: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true

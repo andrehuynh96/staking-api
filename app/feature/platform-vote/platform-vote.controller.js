@@ -1,11 +1,11 @@
 const logger = require("app/lib/logger");
 const config = require("app/config");
-const PlatformVote = require("app/model").platform_votes;
+const PlatformVote = require("app/model").staking_platforms;
 const Model = require("app/model");
 
 const ModelConfig = {
-  ATOM: Model.cosmos_configs,
-  IRIS: Model.iris_configs
+  ATOM: Model.cosmos_cfgs,
+  IRIS: Model.iris_cfgs
 }
 
 ///validator_address
@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
   try {
     let items = await PlatformVote.findAll({
       where: {
-        active_flg: true
+        actived_flg: true
       },
       raw: true
     });
@@ -22,7 +22,7 @@ module.exports = async (req, res, next) => {
         e.validator_address = "";
         let validator = await ModelConfig[e.symbol].findOne({
           where: {
-            active_flg: true
+            actived_flg: true
           },
           order: [
             ['default', 'DESC'],
