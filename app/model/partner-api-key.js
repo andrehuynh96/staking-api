@@ -1,35 +1,31 @@
 
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define("verified_votes", {
+  return sequelize.define("partner_api_keys", {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
       defaultValue: DataTypes.UUIDV4(),
     },
-    client_id: {
+    partner_id: {
       type: DataTypes.UUID,
       allowNull: false
     },
-    tx_id: {
-      type: DataTypes.STRING,
+    api_key: {
+      type: DataTypes.STRING(36),
       allowNull: false
     },
-    platform: {
-      type: DataTypes.STRING,
+    secret_key: {
+      type: DataTypes.STRING(64),
       allowNull: false
     },
-    amount: {
-      type: DataTypes.DOUBLE,
-      allowNull: false
-    },
-    from_address: {
-      type: DataTypes.STRING,
-      allowNull: false
+    actived_flg: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      default: true
     }
   }, {
       underscored: true,
       timestamps: true,
     });
-}
-
+} 

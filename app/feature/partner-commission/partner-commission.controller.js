@@ -1,10 +1,7 @@
 
 const logger = require("app/lib/logger");
 const config = require("app/config");
-const CosmosAccount = require("app/model").cosmos_accounts;
-const IrisAccount = require("app/model").iris_accounts;
-const Client = require("app/model").clients;
-const DistributeCommission = require("app/model").distribute_commission_histories;
+const Partner = require("app/model").partners;
 const Insight = require("app/lib/insight");
 
 module.exports = {
@@ -26,7 +23,7 @@ module.exports = {
   get: async (req, res, next) => {
     try {
       let partnerId = req.params.id;
-      let client = await Client.findOne({
+      let client = await Partner.findOne({
         where: {
           id: partnerId
         }
