@@ -1,16 +1,16 @@
 const config = require("app/config");
 const logger = require("app/lib/logger");
-const Client = require("app/model").clients;
-const ClientKey = require("app/model").client_keys;
+const Partner = require("app/model").partners;
+const ClientKey = require("app/model").partner_api_keys;
 const jwt = require("jsonwebtoken");
 
 module.exports = async (req, res, next) => {
   try {
     let key = await ClientKey.findOne({
       where: {
-        client_key: req.body.api_key,
-        client_secret: req.body.secret_key,
-        active_flg: true
+        api_key: req.body.api_key,
+        secret_key: req.body.secret_key,
+        actived_flg: true
       }
     });
 
@@ -18,21 +18,21 @@ module.exports = async (req, res, next) => {
       return res.badRequest(res.__("NOT_FOUND_API_KEY"), "NOT_FOUND_API_KEY");
     }
 
-    let client = await Client.findOne({
+    let client = await Partner.findOne({
       where: {
-        id: key.client_id,
+        id: key.partner_id,
       }
     });
     if (!client) {
       return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT");
     }
-    if (!client.active_flg) {
+    if (!client.actived_flg) {
       return res.forbidden(res.__("CLIENT_NOT_INACTIVE"), "CLIENT_NOT_INACTIVE");
     }
 
     var payload = {
       client_id: client.id,
-      api_key: key.client_key
+      api_key: key.api_key
     };
     let token = jwt.sign(payload, config.jwt.private, config.jwt.options);
     return res.ok({
