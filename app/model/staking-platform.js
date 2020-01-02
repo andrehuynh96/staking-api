@@ -81,12 +81,14 @@ module.exports = (sequelize, DataTypes) => {
       default: false
     },
     created_by: {
-      type: DataTypes.STRING(128),
-      allowNull: true
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      default: 0
     },
     updated_by: {
-      type: DataTypes.STRING(128),
-      allowNull: true
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      default: 0
     }
   }, {
       underscored: true,
