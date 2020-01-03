@@ -4,6 +4,7 @@ const PLAN_STATUS = require('./const').PLAN_STATUS;
 const StakingPlans = require("app/model").staking_plan;
 const Deposits = require("app/model").deposit;
 const Withdraws = require("app/model").withdraw;
+const db = require('./db');
 
 async function getAllPlans(req, res, next) {
     try {
@@ -66,7 +67,24 @@ async function getDepositById(req, res, next) {
     }
 }
 
+
+async function getDepositByDepositor(req, res, next) {
+    var address = req.params.address;
+    var offset = req.params.offset;
+    var limit = req.params.limit;
+    //TODO: Check ETH address
+    try {
+        var deposit = await db.getDepositByDepositorAddr(address, offset, limit);
+        res.ok(deposit);
+    } catch (err) {
+        next(err);
+    }
+}
+
+
+
 module.exports = {
     getAllPlans: getAllPlans,
-    getDepositById: getDepositById
+    getDepositById: getDepositById,
+    getDepositByDepositor:getDepositByDepositor
 }

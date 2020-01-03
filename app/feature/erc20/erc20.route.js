@@ -16,6 +16,11 @@ route.get("/erc20/deposit/:id",
   validatorQuery(validatingSchema.checkDepositId),
   controller.getDepositById
 );
+route.get("/erc20/deposits/depositor/:address/:offset/:limit",
+  authenticate,
+  validatorQuery(validatingSchema.checkGetDepositByDepositorAddr),
+  controller.getDepositByDepositor
+);
 
 module.exports = route;
 
