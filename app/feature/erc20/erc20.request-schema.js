@@ -1,7 +1,6 @@
 const Joi = require("joi");
 const CONST = require('./const');
 
-
 var allPlans = Joi.object().keys({
   status: Joi.string().valid(
       CONST.PLAN_STATUS.all,
@@ -10,6 +9,11 @@ var allPlans = Joi.object().keys({
     ).empty('').default(CONST.PLAN_STATUS.all)
 })
 
+var checkDepositId = Joi.object({
+  id: Joi.number().integer().min(0),
+});
+
 module.exports = {
-  allPlans: allPlans
+  allPlans: allPlans,
+  checkDepositId: checkDepositId
 };
