@@ -128,6 +128,7 @@ module.exports = route;
  *             {
                   "data": [
                     {
+                        "block_time": 1577430776,
                         "block_number": "7039071",
                         "block_hash": "0x514b22f8ffcb7e39bb86cd0efe5f5735ecc9e09d34066fcb41c03e7c50118ab4",
                         "transaction_index": "0",
@@ -150,6 +151,7 @@ module.exports = route;
                         "duration": "900",
                         "memo": "plan1-10",
                         "withdraw": {
+                            "block_time": 1577430776,
                             "block_number": "7039768",
                             "blockHash": "0x16f3fd2bc9022886f281e59b0c0cee9d47dc21749ef0f80eb99a7b1493d3b3a3",
                             "transactionIndex": "99",
@@ -218,6 +220,7 @@ module.exports = route;
  *             {
                   "data": [
                     {
+                      "block_time": 1577430776,
                       "block_number": "7039768",
                       "block_hash": "0x16f3fd2bc9022886f281e59b0c0cee9d47dc21749ef0f80eb99a7b1493d3b3a3",
                       "transaction_hash": "0x360f30ccb991021aef7bb88684172c7fb5229b17d02c65be6eead85e7bda3311",
@@ -231,6 +234,7 @@ module.exports = route;
                       "type": "withdraw"
                     },
                     {
+                      "block_time": 1577430776,
                       "block_number": "7039071",
                       "block_hash": "0x514b22f8ffcb7e39bb86cd0efe5f5735ecc9e09d34066fcb41c03e7c50118ab4",
                       "transaction_hash": "0xc2643cb1e646283151875ed21d6db42ba109f9c71e040a77e2515e807727c193",
