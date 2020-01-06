@@ -44,7 +44,7 @@ async function getDeposit(req, res, next) {
     if (memo) {
         where += ` AND d.memo = '${memo}'`;
     }
-    //TODO: Check ETH address
+
     try {
         var deposit = await db.getDeposit(where, offset, limit);
         res.ok(deposit);
@@ -53,7 +53,30 @@ async function getDeposit(req, res, next) {
     }
 }
 
+async function getHistoryOfAddress(req, res, next) {
+    var depositor_address = req.query.depositor_address;
+    var token_address = req.query.token_address;
+    var offset = req.query.offset;
+    var limit = req.query.limit;
+    var where = '1=1'
+    if (depositor_address) {
+        where += ` AND depositor_addr = '${depositor_address}'`;
+    }
+    if (token_address) {
+        where += ` AND token_addr = '${token_address}'`;
+    }
+
+    try {
+        var history = await db.getHistoryOfAddress(where, offset, limit);
+        res.ok(history);
+    } catch (err) {
+        next(err);
+    }
+}
+
+
 module.exports = {
     getAllPlans: getAllPlans,
-    getDeposit: getDeposit
+    getDeposit: getDeposit,
+    getHistoryOfAddress: getHistoryOfAddress
 }

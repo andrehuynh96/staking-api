@@ -1,47 +1,6 @@
 const db = require("app/model").sequelize;
 
-async function getDepositByDepositorAddr(depositorAddr, offset, limit) {
-    var q = `
-        SELECT 
-            d.block_number,
-            d.block_hash,
-            d.transaction_index,
-            d.deposit_id,
-            d.deposit_id,
-            d.token_addr,
-            d.depositor_addr,
-            d.amount,
-            d.duration,
-            d.memo,
-            w.block_number as "withdrawData_block_number",
-            w.block_hash as "withdrawData_blockHash",
-            w.transaction_index as "withdrawData_transactionIndex",
-            w.transaction_hash as "withdrawData_transactionHash",
-            w.log_index as "withdrawData_logIndex",
-            w.deposit_id as "withdrawData_depositId",
-            w."token_addr" as "withdrawData_token_addr",
-            w.depositor_addr as "withdrawData_depositor_addr",
-            w.recipient_addr as "withdrawData_recipient_addr",
-            w."amount" as "withdrawData_amount"               
-        FROM deposits as d
-        LEFT JOIN withdraws as w
-            ON d.deposit_id = w.deposit_id
-        WHERE d.depositor_addr = '${depositorAddr}'
-        ORDER BY d.block_number DESC,
-                d.transaction_index DESC,
-                d.log_index DESC
-        OFFSET ${offset}
-        LIMIT ${limit}
-    `;
-    var rs = await db.query(q, { type: db.QueryTypes.SELECT });
-    if (rs) {
-        
-        rs = _formatWithdrawData(rs);
-    }
-    return rs;
-}
 async function getDeposit(where, offset, limit) {
-
     var q = `
         SELECT 
             d.block_number,
@@ -102,7 +61,26 @@ function _formatWithdrawData(data) {
     return transformed;
 }
 
+async function getHistoryOfAddress(where, offset, limit) {
+    //TODO: UNION query's performance is not good with a large data
+    var q = `
+        SELECT * FROM (
+            SELECT block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, recipient_addr, "amount", 'withdraw' AS type FROM withdraws WHERE ${where}
+            UNION
+            SELECT block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, '' as recipient_addr, "amount", 'deposit' AS type FROM deposits WHERE ${where}
+        ) AS d
+        ORDER BY d.block_number DESC,
+                d.transaction_index DESC,
+                d.log_index DESC
+        OFFSET ${offset}
+        LIMIT ${limit}
+    `;
+    var rs = await db.query(q, { type: db.QueryTypes.SELECT });
+    return rs;
+}
+
+
 module.exports = {
-    getDepositByDepositorAddr: getDepositByDepositorAddr,
+    getHistoryOfAddress: getHistoryOfAddress,
     getDeposit: getDeposit
 }
