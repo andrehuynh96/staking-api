@@ -3,6 +3,7 @@ const db = require("app/model").sequelize;
 async function getDeposit(where, offset, limit) {
     var q = `
         SELECT 
+            extract(epoch from d.block_time) as block_time,
             d.block_number,
             d.block_hash,
             d.transaction_index,
@@ -13,6 +14,7 @@ async function getDeposit(where, offset, limit) {
             d.amount,
             d.duration,
             d.memo,
+            extract(epoch from w.block_time) as "withdrawData_block_time",
             w.block_number as "withdrawData_block_number",
             w.block_hash as "withdrawData_blockHash",
             w.transaction_index as "withdrawData_transactionIndex",
@@ -65,9 +67,9 @@ async function getHistoryOfAddress(where, offset, limit) {
     //TODO: UNION query's performance is not good with a large data
     var q = `
         SELECT * FROM (
-            SELECT block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, recipient_addr, "amount", 'withdraw' AS type FROM withdraws WHERE ${where}
+            SELECT extract(epoch from block_time) as block_time, block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, recipient_addr, "amount", 'withdraw' AS type FROM withdraws WHERE ${where}
             UNION
-            SELECT block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, '' as recipient_addr, "amount", 'deposit' AS type FROM deposits WHERE ${where}
+            SELECT extract(epoch from block_time) as block_time, block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, '' as recipient_addr, "amount", 'deposit' AS type FROM deposits WHERE ${where}
         ) AS d
         ORDER BY d.block_number DESC,
                 d.transaction_index DESC,

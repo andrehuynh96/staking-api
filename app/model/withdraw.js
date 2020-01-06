@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: DataTypes.UUIDV4(),
     },
+    block_time: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
     block_number: {
       type: DataTypes.BIGINT,
       allowNull: false
