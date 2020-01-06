@@ -8,7 +8,6 @@ async function getDeposit(where, offset, limit) {
             d.block_hash,
             d.transaction_index,
             d.deposit_id,
-            d.deposit_id,
             d.token_addr,
             d.depositor_addr,
             d.amount,
@@ -25,8 +24,8 @@ async function getDeposit(where, offset, limit) {
             w.depositor_addr as "withdrawData_depositor_addr",
             w.recipient_addr as "withdrawData_recipient_addr",
             w."amount" as "withdrawData_amount"               
-        FROM deposits as d
-        LEFT JOIN withdraws as w
+        FROM erc20_deposits as d
+        LEFT JOIN erc20_withdraws as w
             ON d.deposit_id = w.deposit_id
         WHERE 1=1 ${where}
         ORDER BY d.block_number DESC,
@@ -67,9 +66,9 @@ async function getHistoryOfAddress(where, offset, limit) {
     //TODO: UNION query's performance is not good with a large data
     var q = `
         SELECT * FROM (
-            SELECT extract(epoch from block_time) as block_time, block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, recipient_addr, "amount", 'withdraw' AS type FROM withdraws WHERE ${where}
+            SELECT extract(epoch from block_time) as block_time, block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, recipient_addr, "amount", 'withdraw' AS type FROM erc20_withdraws WHERE ${where}
             UNION
-            SELECT extract(epoch from block_time) as block_time, block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, '' as recipient_addr, "amount", 'deposit' AS type FROM deposits WHERE ${where}
+            SELECT extract(epoch from block_time) as block_time, block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, '' as recipient_addr, "amount", 'deposit' AS type FROM erc20_deposits WHERE ${where}
         ) AS d
         ORDER BY d.block_number DESC,
                 d.transaction_index DESC,
