@@ -38,18 +38,16 @@ var allPlans = Joi.object().keys({
   ).empty('').default(CONST.PLAN_STATUS.all)
 })
 
-var checkDepositId = Joi.object({
-  id: Joi.number().integer().min(0),
-});
-
-var checkGetDepositByDepositorAddr = Joi.object({
-  address: Address.ETHAddress().checksum(),
-  offset: Joi.number().integer().min(0),
-  limit: Joi.number().integer().min(0).max(50),
+var checkGetDeposit = Joi.object({
+  depositor_address: Address.ETHAddress().empty('').allow('').checksum(),
+  token_address: Address.ETHAddress().empty('').allow('').checksum(),
+  deposit_id: Joi.number().integer().allow(''),
+  memo: Joi.string().allow('').max(8),
+  offset: Joi.number().integer().min(0).empty('').default(0),
+  limit: Joi.number().integer().min(0).max(50).empty('').default(50),
 });
 
 module.exports = {
   allPlans: allPlans,
-  checkDepositId: checkDepositId,
-  checkGetDepositByDepositorAddr: checkGetDepositByDepositorAddr
+  checkGetDeposit: checkGetDeposit
 };

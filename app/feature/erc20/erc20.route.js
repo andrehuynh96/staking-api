@@ -2,8 +2,9 @@ const express = require("express");
 const controller = require("./erc20.controller");
 const authenticate = require('app/middleware/authenticate.middleware');
 const route = express.Router();
-const validatorQuery = require("app/middleware/validator.query.middleware");
 const validatingSchema = require('./erc20.request-schema');
+const validatorQuery = require("app/middleware/validator.query.middleware");
+const validatorParam = require("app/middleware/validator.param.middleware");
 
 route.get("/erc20/plans",
   authenticate,
@@ -11,15 +12,10 @@ route.get("/erc20/plans",
   controller.getAllPlans
 );
 
-route.get("/erc20/deposit/:id",
+route.get("/erc20/deposits",
   authenticate,
-  validatorQuery(validatingSchema.checkDepositId),
-  controller.getDepositById
-);
-route.get("/erc20/deposits/depositor/:address/:offset/:limit",
-  authenticate,
-  validatorQuery(validatingSchema.checkGetDepositByDepositorAddr),
-  controller.getDepositByDepositor
+  validatorQuery(validatingSchema.checkGetDeposit),
+  controller.getDeposit
 );
 
 module.exports = route;
@@ -84,23 +80,39 @@ module.exports = route;
  *         schema:
  *           $ref: '#/definitions/500'
  */
+
 /**
  * @swagger
- * /api/v1/erc20/deposit/{id}:
+ * /api/v1/erc20/deposits:
  *   get:
- *     summary: Get a deposit
+ *     summary: Get deposits of a depositor
  *     tags:
  *       - erc20
- *     description: Get deposit detail
+ *     description: Get deposits of a depositor
  *     parameters:
  *       - in: header
  *         name: Authorization
  *         type: string
  *         required: true
  *         description: Bearer {token}
- *       - in: path
- *         name: id
+ *       - in: query
+ *         name: deposit_id
  *         description: Id of a deposit.
+ *       - in: query
+ *         name: depositor_address
+ *         description: Address of a depositor.
+ *       - in: query
+ *         name: token_address
+ *         description: Address of a token.
+ *       - in: query
+ *         name: memo
+ *         description: Memo a deposit.
+ *       - in: query
+ *         name: offset
+ *         description: Offset of data for pagination.
+ *       - in: query
+ *         name: limit
+ *         description: Limit of data for pagination.
  *     produces:
  *       - application/json
  *     responses:
@@ -109,28 +121,43 @@ module.exports = route;
  *         examples:
  *           application/json:
  *             {
- *                 "data": {
-                      "block_number": "7039055",
-                      "block_hash": "0xa54727ba8fe5d052cdd1be29a160735cc30451cb6c1dcb5f0259a300c886b3b6",
-                      "transaction_index": "10",
-                      "log_index": "2",
-                      "deposit_id": "0",
-                      "token_addr": "0x90A537b2904f47d958f8340B128c06b3768153BC",
-                      "depositor_addr": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36",
-                      "amount": "1000",
-                      "duration": "900",
-                      "memo": "plan1-10",
-                      "withdraw": {
-                          "block_number": "7039768",
-                          "block_hash": "0x16f3fd2bc9022886f281e59b0c0cee9d47dc21749ef0f80eb99a7b1493d3b3a3",
-                          "transaction_index": "99",
-                          "deposit_id": "0",
-                          "token_addr": "0x90A537b2904f47d958f8340B128c06b3768153BC",
-                          "depositor_addr": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36",
-                          "amount": "1000",
-                          "recipient_addr": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36"
-                      }
-                  }
+                  "data": [
+                    {
+                        "block_number": "7039071",
+                        "block_hash": "0x514b22f8ffcb7e39bb86cd0efe5f5735ecc9e09d34066fcb41c03e7c50118ab4",
+                        "transaction_index": "0",
+                        "deposit_id": "5",
+                        "token_addr": "0x90A537b2904f47d958f8340B128c06b3768153BC",
+                        "depositor_addr": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36",
+                        "amount": "1000",
+                        "duration": "300",
+                        "memo": "plan1-10",
+                        "withdraw": null
+                    },
+                    {
+                        "block_number": "7039055",
+                        "block_hash": "0xa54727ba8fe5d052cdd1be29a160735cc30451cb6c1dcb5f0259a300c886b3b6",
+                        "transaction_index": "10",
+                        "deposit_id": "0",
+                        "token_addr": "0x90A537b2904f47d958f8340B128c06b3768153BC",
+                        "depositor_addr": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36",
+                        "amount": "1000",
+                        "duration": "900",
+                        "memo": "plan1-10",
+                        "withdraw": {
+                            "block_number": "7039768",
+                            "blockHash": "0x16f3fd2bc9022886f281e59b0c0cee9d47dc21749ef0f80eb99a7b1493d3b3a3",
+                            "transactionIndex": "99",
+                            "transactionHash": "0x360f30ccb991021aef7bb88684172c7fb5229b17d02c65be6eead85e7bda3311",
+                            "logIndex": "19",
+                            "depositId": "0",
+                            "token_addr": "0x90A537b2904f47d958f8340B128c06b3768153BC",
+                            "depositor_addr": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36",
+                            "recipient_addr": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36",
+                            "amount": "1000"
+                        }
+                    }
+                ]
  *             }
  *       400:
  *         description: Error

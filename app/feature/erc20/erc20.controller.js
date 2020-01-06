@@ -24,67 +24,36 @@ async function getAllPlans(req, res, next) {
     }
 }
 
-async function getDepositById(req, res, next) {
-    var id = req.params.id;
-
-    try {
-        var deposit = await Deposits.findOne({
-            where: { deposit_id: id },
-            attributes: [
-                "block_number",
-                "block_hash",
-                "transaction_index",
-                "log_index",
-                "deposit_id",
-                "token_addr",
-                "depositor_addr",
-                "amount",
-                "duration",
-                "memo"
-            ],
-            raw: true
-        });
-        if (deposit) {
-            var withdraw = await Withdraws.findOne({
-                where: { deposit_id: id },
-                attributes: [
-                    "block_number",
-                    "block_hash",
-                    "transaction_index",
-                    "deposit_id",
-                    "token_addr",
-                    "depositor_addr",
-                    "amount",
-                    "recipient_addr"
-                ],
-                raw: true
-            });
-            deposit.withdraw = withdraw;
-        }
-        res.ok(deposit);
-    } catch (err) {
-        next(err);
+async function getDeposit(req, res, next) {
+    var depositor_address = req.query.depositor_address;
+    var deposit_id = req.query.deposit_id;
+    var token_address = req.query.token_address;
+    var memo = req.query.memo;
+    var offset = req.query.offset;
+    var limit = req.query.limit;
+    var where = ''
+    if (depositor_address) {
+        where += ` AND d.depositor_addr = '${depositor_address}'`;
     }
-}
-
-
-async function getDepositByDepositor(req, res, next) {
-    var address = req.params.address;
-    var offset = req.params.offset;
-    var limit = req.params.limit;
+    if (token_address) {
+        where += ` AND d.token_addr = '${token_address}'`;
+    }
+    if (deposit_id >= 0) {
+        where += ` AND d.deposit_id = ${deposit_id}`;
+    }
+    if (memo) {
+        where += ` AND d.memo = '${memo}'`;
+    }
     //TODO: Check ETH address
     try {
-        var deposit = await db.getDepositByDepositorAddr(address, offset, limit);
+        var deposit = await db.getDeposit(where, offset, limit);
         res.ok(deposit);
     } catch (err) {
         next(err);
     }
 }
-
-
 
 module.exports = {
     getAllPlans: getAllPlans,
-    getDepositById: getDepositById,
-    getDepositByDepositor:getDepositByDepositor
+    getDeposit: getDeposit
 }
