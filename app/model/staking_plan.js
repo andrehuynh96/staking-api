@@ -28,6 +28,31 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
+    reward_in_diff_platform_flg: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+    reward_platform: {
+      type: DataTypes.STRING(16),
+      allowNull: false
+    },
+    reward_token_address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    created_by :{
+      type: DataTypes.INTEGER
+    },
+    updated_by :{
+      type: DataTypes.INTEGER
+    },
+    deleted_flg: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    staking_platform_id: {
+      type: DataTypes.UUID
+    }
 
   }, {
       underscored: true,

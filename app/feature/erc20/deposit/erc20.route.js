@@ -4,13 +4,6 @@ const authenticate = require('app/middleware/authenticate.middleware');
 const route = express.Router();
 const validatingSchema = require('./erc20.request-schema');
 const validatorQuery = require("app/middleware/validator.query.middleware");
-const validatorParam = require("app/middleware/validator.param.middleware");
-
-route.get("/erc20/plans",
-  authenticate,
-  validatorQuery(validatingSchema.allPlans),
-  controller.getAllPlans
-);
 
 route.get("/erc20/deposits",
   authenticate,
@@ -30,64 +23,6 @@ module.exports = route;
 
 /**
  * @swagger
- * /api/v1/erc20/plans:
- *   get:
- *     summary: Get all plans
- *     tags:
- *       - erc20
- *     description: Get all plans of erc20 staking
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         type: string
- *         required: true
- *         description: Bearer {token}
- *       - in: path
- *         name: status
- *         description: Status of plans, it is `all`, `active` or `deactive` (ommit is all).
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: Ok 
- *         examples:
- *           application/json:
- *             {
- *                 "data": [{
-                        "staking_plan_code": "plan-001",
-                        "duration": 10,
-                        "duration_type": "YEAR",
-                        "reward_per_year": "6.930",
-                        "actived_flg": false
-                    },
-                    {
-                        "staking_plan_code": "plan-002",
-                        "duration": 101,
-                        "duration_type": "DAY",
-                        "reward_per_year": "2.230",
-                        "actived_flg": true
-                    },]
- *             }
- *       400:
- *         description: Error
- *         schema:
- *           $ref: '#/definitions/400'
- *       401:
- *         description: Error
- *         schema:
- *           $ref: '#/definitions/401'
- *       404:
- *         description: Error
- *         schema:
- *           $ref: '#/definitions/404'
- *       500:
- *         description: Error
- *         schema:
- *           $ref: '#/definitions/500'
- */
-
-/**
- * @swagger
  * /api/v1/erc20/deposits:
  *   get:
  *     summary: Get deposits of a depositor
@@ -103,21 +38,26 @@ module.exports = route;
  *       - in: query
  *         name: deposit_id
  *         description: Id of a deposit.
+ *         type: string
  *       - in: query
  *         name: depositor_address
  *         description: Address of a depositor.
+ *         type: string
  *       - in: query
  *         name: token_address
  *         description: Address of a token.
  *       - in: query
  *         name: memo
  *         description: Memo a deposit.
+ *         type: string
  *       - in: query
  *         name: offset
  *         description: Offset of data for pagination.
+ *         type: integer
  *       - in: query
  *         name: limit
  *         description: Limit of data for pagination.
+ *         type: integer
  *     produces:
  *       - application/json
  *     responses:
@@ -201,15 +141,19 @@ module.exports = route;
  *       - in: query
  *         name: depositor_address
  *         description: Address of a depositor.
+ *         type: string
  *       - in: query
  *         name: token_address
  *         description: Address of a token.
+ *         type: string
  *       - in: query
  *         name: offset
  *         description: Offset of data for pagination.
+ *         type: integer
  *       - in: query
  *         name: limit
  *         description: Limit of data for pagination.
+ *         type: integer
  *     produces:
  *       - application/json
  *     responses:
