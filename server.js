@@ -28,7 +28,7 @@ database.init(async err => {
     database.instanse.sync({ force: false }).then(() => {
       logger.info('Resync data model and do not drop any data');
     });
-
+    require('app/model/seed');
     app.set('trust proxy', 1);
     app.use('/', require('app/index'));
     app.use(express.static('public'));
