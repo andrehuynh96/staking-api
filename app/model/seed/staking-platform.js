@@ -4,7 +4,7 @@ const Model = require("app/model").staking_platforms;
 (async () => {
   let count = await Model.count();
   if (count == 0) {
-    await Model.bulkCreate([{
+    let result = await Model.bulkCreate([{
       id: "36b7f440-1a3b-11ea-978f-2e728ce88125",
       name: "COSMOS",
       symbol: "ATOM",
@@ -16,7 +16,11 @@ const Model = require("app/model").staking_platforms;
       payout_reward: 0,
       payout_reward_unit: "DAY",
       confirmation_block: 5,
-      staking_type: "NATIVE"
+      staking_type: "NATIVE",
+      actived_flg: true,
+      deleted_flg: false,
+      created_by: 0,
+      updated_by: 0
     },
     {
       id: "482a12ce-1a3d-11ea-978f-2e728ce88125",
@@ -30,7 +34,11 @@ const Model = require("app/model").staking_platforms;
       payout_reward: 0,
       payout_reward_unit: "DAY",
       confirmation_block: 5,
-      staking_type: "NATIVE"
+      staking_type: "NATIVE",
+      actived_flg: true,
+      deleted_flg: false,
+      created_by: 0,
+      updated_by: 0
     }
     ], {
         returning: true
