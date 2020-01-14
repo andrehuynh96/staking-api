@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    default: {
+    default_flg: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       default: false

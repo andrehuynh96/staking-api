@@ -24,7 +24,7 @@ module.exports = async (req, res, next) => {
               actived_flg: true
             },
             order: [
-              ['default', 'DESC'],
+              ['default_flg', 'DESC'],
             ],
           });
           if (validator) {
