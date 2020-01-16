@@ -36,7 +36,7 @@ async function getDeposit(where, offset, limit) {
     `;
     var rs = await db.query(q, { type: db.QueryTypes.SELECT });
     if (rs) {
-        
+
         rs = _formatWithdrawData(rs);
     }
     return rs;
@@ -80,8 +80,36 @@ async function getHistoryOfAddress(where, offset, limit) {
     return rs;
 }
 
+// Get aggregation info of an address
+async function getAggregationInfoOfAddr(depositorAddr, tokenAddr) {
+    var where = '';
+    if (tokenAddr) {
+        where = `WHERE t.token_addr = '${tokenAddr}'`;
+    }
+    var q = `
+        SELECT t.token_addr, sum(t.deposit_amount) as total_deposit, sum(t.withdraw_amount) as total_withdraw, sum(t.reward) as total_reward
+        FROM (
+
+            SELECT  d.token_addr, d.amount as deposit_amount, w.amount withdraw_amount, d.amount*p.reward_per_year/100 * rc.commission/100 as reward
+            FROM erc20_deposits d
+            LEFT JOIN erc20_withdraws w
+            ON d.deposit_id = w.deposit_id
+            JOIN staking_plans p
+                on split_part(d.memo, '|', 1)::uuid=p.id
+            join staking_reward_cfgs rc
+            on p.staking_platform_id = rc.staking_platform_id
+            WHERE d.depositor_addr = '${depositorAddr}'
+            
+        ) t
+        ${where}
+        GROUP BY t.token_addr
+    `;
+    var rs = await db.query(q, { type: db.QueryTypes.SELECT });
+    return rs;
+}
 
 module.exports = {
     getHistoryOfAddress: getHistoryOfAddress,
-    getDeposit: getDeposit
+    getDeposit: getDeposit,
+    getAggregationInfoOfAddr: getAggregationInfoOfAddr
 }
