@@ -51,8 +51,21 @@ async function getHistoryOfAddress(req, res, next) {
     }
 }
 
+async function getAggregationInfoOfAddr(req, res, next) {
+    var depositor_address = req.query.depositor_address;
+    var token_address = req.query.token_address;
+    
+    try {
+        var history = await db.getAggregationInfoOfAddr(depositor_address, token_address);
+        res.ok(history);
+    } catch (err) {
+        next(err);
+    }
+}
+
 
 module.exports = {
     getDeposit: getDeposit,
-    getHistoryOfAddress: getHistoryOfAddress
+    getHistoryOfAddress: getHistoryOfAddress,
+    getAggregationInfoOfAddr: getAggregationInfoOfAddr
 }

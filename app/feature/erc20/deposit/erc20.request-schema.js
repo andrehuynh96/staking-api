@@ -35,7 +35,12 @@ var checkGetDeposit = Joi.object({
   offset: Joi.number().integer().min(0).empty('').default(0),
   limit: Joi.number().integer().min(0).max(50).empty('').default(50),
 });
+var checkGetAggregation = Joi.object({
+  depositor_address: Address.ETHAddress().checksum().required(),
+  token_address: Address.ETHAddress().empty('').allow('').checksum(),
+});
 
 module.exports = {
-  checkGetDeposit: checkGetDeposit
+  checkGetDeposit: checkGetDeposit,
+  checkGetAggregation: checkGetAggregation
 };
