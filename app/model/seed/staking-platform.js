@@ -17,7 +17,7 @@ const Model = require("app/model").staking_platforms;
       payout_reward_unit: "DAY",
       confirmation_block: 5,
       staking_type: "NATIVE",
-      actived_flg: true,
+      status: 1,
       deleted_flg: false,
       created_by: 0,
       updated_by: 0
@@ -35,7 +35,7 @@ const Model = require("app/model").staking_platforms;
       payout_reward_unit: "DAY",
       confirmation_block: 5,
       staking_type: "NATIVE",
-      actived_flg: true,
+      status: 1,
       deleted_flg: false,
       created_by: 0,
       updated_by: 0

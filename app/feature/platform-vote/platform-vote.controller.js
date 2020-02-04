@@ -1,6 +1,9 @@
 const logger = require("app/lib/logger");
 const config = require("app/config");
 const PlatformVote = require("app/model").staking_platforms;
+const StakingPlatformStatus = require("./value-object/staking-platform-status");
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 const Model = require("app/model");
 
 const ModelConfig = {
@@ -12,7 +15,9 @@ module.exports = async (req, res, next) => {
   try {
     let items = await PlatformVote.findAll({
       where: {
-        actived_flg: true
+        status: {
+          [Op.in]: [StakingPlatformStatus.COMMING_SOON, StakingPlatformStatus.ENABLED]
+        }
       },
       raw: true
     });

@@ -1,6 +1,7 @@
 
 const timeUnit = require("./value-object/time-unit");
 const StakingType = require("./value-object/staking-type");
+const StakingPlatformStatus = require("./value-object/staking-platform-status");
 
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define("staking_platforms", {
@@ -60,6 +61,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       default: true
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: StakingPlatformStatus.COMMING_SOON
     },
     confirmation_block: {
       type: DataTypes.INTEGER,
