@@ -57,11 +57,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: timeUnit.DAY
     },
-    actived_flg: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      default: true
-    },
     status: {
       type: DataTypes.INTEGER,
       allowNull: false,
