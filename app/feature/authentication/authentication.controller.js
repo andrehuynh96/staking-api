@@ -2,6 +2,7 @@ const config = require("app/config");
 const logger = require("app/lib/logger");
 const Partner = require("app/model").partners;
 const ClientKey = require("app/model").partner_api_keys;
+const ApiKeyStatus = require("app/model/value-object/api-key-status");
 const jwt = require("jsonwebtoken");
 
 module.exports = async (req, res, next) => {
@@ -35,6 +36,16 @@ module.exports = async (req, res, next) => {
       api_key: key.api_key
     };
     let token = jwt.sign(payload, config.jwt.private, config.jwt.options);
+
+    await ClientKey.update({
+      status: ApiKeyStatus.CONNECTED
+    },
+      {
+        where: {
+          id: key.id
+        }, returning: true
+      });
+
     return res.ok({
       access_token: token,
       token_type: 'Bearer',
