@@ -39,10 +39,6 @@ module.exports = route;
  *         name: staking_platform_id
  *         description: Staking platform id.
  *         type: string
- *       - in: query
- *         name: include_deleted
- *         description: Get deleted record or not.
- *         type: boolean
  *     produces:
  *       - application/json
  *     responses:
@@ -60,7 +56,7 @@ module.exports = route;
                         "reward_percentage": "9.100",
                         "status": 1,
                         "reward_diff_token_flg": false,
-                        "diff_toke_rate": 0,
+                        "diff_token_rate": 0,
                         "tx_id": "",
                         "wait_blockchain_confirm_status_flg": false,
                         "staking_platform_id": "36b7f440-1a3b-11ea-978f-2e728ce88125",
@@ -74,7 +70,7 @@ module.exports = route;
                         "reward_percentage": "9.100",
                         "status": 1,
                         "reward_diff_token_flg": false,
-                        "diff_toke_rate": 0,
+                        "diff_token_rate": 0,
                         "tx_id": "",
                         "wait_blockchain_confirm_status_flg": false,
                         "staking_platform_id": "36b7f440-1a3b-11ea-978f-2e728ce88125",
