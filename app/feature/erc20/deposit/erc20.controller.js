@@ -5,21 +5,17 @@ async function getDeposit(req, res, next) {
     var depositor_address = req.query.depositor_address;
     var deposit_id = req.query.deposit_id;
     var token_address = req.query.token_address;
-    var memo = req.query.memo;
     var offset = req.query.offset;
     var limit = req.query.limit;
-    var where = ''
+    var where = '';
     if (depositor_address) {
-        where += ` AND d.depositor_addr = '${depositor_address}'`;
+        where += ` AND d.depositor = '${depositor_address}'`;
     }
     if (token_address) {
         where += ` AND d.token_addr = '${token_address}'`;
     }
     if (deposit_id >= 0) {
         where += ` AND d.deposit_id = ${deposit_id}`;
-    }
-    if (memo) {
-        where += ` AND d.memo = '${memo}'`;
     }
 
     try {
@@ -35,16 +31,19 @@ async function getHistoryOfAddress(req, res, next) {
     var token_address = req.query.token_address;
     var offset = req.query.offset;
     var limit = req.query.limit;
-    var where = '1=1'
+    var where = '1=1';
+    var withdrawWhere = '1=1'; 
     if (depositor_address) {
-        where += ` AND depositor_addr = '${depositor_address}'`;
+        where += ` AND depositor = '${depositor_address}'`;
+        withdrawWhere += ` AND depositor_addr = '${depositor_address}'`;
     }
     if (token_address) {
         where += ` AND token_addr = '${token_address}'`;
+        withdrawWhere += ` AND token_addr = '${token_address}'`;
     }
 
     try {
-        var history = await db.getHistoryOfAddress(where, offset, limit);
+        var history = await db.getHistoryOfAddress(where, withdrawWhere, offset, limit);
         res.ok(history);
     } catch (err) {
         next(err);
