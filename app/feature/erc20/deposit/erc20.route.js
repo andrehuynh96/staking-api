@@ -52,10 +52,6 @@ module.exports = route;
  *         name: token_address
  *         description: Address of a token.
  *       - in: query
- *         name: memo
- *         description: Memo a deposit.
- *         type: string
- *       - in: query
  *         name: offset
  *         description: Offset of data for pagination.
  *         type: integer
@@ -79,10 +75,9 @@ module.exports = route;
                         "transaction_index": "0",
                         "deposit_id": "5",
                         "token_addr": "0x90A537b2904f47d958f8340B128c06b3768153BC",
-                        "depositor_addr": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36",
-                        "amount": "1000",
+                        "depositor": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36",
+                        "token_amount": "1000",
                         "duration": "300",
-                        "memo": "plan1-10",
                         "withdraw": null
                     },
                     {
@@ -91,8 +86,8 @@ module.exports = route;
                         "transaction_index": "10",
                         "deposit_id": "0",
                         "token_addr": "0x90A537b2904f47d958f8340B128c06b3768153BC",
-                        "depositor_addr": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36",
-                        "amount": "1000",
+                        "depositor": "0x2F0036792DF25362a2DE0Bab82B4798657B4BC36",
+                        "token_amount": "1000",
                         "duration": "900",
                         "memo": "plan1-10",
                         "withdraw": {
