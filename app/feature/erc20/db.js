@@ -16,6 +16,7 @@ async function getDeposit(where, offset, limit) {
             d.plan_id,
             d.partner_id,
             d.log_index,
+            d.created_at,
             extract(epoch from w.block_time) as "withdrawData_block_time",
             w.block_number as "withdrawData_block_number",
             w.block_hash as "withdrawData_blockHash",
@@ -26,10 +27,22 @@ async function getDeposit(where, offset, limit) {
             w.token_addr as "withdrawData_token_addr",
             w.depositor_addr as "withdrawData_depositor_addr",
             w.recipient_addr as "withdrawData_recipient_addr",
-            w."amount" as "withdrawData_amount"               
+            w."amount" as "withdrawData_amount",
+            s.duration,
+            s.duration_type,
+            s.reward_percentage,
+            p.name as token_name,
+            p.symbol as token_symbol,
+            p.icon as token_icon,
+            p.platform,
+            p.erc20_validator_fee as validator_fee              
         FROM erc20_deposits as d
         LEFT JOIN erc20_withdraws as w
             ON d.deposit_id = w.deposit_id
+        LEFT JOIN erc20_staking_plans as s
+            ON d.plan_id = s.id
+        LEFT JOIN staking_platforms as p
+            ON s.staking_platform_id = p.id   
         WHERE 1=1 ${where}
         ORDER BY d.block_number DESC,
                 d.transaction_index DESC,
