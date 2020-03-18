@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define("erc20_staking_plans", {
+  return sequelize.define("staking_plans", {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
-    erc20_staking_payout_id: {
+    staking_payout_id: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
