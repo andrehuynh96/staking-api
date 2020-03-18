@@ -39,7 +39,7 @@ async function getDeposit(where, offset, limit) {
         FROM erc20_deposits as d
         LEFT JOIN erc20_withdraws as w
             ON d.deposit_id = w.deposit_id
-        LEFT JOIN erc20_staking_plans as s
+        LEFT JOIN staking_plans as s
             ON d.plan_id = s.id
         LEFT JOIN staking_platforms as p
             ON s.staking_platform_id = p.id   
@@ -110,7 +110,7 @@ async function getAggregationInfoOfAddr(depositorAddr, tokenAddr) {
             FROM erc20_deposits d
             LEFT JOIN erc20_withdraws w
             ON d.deposit_id = w.deposit_id
-            JOIN erc20_staking_plans p
+            JOIN staking_plans p
             ON d.plan_id=p.id
             JOIN staking_reward_cfgs rc
             ON p.staking_platform_id = rc.staking_platform_id

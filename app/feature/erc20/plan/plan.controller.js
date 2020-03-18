@@ -1,7 +1,7 @@
 
 const logger = require("app/lib/logger");
 const PLAN_STATUS = require('../const').PLAN_STATUS;
-const StakingPlans = require("app/model").erc20_staking_plans;
+const StakingPlans = require("app/model").staking_plans;
 
 async function getAllPlans(req, res, next) {
     try {
@@ -30,7 +30,7 @@ async function getAllPlans(req, res, next) {
             "reward_percentage",
             "status",
             "reward_diff_token_flg",
-            "erc20_staking_payout_id",
+            "staking_payout_id",
             "diff_token_rate",
             "tx_id",
             "wait_blockchain_confirm_status_flg",
