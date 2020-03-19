@@ -20,8 +20,13 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'DAY',
       allowNull: false
     },
+    duration_in_second: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
     reward_percentage: {
-      type: DataTypes.DECIMAL(4,3),
+      type: DataTypes.DECIMAL(4, 3),
       allowNull: false
     },
     status: {
@@ -37,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     diff_token_rate: {
-      type: DataTypes.DECIMAL(4,3),
+      type: DataTypes.DECIMAL(4, 3),
       allowNull: false
     },
     tx_id: {
@@ -54,8 +59,8 @@ module.exports = (sequelize, DataTypes) => {
     }
 
   }, {
-    underscored: true,
-    timestamps: true,
-  });
+      underscored: true,
+      timestamps: true,
+    });
 }
 
