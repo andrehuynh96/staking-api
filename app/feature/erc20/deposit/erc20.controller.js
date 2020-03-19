@@ -5,6 +5,9 @@ async function getDeposit(req, res, next) {
     var depositor_address = req.query.depositor_address;
     var deposit_id = req.query.deposit_id;
     var token_address = req.query.token_address;
+    var pool_id = req.query.pool_id;
+    var plan_id = req.query.plan_id;
+    var partner_id = req.query.partner_id;
     var offset = req.query.offset;
     var limit = req.query.limit;
     var where = '';
@@ -17,7 +20,15 @@ async function getDeposit(req, res, next) {
     if (deposit_id >= 0) {
         where += ` AND d.deposit_id = ${deposit_id}`;
     }
-
+    if (pool_id) {
+        where += ` AND d.pool_id = ${pool_id}`;
+    }
+    if (plan_id) {
+        where += ` AND d.plan_id = ${plan_id}`;
+    }
+    if (partner_id) {
+        where += ` AND d.partner_id = ${partner_id}`;
+    }
     try {
         var deposit = await db.getDeposit(where, offset, limit);
         res.ok(deposit);
