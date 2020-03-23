@@ -1,5 +1,5 @@
 const ApiKeyStatus = require("./value-object/api-key-status");
-
+const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define("partner_api_keys", {
     id: {
@@ -17,8 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     api_key: {
-      type: DataTypes.STRING(36),
-      allowNull: false
+      type: DataTypes.UUID,
+      allowNull: false,
+      defaultValue: Sequelize.UUIDV4()
     },
     secret_key: {
       type: DataTypes.STRING(64),
