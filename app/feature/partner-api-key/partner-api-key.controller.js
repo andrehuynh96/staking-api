@@ -34,7 +34,8 @@ module.exports = {
 				partner_id: req.body.partner_id,
 				name: req.body.name,
 				secret_key: secret_key,
-				actived_flg: true
+				actived_flg: true,
+				created_by: req.body.user_id
 			}
 			let APIkey = await PartnerAPIKey.create(data)
 			if (!APIkey) return res.serverInternalError();
