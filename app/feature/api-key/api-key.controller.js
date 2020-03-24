@@ -10,7 +10,7 @@ module.exports = {
         actived_flg: false
       }, {
         where: {
-          // api_key: req.user.api_key,
+          api_key: req.user.api_key,
           partner_id: req.user.client_id,
           actived_flg: true
         }
