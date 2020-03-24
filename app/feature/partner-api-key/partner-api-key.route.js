@@ -104,7 +104,7 @@ module.exports = route;
  *     summary: create a new API key
  *     tags:
  *       - API key
- *     description: reate a new API key
+ *     description: create a new API key
  *     parameters:
  *       - name: id
  *         in: path
@@ -130,16 +130,16 @@ module.exports = route;
  *           application/json:
  *             {
                     "data": {
-                        "id": "c487a17d-1992-4324-8847-b8cc25acecd7",
-                        "api_key": "5f4ddc88-02d6-4f72-abc2-082ed86205ff",
+                        "id": "024625de-afe6-439b-bfd6-784135931ef5",
+                        "api_key": "27572536-9260-4ffd-908a-eede3eee775f",
                         "status": "NOT_CONNECT",
                         "partner_id": "8f3d8b76-7915-493c-88f2-94ee074a56f2",
                         "name": "MYHN",
-                        "secret_key": "oVN9QA29PtM2",
+                        "secret_key": "4dE8voPBVgv4rOxNb9zTL0lRMDQKb5k9",
                         "actived_flg": true,
                         "created_by": 1,
-                        "updatedAt": "2020-03-24T03:52:07.788Z",
-                        "createdAt": "2020-03-24T03:52:07.788Z"
+                        "updatedAt": "2020-03-24T04:12:33.677Z",
+                        "createdAt": "2020-03-24T04:12:33.677Z"
                     }
                 }
  *       400:

@@ -3,7 +3,6 @@ const config = require("app/config");
 const Partner = require("app/model").partners;
 const PartnerAPIKey = require("app/model").partner_api_keys;
 const Hashids = require('hashids/cjs')
-const hashids = new Hashids()
 
 module.exports = {
     getAll: async(req, res, next) => {
@@ -26,6 +25,7 @@ module.exports = {
 	},
 	create: async(req, res, next) => {
 		try {
+			const hashids = new Hashids(req.body.name, 32)
 			let secret_key = hashids.encode(
 				Date.now(),
 				Math.floor(Math.random(1000) * 1000 + 1)
