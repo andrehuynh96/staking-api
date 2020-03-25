@@ -11,7 +11,7 @@ route.get("/partners/:id/keys",
 );
 
 route.post("/partners/:id/keys",
-  validator(create),
+//   validator(create),
   authenticate,
   controller.create
 );

@@ -31,11 +31,11 @@ module.exports = {
 				Math.floor(Math.random(1000) * 1000 + 1)
 			)
 			let data = {
-				partner_id: req.body.partner_id,
+				partner_id: req.params.id,
 				name: req.body.name,
 				secret_key: secret_key,
 				actived_flg: true,
-				created_by: req.body.user_id
+				created_by: 0,
 			}
 			let APIkey = await PartnerAPIKey.create(data)
 			if (!APIkey) return res.serverInternalError();

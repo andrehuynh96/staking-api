@@ -1,9 +1,7 @@
 const Joi = require('joi');
 
 const schema = Joi.object().keys({
-    name: Joi.string().required(),
-    partner_id: Joi.string().required(),
-    user_id: Joi.number().required()
+    name: Joi.string().required()
 });
 
 module.exports = schema;
