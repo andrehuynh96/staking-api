@@ -52,8 +52,40 @@ async function insertPlan(req, res, next) {
 async function updatePlan(req, res, next) {
     throw "NOT IMPLEMENT"
 }
+
+async function getPlan(req, res, next) {
+    try {
+        var filter = { order: ['created_at'] };
+        filter['where'] = {
+            id: req.params.id
+        };
+        filter['attributes'] = [
+            "id",
+            "name",
+            "duration",
+            "duration_type",
+            "reward_percentage",
+            "status",
+            "reward_diff_token_flg",
+            "staking_payout_id",
+            "diff_token_rate",
+            "tx_id",
+            "wait_blockchain_confirm_status_flg",
+            "staking_platform_id",
+            "created_at"
+        ];
+
+        var plan = await StakingPlans.findOne(filter, { raw: true })
+        res.ok(plan)
+    } catch (err) {
+        logger.error(err);
+        next(err);
+    }
+}
+
 module.exports = {
     getAllPlans: getAllPlans,
     insertPlan: insertPlan,
-    updatePlan: updatePlan
+    updatePlan: updatePlan,
+    getPlan: getPlan
 }
