@@ -5,7 +5,7 @@ const PartnerAPIKey = require("app/model").partner_api_keys;
 const PartnerCommission = require("app/model").partner_commissions;
 
 module.exports = {
-	create: async(req, res, next) => {
+	create: async (req, res, next) => {
 		try {
 			let partner = await Partner.create({
 				email: req.body.email,
@@ -25,7 +25,7 @@ module.exports = {
 			next(err);
 		}
 	},
-	getAll: async(req, res, next) => {
+	getAll: async (req, res, next) => {
 		try {
 			let limit = req.query.limit ? parseInt(req.query.limit) : 10;
 			let offset = req.query.offset ? parseInt(req.query.offset) : 0;
@@ -43,4 +43,29 @@ module.exports = {
 			next(err);
 		}
 	},
+	update: async (req, res, next) => {
+		try {
+			let partner = await Partner.findOne({
+				where: {
+					id: req.params.id
+				}
+			})
+			if (!partner) return res.badRequest(res.__("NOT_FOUND_PARTNER"), "NOT_FOUND_PARTNER", { fields: ['id'] });
+
+			await Partner.update({
+				name: req.body.name,
+				updated_by: req.body.updated_by
+			}, {
+				where: {
+					id: req.params.id
+				}
+			});
+			partner.name = req.body.name;
+			return res.ok(partner);
+		}
+		catch (err) {
+			logger.error("update grandchild fail:", err);
+			next(err);
+		}
+	}
 }
