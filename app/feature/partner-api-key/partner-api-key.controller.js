@@ -9,7 +9,7 @@ module.exports = {
 		try {
 			let limit = req.query.limit ? parseInt(req.query.limit) : 10;
 			let offset = req.query.offset ? parseInt(req.query.offset) : 0;
-			let where = { partner_id: req.params.id};
+			let where = { partner_id: req.params.id,actived_flg: true};
 			const { count: total, rows: items } = await PartnerAPIKey.findAndCountAll({ limit, offset, where: where, order: [['created_at', 'DESC']] });
 			return res.ok({
 				items: items,
