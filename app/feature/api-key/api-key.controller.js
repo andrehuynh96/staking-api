@@ -6,6 +6,13 @@ const ApiKeyStatus = require("app/model/value-object/api-key-status");
 module.exports = {
   revokeAPIKey: async (req, res, next) => {
     try {
+      let { id: partnerId, key: apiKey } = req.params;
+      
+      if (req.user.client_id != partnerId)
+        return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT", { fields: ['id'] });
+      if (req.user.api_key != apiKey)
+        return res.badRequest(res.__("NOT_FOUND_API_KEY"), "NOT_FOUND_API_KEY", { fields: ['key'] });
+
       let key = await ClientKey.update({
         actived_flg: false
       }, {

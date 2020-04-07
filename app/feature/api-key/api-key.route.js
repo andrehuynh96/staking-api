@@ -3,7 +3,7 @@ const controller = require("./api-key.controller");
 const authenticate = require('app/middleware/authenticate.middleware');
 const route = express.Router();
 
-route.get("/api-key/revoke",
+route.delete("/partners/:id/keys/:key",
   authenticate,
   controller.revokeAPIKey
 )
@@ -13,12 +13,19 @@ route.get("/api-key/revoke",
 
 /**
  * @swagger
- * /api/v1/api-key/revoke:
- *   get:
+ * /api/v1/partners/{id}/keys/{key}:
+ *   delete:
  *     summary: revoke API key
  *     tags:
  *       - API Key
  *     description: revoke API key
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         type: string
+ *       - name: key
+ *         in: path
+ *         type: string
  *     produces:
  *       - application/json
  *     responses:
