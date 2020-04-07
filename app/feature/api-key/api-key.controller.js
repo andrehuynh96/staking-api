@@ -10,21 +10,24 @@ module.exports = {
       
       if (req.user.client_id != partnerId)
         return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT", { fields: ['id'] });
-      if (req.user.api_key != apiKey)
-        return res.badRequest(res.__("NOT_FOUND_API_KEY"), "NOT_FOUND_API_KEY", { fields: ['key'] });
 
-      let key = await ClientKey.update({
-        actived_flg: false
-      }, {
+      let key = await ClientKey.findOne({
         where: {
-          api_key: req.user.api_key,
-          partner_id: req.user.client_id,
-          actived_flg: true
+          api_key: apiKey,
+          partner_id: partnerId
         }
       });
       if (!key) {
         return res.badRequest(res.__("NOT_FOUND_API_KEY"), "NOT_FOUND_API_KEY");
       }
+
+      key = await ClientKey.update({
+        actived_flg: false
+      }, {
+        where: {
+          id: key.id
+        }
+      });
       return res.ok(true);
     }
     catch (err) {
