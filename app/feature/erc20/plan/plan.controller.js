@@ -1,44 +1,41 @@
 
 const logger = require("app/lib/logger");
 const PLAN_STATUS = require('../const').PLAN_STATUS;
-const StakingPlans = require("app/model").staking_plan;
+const StakingPlans = require("app/model").staking_plans;
 
 async function getAllPlans(req, res, next) {
     try {
         var status = req.query.status || PLAN_STATUS.all;
         var staking_platform_id = req.query.staking_platform_id;
-        var include_deleted = req.query.include_deleted;
 
         var filter = { order: ['created_at'] };
         var where = {};
 
         if (status == PLAN_STATUS.active) {
-            where['actived_flg'] = true;
+            where['status'] = 1;
         } else if (status == PLAN_STATUS.deactive) {
-            where['actived_flg'] = false;
+            where['status'] = 0;
         }
 
         if (staking_platform_id) {
             where['staking_platform_id'] = staking_platform_id;
         }
 
-        if (!include_deleted) {
-            where['deleted_flg'] = false;
-        }
-
         filter['where'] = where;
         filter['attributes'] = [
             "id",
-            "staking_plan_code",
+            "name",
             "duration",
             "duration_type",
-            "reward_per_year",
-            "actived_flg",
-            "reward_in_diff_platform_flg",
-            "reward_platform",
-            "reward_token_address",
+            "reward_percentage",
+            "status",
+            "reward_diff_token_flg",
+            "staking_payout_id",
+            "diff_token_rate",
+            "tx_id",
+            "wait_blockchain_confirm_status_flg",
             "staking_platform_id",
-            "deleted_flg"
+            "created_at"
         ];
 
         var plans = await StakingPlans.findAll(filter, { raw: true })
@@ -55,8 +52,40 @@ async function insertPlan(req, res, next) {
 async function updatePlan(req, res, next) {
     throw "NOT IMPLEMENT"
 }
+
+async function getPlan(req, res, next) {
+    try {
+        var filter = { order: ['created_at'] };
+        filter['where'] = {
+            id: req.params.id
+        };
+        filter['attributes'] = [
+            "id",
+            "name",
+            "duration",
+            "duration_type",
+            "reward_percentage",
+            "status",
+            "reward_diff_token_flg",
+            "staking_payout_id",
+            "diff_token_rate",
+            "tx_id",
+            "wait_blockchain_confirm_status_flg",
+            "staking_platform_id",
+            "created_at"
+        ];
+
+        var plan = await StakingPlans.findOne(filter, { raw: true })
+        res.ok(plan)
+    } catch (err) {
+        logger.error(err);
+        next(err);
+    }
+}
+
 module.exports = {
     getAllPlans: getAllPlans,
     insertPlan: insertPlan,
-    updatePlan: updatePlan
+    updatePlan: updatePlan,
+    getPlan: getPlan
 }
