@@ -67,5 +67,20 @@ module.exports = {
 			logger.error("update grandchild fail:", err);
 			next(err);
 		}
+	},
+	get: async (req, res, next) => {
+		try {
+			let partner = await Partner.findOne({
+				where: {
+					id: req.params.id
+				}
+			})
+			if (!partner) return res.badRequest(res.__("NOT_FOUND_PARTNER"), "NOT_FOUND_PARTNER", { fields: ['id'] });
+			return res.ok(partner);
+		}
+		catch (err) {
+			logger.error("get grandchild fail:", err);
+			next(err);
+		}
 	}
 }

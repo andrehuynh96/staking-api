@@ -22,6 +22,11 @@ route.put("/grandchild/:id",
   controller.update
 );
 
+route.get("/grandchild/:id",
+  authenticate,
+  controller.get
+);
+
 module.exports = route;
 
 /*********************************************************************/
@@ -207,7 +212,7 @@ module.exports = route;
  *            example:
  *                  {
                         "name": "sua lai ten",
-                        updated_by: 10  
+                        updated_by: 10
  *                  }
  *     produces:
  *       - application/json
@@ -230,6 +235,60 @@ module.exports = route;
                         "createdAt": "2020-04-07T07:06:50.571Z",
                         "updatedAt": "2020-04-07T07:18:27.243Z"
                     }
+ *             }
+ *       400:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/400'
+ *       401:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/401'
+ *       404:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/404'
+ *       500:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/500'
+ */
+
+/*********************************************************************/
+
+/**
+ * @swagger
+ * /api/v1/grandchild/{id}:
+ *   get:
+ *     summary: get info of a grandchild
+ *     tags:
+ *       - Grandchild
+ *     description: get info of a grandchild
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         type: string
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Ok
+ *         examples:
+ *           application/json:
+ *             {
+ *                "data": {
+                      "id": "4ab88f58-c25a-4ee2-836b-7f020e42bd81",
+                      "email": "trinhdn@blockchainlabs.asia",
+                      "name": "sua lai ten khac",
+                      "parent_id": "ed483de6-2d14-11ea-978f-2e728ce88125",
+                      "partner_type": "CHILD",
+                      "actived_flg": true,
+                      "deleted_flg": false,
+                      "created_by": 10,
+                      "updated_by": 10,
+                      "createdAt": "2020-04-07T07:06:50.571Z",
+                      "updatedAt": "2020-04-07T08:28:52.677Z"
+                  }
  *             }
  *       400:
  *         description: Error
