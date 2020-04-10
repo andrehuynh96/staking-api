@@ -5,22 +5,35 @@ const validator = require('app/middleware/validator.middleware');
 const { update } = require('./validator');
 const route = express.Router();
 
-route.get("/partners/:partner_id/commissions",
-  authenticate,
-  controller.getAll
+route.get(
+	"/partners/:partner_id/commissions",
+	authenticate,
+	controller.getAll
 );
 
 route.get(
-  '/partners/:partner_id/commissions/histories',
-  authenticate,
-  controller.getHis
+	'/partners/:partner_id/commissions/histories',
+	authenticate,
+	controller.getHis
 );
 
 route.post(
-  '/partners/:partner_id/commissions',
-  authenticate,
-  validator(update),
-  controller.update
+	'/partners/:partner_id/commissions',
+	authenticate,
+	validator(update),
+	controller.update
+);
+
+route.get(
+	"/partners/commissions/:platform",
+	authenticate,
+	controller.getAllByPlatform
+);
+
+route.get(
+	"/partners/:partner_id/commissions/:platform",
+	authenticate,
+	controller.get
 );
 
 module.exports = route;
@@ -47,7 +60,7 @@ module.exports = route;
  *       - name: limit
  *         in: query
  *         type: integer
- *         format: int32 
+ *         format: int32
  *     produces:
  *       - application/json
  *     responses:
@@ -120,7 +133,7 @@ module.exports = route;
  *       - in: path
  *         name: partner_id
  *         type: string
- *         required: true  
+ *         required: true
  *       - in: body
  *         name: data
  *         description: Data for commision.
@@ -213,7 +226,7 @@ module.exports = route;
  *       - in: path
  *         name: partner_id
  *         type: string
- *         required: true 
+ *         required: true
  *       - name: offset
  *         in: query
  *         type: integer
@@ -221,7 +234,7 @@ module.exports = route;
  *       - name: limit
  *         in: query
  *         type: integer
- *         format: int32 
+ *         format: int32
  *     produces:
  *       - application/json
  *     responses:
@@ -270,5 +283,149 @@ module.exports = route;
  *         description: Error
  *         schema:
  *           $ref: '#/definitions/500'
- *  
+ *
+ */
+
+/*********************************************************************/
+
+/**
+ * @swagger
+ * /api/v1/partners/commissions/{platform}:
+ *   get:
+ *     summary: get list of partner commissions by platform
+ *     tags:
+ *       - Commission
+ *     description: get list of partner commissions by by platform
+ *     parameters:
+ *       - in: path
+ *         name: platform
+ *         type: string
+ *         required: true
+ *       - name: offset
+ *         in: query
+ *         type: integer
+ *         format: int32
+ *       - name: limit
+ *         in: query
+ *         type: integer
+ *         format: int32
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Ok
+ *         examples:
+ *           application/json:
+ *             {
+ *                 "data": {
+												"items": [
+														{
+																"id": "2366f28e-8802-47b6-b96e-1cbf467f6978",
+																"platform": "IRIS",
+																"commission": 70,
+																"reward_address": "",
+																"updated_by": 64,
+																"updated_at": "2020-04-09T14:47:41.801Z"
+														},
+														{
+																"id": "92883d8c-4184-4cee-8eb7-c0bacee1ffcc",
+																"platform": "IRIS",
+																"commission": 24,
+																"reward_address": "",
+																"updated_by": 10,
+																"updated_at": "2020-04-09T17:22:29.001Z"
+														},
+														{
+																"id": "24c39b32-2d13-11ea-978f-2e728ce88125",
+																"platform": "IRIS",
+																"commission": 20,
+																"reward_address": "iaa16se3zaex588aqa6e0mgnps92a005mjm95d56jx",
+																"updated_by": 0,
+																"updated_at": "2020-02-06T09:12:43.073Z"
+														}
+												],
+												"offset": 0,
+												"limit": 10,
+												"total": 3
+										}
+ *             }
+ *       400:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/400'
+ *       401:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/401'
+ *       404:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/404'
+ *       500:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/500'
+ */
+
+/*********************************************************************/
+
+/**
+ * @swagger
+ * /api/v1/partners/{partner_id}/commissions/{platform}:
+ *   get:
+ *     summary: get commission by platform and partner_id
+ *     tags:
+ *       - Commission
+ *     description: get commission by platform and partner_id
+ *     parameters:
+ *       - in: path
+ *         name: partner_id
+ *         type: string
+ *         required: true
+ *       - in: path
+ *         name: platform
+ *         type: string
+ *         required: true
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Ok
+ *         examples:
+ *           application/json:
+ *             {
+ *                 "data": [
+												{
+														"id": "3c3ed477-a40e-439c-97ff-a404498ed5c2",
+														"platform": "ETH",
+														"commission": 20,
+														"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+														"updated_at": "2019-12-16T08:48:01.508Z"
+												},
+												{
+														"id": "ac098ffd-1ff3-47c5-9244-38eda2dcfc59",
+														"platform": "ETH",
+														"commission": 20,
+														"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+														"updated_by": 0,
+														"updated_at": "2019-12-16T08:48:01.508Z"
+												}
+										]
+ *             }
+ *       400:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/400'
+ *       401:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/401'
+ *       404:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/404'
+ *       500:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/500'
  */

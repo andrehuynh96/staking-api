@@ -82,5 +82,42 @@ module.exports = {
       if (transaction) await transaction.rollback();
       next(err);
     }
-  }
+  },
+  getAllByPlatform: async (req, res, next) => {
+    try {
+      logger.info('partner-commission::all::getAllByPlatform');
+      const { query: { offset, limit }, params: { platform } } = req;
+      const where = { platform };
+      const off = parseInt(offset) || 0;
+      const lim = parseInt(limit) || 10;
+      const { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
+      return res.ok({
+        items: partner_commissions.map(item => mapper(item)),
+        offset: off,
+        limit: lim,
+        total: total
+      });
+    }
+    catch (err) {
+      logger.error("get commission by platform fail:", err);
+      if (transaction) await transaction.rollback();
+      next(err);
+    }
+  },
+  get: async (req, res, next) => {
+    try {
+      logger.info('partner-commission::get');
+      const { params: { partner_id, platform } } = req;
+      const where = { platform, partner_id };
+      let response = await PartnerCommission.findAll({
+        where
+      });
+      return res.ok(response.map(item => mapper(item)));
+    }
+    catch (err) {
+      logger.error("get commission fail:", err);
+      if (transaction) await transaction.rollback();
+      next(err);
+    }
+  },
 }
