@@ -7,13 +7,13 @@ const authenticate = require('app/middleware/authenticate.middleware');
 const router = express.Router();
 
 router.post(
-    '/partners/:partner_id/commissions/:commission_id/requests',
+    '/commissions/:commission_id/requests',
     authenticate,
     validator(create),
     controller.create
 );
-router.put(
-    '/partners/:partner_id/commissions/:commission_id/requests/:id',
+router.post(
+    '/commissions/requests',
     authenticate,
     validator(update),
     controller.update
@@ -25,7 +25,7 @@ module.exports = router;
   
 /**
  * @swagger
- * /api/v1/partners/{partner_id}/commissions/{commission_id}/requests:
+ * /api/v1/commissions/{commission_id}/requests:
  *   post:
  *     summary: create request change reward address
  *     tags:
@@ -37,10 +37,6 @@ module.exports = router;
  *         type: string
  *         required: true
  *         description: Bearer {token}
- *       - in: path
- *         name: partner_id
- *         type: string
- *         required: true
  *       - in: path
  *         name: commission_id
  *         type: string
@@ -68,7 +64,11 @@ module.exports = router;
 *         examples:
 *           application/json:
 *             {
-*                 "data": "OWY4YzBlOTgtZmY5NS00M2Y1LTk4M2YtY2M0MzAzNjRlNDFi"
+*                 "data": {
+                    "verify_token": "OWY4YzBlOTgtZmY5NS00M2Y1LTk4M2YtY2M0MzAzNjRlNDFi",
+                    "platform": "ATOM"
+                }
+
 *             }
 *       400:
 *         description: Error
@@ -90,8 +90,8 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/v1/partners/{partner_id}/commissions/{commission_id}/requests/{id}:
- *   put:
+ * /api/v1/commissions/requests:
+ *   post:
  *     summary: update request change reward address
  *     tags:
  *       - Requests
@@ -102,18 +102,6 @@ module.exports = router;
  *         type: string
  *         required: true
  *         description: Bearer {token}
- *       - in: path
- *         name: partner_id
- *         type: string
- *         required: true
- *       - in: path
- *         name: commission_id
- *         type: string
- *         required: true
- *       - in: path
- *         name: id
- *         type: string
- *         required: true
  *       - in: body
  *         name: data
  *         description: Data for update.
@@ -135,7 +123,11 @@ module.exports = router;
 *         examples:
 *           application/json:
 *             {
-*                 "data": true
+*                 "data": {
+                    "partner": "",
+                    "platform": "", 
+                    "address": ""
+}
 *             }
 *       400:
 *         description: Error
