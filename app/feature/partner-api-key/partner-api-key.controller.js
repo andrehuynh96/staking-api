@@ -5,11 +5,13 @@ const PartnerAPIKey = require("app/model").partner_api_keys;
 const Hashids = require('hashids/cjs')
 
 module.exports = {
-    getAll: async(req, res, next) => {
+	getAll: async (req, res, next) => {
 		try {
+			if (req.user.client_id != req.params.id)
+				return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT", { fields: ['id'] });
 			let limit = req.query.limit ? parseInt(req.query.limit) : 10;
 			let offset = req.query.offset ? parseInt(req.query.offset) : 0;
-			let where = { partner_id: req.params.id,actived_flg: true};
+			let where = { partner_id: req.params.id, actived_flg: true };
 			const { count: total, rows: items } = await PartnerAPIKey.findAndCountAll({ limit, offset, where: where, order: [['created_at', 'DESC']] });
 			return res.ok({
 				items: items,
@@ -23,8 +25,10 @@ module.exports = {
 			next(err);
 		}
 	},
-	create: async(req, res, next) => {
+	create: async (req, res, next) => {
 		try {
+			if (req.user.client_id != req.params.id)
+				return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT", { fields: ['id'] });
 			const hashids = new Hashids(req.body.name, 32)
 			let secret_key = hashids.encode(
 				Date.now(),
@@ -41,7 +45,7 @@ module.exports = {
 			if (!APIkey) return res.serverInternalError();
 			return res.ok(APIkey);
 		}
-		catch(err){
+		catch (err) {
 			logger.error("create new api key fail:", err);
 			next(err);
 		}
