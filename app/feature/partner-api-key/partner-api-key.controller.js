@@ -7,7 +7,12 @@ const Hashids = require('hashids/cjs')
 module.exports = {
 	getAll: async (req, res, next) => {
 		try {
-			if (req.user.client_id != req.params.id)
+			let partner = await Partner.findOne({
+				where: {
+					id: req.params.id
+				}
+			});
+			if (req.user.client_id != req.params.id && partner.parent_id != req.user.client_id)
 				return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT", { fields: ['id'] });
 			let limit = req.query.limit ? parseInt(req.query.limit) : 10;
 			let offset = req.query.offset ? parseInt(req.query.offset) : 0;
@@ -27,7 +32,12 @@ module.exports = {
 	},
 	create: async (req, res, next) => {
 		try {
-			if (req.user.client_id != req.params.id)
+			let partner = await Partner.findOne({
+				where: {
+					id: req.params.id
+				}
+			});
+			if (req.user.client_id != req.params.id && partner.parent_id != req.user.client_id)
 				return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT", { fields: ['id'] });
 			const hashids = new Hashids(req.body.name, 32)
 			let secret_key = hashids.encode(
