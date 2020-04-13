@@ -12,5 +12,6 @@ router.use(require("./partner-api-key/partner-api-key.route"));
 // Erc20 routes
 router.use(require("./erc20/plan/plan.route"));
 router.use(require("./erc20/deposit/erc20.route"));
+router.use(require("./partner-request/partner-request.route"));
 
 module.exports = router;
