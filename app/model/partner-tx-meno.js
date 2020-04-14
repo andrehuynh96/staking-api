@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       default: 0
     },
+    updated_by: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      default: 0
+    },
   }, {
       underscored: true,
       timestamps: true,
