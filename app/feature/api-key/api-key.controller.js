@@ -7,8 +7,13 @@ module.exports = {
   revokeAPIKey: async (req, res, next) => {
     try {
       let { id: partnerId, key: apiKey } = req.params;
-      
-      if (req.user.client_id != partnerId)
+
+      let partner = await Partner.findOne({
+        where: {
+          id: partnerId
+        }
+      });
+      if (req.user.client_id != req.params.id && partner.parent_id != req.user.client_id)
         return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT", { fields: ['id'] });
 
       let key = await ClientKey.findOne({
