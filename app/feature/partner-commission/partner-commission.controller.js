@@ -100,7 +100,6 @@ module.exports = {
     }
     catch (err) {
       logger.error("get commission by platform fail:", err);
-      if (transaction) await transaction.rollback();
       next(err);
     }
   },
@@ -116,8 +115,27 @@ module.exports = {
     }
     catch (err) {
       logger.error("get commission fail:", err);
-      if (transaction) await transaction.rollback();
       next(err);
     }
   },
+  getAllByPartner: async (req, res, next) => {
+    try {
+      logger.info('partner-commission::all::getAllByPartner');
+      const { query: { offset, limit } } = req;
+      const where = { partner_id: req.user.client_id };
+      const off = parseInt(offset) || 0;
+      const lim = parseInt(limit) || 10;
+      const { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
+      return res.ok({
+        items: partner_commissions.map(item => mapper(item)),
+        offset: off,
+        limit: lim,
+        total: total
+      });
+    }
+    catch (err) {
+      logger.error("get commission by partner fail:", err);
+      next(err);
+    }
+  }
 }

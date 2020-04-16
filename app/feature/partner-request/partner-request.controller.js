@@ -9,7 +9,7 @@ const UserRole = require('app/model').user_roles;
 const Permission = require('app/model').permissions;
 const RolePermission = require('app/model').role_permissions;
 const Partner = require('app/model').partners;
-
+const verifyAddress = require('app/lib/verify-address');
 module.exports = {
     create: async (req, res, next) => {
         try {
@@ -23,6 +23,9 @@ module.exports = {
             });
             if (!commission) {
                 return res.badRequest(res.__("PARTNER_COMMISSION_NOT_FOUND"), "PARTNER_COMMISSION_NOT_FOUND");
+            }
+            if (!verifyAddress(commission.platform, body.reward_address)) {
+                return res.badRequest(res.__("ADDRESS_INVALID"), "ADDRESS_INVALID");
             }
             let data = {
                 ...body,
@@ -128,4 +131,7 @@ module.exports = {
         }
     }
 }
+
+
+
 
