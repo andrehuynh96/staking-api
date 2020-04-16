@@ -50,6 +50,7 @@ module.exports = {
 				secret_key: secret_key,
 				actived_flg: true,
 				created_by: 0,
+				partner_updated_by: req.user.client_id
 			}
 			let APIkey = await PartnerAPIKey.create(data)
 			if (!APIkey) return res.serverInternalError();
