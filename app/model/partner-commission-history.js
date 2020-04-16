@@ -1,6 +1,5 @@
-
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define("partner_tx_memos", {
+  return sequelize.define("partner_commissions_his", {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -11,35 +10,35 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false
     },
+    commission: {
+      type: DataTypes.DOUBLE,
+      allowNull: false
+    },
     platform: {
       type: DataTypes.STRING(16),
       allowNull: false
     },
-    memo: {
-      type: DataTypes.STRING(256),
+    reward_address: {
+      type: DataTypes.STRING(128),
       allowNull: false
-    },
-    default_flg: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      default: true
     },
     created_by: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      default: 0
+      defaultValue: 0
     },
     updated_by: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      default: 0
+      defaultValue: 0
     },
     partner_updated_by: {
       type: DataTypes.UUID,
       allowNull: true
     }
   }, {
-    underscored: true,
-    timestamps: true,
-  });
-} 
+      underscored: true,
+      timestamps: true,
+    });
+
+}

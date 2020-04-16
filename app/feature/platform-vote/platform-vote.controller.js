@@ -11,38 +11,54 @@ const ModelConfig = {
   IRIS: Model.iris_cfgs
 }
 
-module.exports = async (req, res, next) => {
-  try {
-    let items = await PlatformVote.findAll({
-      where: {
-        status: {
-          [Op.in]: [StakingPlatformStatus.COMMING_SOON, StakingPlatformStatus.ENABLED]
-        }
-      },
-      raw: true
-    });
-    if (items && items.length > 0) {
-      for (let e of items) {
-        if (!e.validator_address && ModelConfig[e.symbol]) {
-          let validator = await ModelConfig[e.symbol].findOne({
-            where: {
-              actived_flg: true
-            },
-            order: [
-              ['default_flg', 'DESC'],
-            ],
-          });
-          if (validator) {
-            e.validator_address = validator.validator;
+module.exports = {
+  getAll: async (req, res, next) => {
+    try {
+      let items = await PlatformVote.findAll({
+        where: {
+          status: {
+            [Op.in]: [StakingPlatformStatus.COMMING_SOON, StakingPlatformStatus.ENABLED]
+          }
+        },
+        raw: true
+      });
+      if (items && items.length > 0) {
+        for (let e of items) {
+          if (!e.validator_address && ModelConfig[e.symbol]) {
+            let validator = await ModelConfig[e.symbol].findOne({
+              where: {
+                actived_flg: true
+              },
+              order: [
+                ['default_flg', 'DESC'],
+              ],
+            });
+            if (validator) {
+              e.validator_address = validator.validator;
+            }
           }
         }
       }
+      return res.ok(items);
     }
-    return res.ok(items);
-  }
-  catch (err) {
-    logger.error("get platform vote fail:", err);
-    next(err);
+    catch (err) {
+      logger.error("get all platform vote fail:", err);
+      next(err);
+    }
+  },
+  get: async (req, res, next) => {
+    try {
+      let platform = await PlatformVote.findOne({
+        where: {
+          id: req.params.id
+        }
+      });
+      return res.ok(platform);
+    }
+    catch (err) {
+      logger.error("get platform vote fail:", err);
+      next(err);
+    }
   }
 }
 
