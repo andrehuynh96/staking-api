@@ -52,6 +52,7 @@
     "redis": "^2.8.0",
     "rootpath": "^0.1.2",
     "sequelize": "^5.21.2",
+    "sequelize-cli": "^5.5.1",
     "sequelize-temporalize": "^4.1.0",
     "string-template": "^1.0.0",
     "swagger-jsdoc": "^3.4.0",
