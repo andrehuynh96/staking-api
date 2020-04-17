@@ -6,7 +6,8 @@ const destObject = {
   memo: 'memo',
   default_flg: 'default_flg',
   created_by: 'updated_by',
-  createdAt: 'updated_at'
+  createdAt: 'updated_at',
+  partner_updated_by: 'partner_updated_by'
 };
 
 module.exports = srcObject => {
