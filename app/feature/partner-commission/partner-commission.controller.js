@@ -59,10 +59,12 @@ module.exports = {
           item.created_by = updated_by;
           item.updated_by = updated_by;
           item.partner_id = partner_id;
+          item.partner_updated_by = req.user.client_id;
           item.reward_address = '';
           insertedItems.push(item);
         } else {
           item.updated_by = updated_by;
+          item.partner_updated_by = req.user.client_id;
           let [_, updatedCommission] = await PartnerCommission.update(item, {
             where: {
               id: item.id

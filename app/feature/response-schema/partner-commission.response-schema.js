@@ -6,7 +6,8 @@ const destObject = {
   commission: 'commission',
   reward_address: 'reward_address',
   updated_by: 'updated_by',
-  updatedAt: 'updated_at'
+  updatedAt: 'updated_at',
+  partner_updated_by: 'partner_updated_by'
 };
 
 module.exports = srcObject => {
