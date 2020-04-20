@@ -70,12 +70,12 @@ module.exports = {
           item.updated_by = user_id;
           item.partner_id = partner_id;
           item.default_flg = true;
+          item.partner_updated_by = partner_id
           insertedItems.push(item);
           if (txMemo && txMemo.id) updatedItems.push(txMemo.id);
         }
       }
       let partner_tx_memos = await TxMemo.bulkCreate(insertedItems, { transaction });
-      console.log(user_id)
       await TxMemo.update({
         default_flg: false,
         updated_by: user_id
