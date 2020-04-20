@@ -61,6 +61,10 @@ module.exports = {
             if (!partnerRequest) {
                 return res.badRequest(res.__("TOKEN_INVALID"), "TOKEN_INVALID", { fields: ["verify_token"] });
             }
+
+            if (partnerRequest.status == 1 || partnerRequest.status == 3) {
+                return res.badRequest(res.__("TOKEN_USED"), "TOKEN_USED", { fields: ["verify_token"] });
+            }
             let commission = await PartnerCommission.findOne({
                 where: {
                     id: partnerRequest.partner_commission_id
@@ -127,6 +131,30 @@ module.exports = {
         } catch (error) {
             logger.error(error);
             if (transaction) await transaction.rollback();
+            next(error);
+        }
+    },
+    checkToken : async (req, res, next) => {
+        try {
+            let token = req.params.token;
+            let partnerRequest = await PartnerRequest.findOne({
+                where: {
+                    partner_id: req.user.client_id,
+                    verify_token: token
+                }
+            });
+            if (!partnerRequest) {
+                return res.badRequest(res.__("TOKEN_INVALID"), "TOKEN_INVALID", { fields: ["verify_token"] });
+            }
+            let status = 'VALID';
+            if (partnerRequest.status == 1 || partnerRequest.status == 3) {
+                status = 'USED'
+            }
+            return res.ok({
+                token_sts: status
+            })
+        } catch (error) {
+            logger.error(error);
             next(error);
         }
     }
