@@ -10,11 +10,17 @@ const Permission = require('app/model').permissions;
 const RolePermission = require('app/model').role_permissions;
 const Partner = require('app/model').partners;
 const verifyAddress = require('app/lib/verify-address');
+const StakingPlatform = require('app/model').staking_platforms;
 module.exports = {
     create: async (req, res, next) => {
         try {
             let {params: {commission_id }, body} = req;
             let verifyToken = Buffer.from(uuidV4()).toString('base64');
+            let partner = await Partner.findOne({
+                where: {
+                    id: req.user.client_id
+                }
+            });
             let commission = await PartnerCommission.findOne({
                 where: {
                     id: commission_id,
@@ -33,10 +39,17 @@ module.exports = {
                 partner_commission_id: commission_id,
                 verify_token: verifyToken
             }
+            let stakingPlatform = await StakingPlatform.findOne({
+                where: {
+                    platform: commission.platform
+                }
+            })
             await PartnerRequest.create(data);
             return res.ok({
                 verify_token: verifyToken,
-                platform: commission.platform
+                platform: commission.platform,
+                partner: partner.name,
+                icon: stakingPlatform ? stakingPlatform.icon : null
             });
         } catch (error) {
             logger.error(error);
@@ -97,17 +110,17 @@ module.exports = {
                 });
 
                 if (permission) {
-                    let rolePermission = await RolePermission.findOne({
+                    let rolePermissions = await RolePermission.findAll({
                         where: {
                             permission_id: permission.id
                         }
                     })
-                    if (rolePermission) {
+                    if (rolePermissions.length > 0) {
                         let include = [
                             {
                                 model: UserRole,
                                 where: {
-                                    role_id: rolePermission.role_id
+                                    role_id: rolePermissions.map(e => e.role_id)
                                 },
                             }
                         ];
@@ -121,12 +134,19 @@ module.exports = {
                     }
                 }
             }
+            let stakingPlatform = await StakingPlatform.findOne({
+                where: {
+                    platform: commission.platform
+                }
+            })
             await transaction.commit();
             return res.ok({
                 partner: partner.name,
+                partner_id: partner.id,
                 platform: commission.platform,
                 address: partnerRequest.reward_address,
-                emails: emails
+                emails: emails,
+                icon: stakingPlatform ? stakingPlatform.icon : null
             });
         } catch (error) {
             logger.error(error);
