@@ -7,6 +7,8 @@ const StakingPlatformStatus = require("app/model/value-object/staking-platform-s
 const mapper = require('app/feature/response-schema/partner-commission.response-schema');
 const database = require('app/lib/database').instanse;
 const { Op } = require("sequelize");
+const bech32 = require("bech32");
+const WAValidator = require("wallet-address-validator");
 
 module.exports = {
   getAll: async (req, res, next) => {
@@ -63,6 +65,12 @@ module.exports = {
       const { params: { partner_id }, body: { items, updated_by } } = req;
       let updatedCommissions = [];
       let insertedItems = [];
+
+      let checkAddressMessage = _checkListAddress(items);
+      if (checkAddressMessage.length > 0) {
+        return res.badRequest(checkAddressMessage);
+      }
+
       transaction = await database.transaction();
       for (let item of items) {
         if (!item.id) {
@@ -199,6 +207,35 @@ const _getPlatformNotConfig = async (stakingPlatformIds) => {
 
 }
 
+
+function _checkListAddress(data) {
+  let errorMessage = "";
+  if (data && data.length > 0) {
+    for (let e of data) {
+      if (e.id) {
+        continue;
+      }
+      if (!e.reward_address) {
+        continue;
+      }
+      let valid = false;
+      if (e.platform == "ATOM") {
+        valid = _verifyCosmosAddress(e.reward_address);
+      } else if (e.platform == "IRIS") {
+        valid = _verifyIrisAddress(e.reward_address);
+      } else {
+        valid = WAValidator.validate(e.reward_address, e.platform, "testnet");
+        valid = valid ? true : WAValidator.validate(e.reward_address, e.platform);
+      }
+      if (!valid) {
+        errorMessage = `invalid address of ${e.platform}!`;
+        break;
+      }
+    }
+  }
+  return errorMessage;
+}
+
 const _getSymbol = async (commissions, stakingPlatformIds) => {
   let result = await StakingPlatform.findAll({
     attributes: ['id', 'platform', 'symbol'],
@@ -217,4 +254,24 @@ const _getSymbol = async (commissions, stakingPlatformIds) => {
   }
 
   return commissions;
+}
+
+function _verifyCosmosAddress(address) {
+  try {
+    let result = bech32.decode(address.toLowerCase());
+    return result.prefix == "cosmos";
+  } catch (e) {
+    logger.error(e);
+    return false;
+  }
+}
+
+function _verifyIrisAddress(address) {
+  try {
+    let result = bech32.decode(address.toLowerCase());
+    return result.prefix == "iaa";
+  } catch (e) {
+    logger.error(e);
+    return false;
+  }
 }
