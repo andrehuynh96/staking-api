@@ -1,21 +1,27 @@
 
 const logger = require("app/lib/logger");
+const Platform = require("app/model").staking_platforms;
 const PartnerCommission = require("app/model").partner_commissions;
 const PartnerCommissionHis = require("app/model").partner_commissions_his;
 const mapper = require('app/feature/response-schema/partner-commission.response-schema');
 const database = require('app/lib/database').instanse;
+const { Op } = require("sequelize");
 
 module.exports = {
   getAll: async (req, res, next) => {
     try {
       logger.info('partner-commission::all');
       const { query: { offset, limit }, params: { partner_id } } = req;
+      const platformList = await _getFreePlatforms();
       const where = { partner_id: partner_id };
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
       const { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
       return res.ok({
-        items: partner_commissions.map(item => mapper(item)),
+        items: partner_commissions.map(item => {
+          if (!item.staking_platform_id) item.staking_platform_id = platformList;
+          return mapper(item);
+        }),
         offset: off,
         limit: lim,
         total: total
@@ -60,12 +66,18 @@ module.exports = {
           item.updated_by = updated_by;
           item.partner_id = partner_id;
           item.partner_updated_by = req.user.client_id;
-          item.reward_address = '';
           insertedItems.push(item);
         } else {
           item.updated_by = updated_by;
           item.partner_updated_by = req.user.client_id;
-          let [_, updatedCommission] = await PartnerCommission.update(item, {
+          let allowedField = ['updated_by', 'partner_updated_by', 'commission'];
+          let filteredItem = Object.keys(item)
+            .filter(key => allowedField.includes(key))
+            .reduce((obj, key) => {
+              obj[key] = item[key];
+              return obj;
+            }, {});
+          let [_, updatedCommission] = await PartnerCommission.update(filteredItem, {
             where: {
               id: item.id
             }, returning: true
@@ -89,12 +101,16 @@ module.exports = {
     try {
       logger.info('partner-commission::all::getAllByPlatform');
       const { query: { offset, limit }, params: { platform } } = req;
+      const platformList = await _getFreePlatforms();
       const where = { platform };
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
       const { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
       return res.ok({
-        items: partner_commissions.map(item => mapper(item)),
+        items: partner_commissions.map(item => {
+          if (!item.staking_platform_id) item.staking_platform_id = platformList;
+          return mapper(item);
+        }),
         offset: off,
         limit: lim,
         total: total
@@ -109,11 +125,15 @@ module.exports = {
     try {
       logger.info('partner-commission::get');
       const { params: { partner_id, platform } } = req;
+      const platformList = await _getFreePlatforms();
       const where = { platform, partner_id };
       let response = await PartnerCommission.findAll({
         where
       });
-      return res.ok(response.map(item => mapper(item)));
+      return res.ok(response.map(item => {
+        if (!item.staking_platform_id) item.staking_platform_id = platformList;
+        return mapper(item);
+      }));
     }
     catch (err) {
       logger.error("get commission fail:", err);
@@ -124,12 +144,16 @@ module.exports = {
     try {
       logger.info('partner-commission::all::getAllByPartner');
       const { query: { offset, limit } } = req;
+      const platformList = await _getFreePlatforms();
       const where = { partner_id: req.user.client_id };
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
       const { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
       return res.ok({
-        items: partner_commissions.map(item => mapper(item)),
+        items: partner_commissions.map(item => {
+          if (!item.staking_platform_id) item.staking_platform_id = platformList;
+          return mapper(item);
+        }),
         offset: off,
         limit: lim,
         total: total
@@ -140,4 +164,20 @@ module.exports = {
       next(err);
     }
   }
+}
+
+const _getFreePlatforms = async () => {
+  let platformId = await PartnerCommission.findAll({
+    attributes: ['staking_platform_id'],
+    where: {}
+  });
+  let ret = await Platform.findAll({
+    attributes: ['id', 'symbol'],
+    where: {
+      [Op.not]: {
+        id: platformId.map(ele => ele.dataValues.staking_platform_id).filter(ele => ele)
+      }
+    }
+  })
+  return ret.map(ele => { return { id: ele.dataValues.id, symbol: ele.dataValues.symbol } });
 }

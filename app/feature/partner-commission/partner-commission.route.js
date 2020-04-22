@@ -77,30 +77,86 @@ module.exports = route;
  *           application/json:
  *             {
  *                 "data": {
-												"items": [
-														{
-																"id": "ac098ffd-1ff3-47c5-9244-38eda2dcfc59",
-																"platform": "ETH",
-																"commission": 69,
-																"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
-																"updated_by": 64,
-																"updated_at": "2020-04-16T08:29:48.954Z",
-																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-														},
-														{
-																"id": "24c39b32-2d13-11ea-978f-2e728ce88125",
-																"platform": "IRIS",
-																"commission": 70,
-																"reward_address": "iaa16se3zaex588aqa6e0mgnps92a005mjm95d56jx",
-																"updated_by": 64,
-																"updated_at": "2020-04-16T08:29:50.051Z",
-																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-														}
-												],
-												"offset": 0,
-												"limit": 10,
-												"total": 2
-										}
+											"items": [
+													{
+															"id": "f62634d4-30f9-11ea-aec2-2e728ce88125",
+															"platform": "ATOM",
+															"commission": 69,
+															"reward_address": "cosmos1suvplzztw7kn4ntn9pcduxz2lxfjfy5akd3uk0",
+															"staking_platform_id": [
+																	{
+																			"id": "cba566c6-35ae-11ea-978f-2e728ce88125",
+																			"symbol": "XTZ"
+																	},
+																	{
+																			"id": "63c41ef1-6534-4f9e-b0c1-8433b2e186ce",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "bc7d5358-a429-461b-afe5-b67e6763567c",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "050b71b7-3914-4368-9e6c-a57ec5cb8d08",
+																			"symbol": "Tst"
+																	}
+															],
+															"updated_by": 64,
+															"updated_at": "2020-04-22T04:07:27.929Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													},
+													{
+															"id": "3c3ed477-a40e-439c-97ff-a404498ed5c2",
+															"platform": "ETH",
+															"commission": 68,
+															"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+															"staking_platform_id": "83675dbc-7a2e-40b8-a97b-867d1fa90319",
+															"updated_by": 64,
+															"updated_at": "2020-04-22T04:07:25.381Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													},
+													{
+															"id": "ac098ffd-1ff3-47c5-9244-38eda2dcfc59",
+															"platform": "ETH",
+															"commission": 69,
+															"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+															"staking_platform_id": "96a29602-257d-4041-85c4-ea0fb17e0e67",
+															"updated_by": 64,
+															"updated_at": "2020-04-22T04:07:27.049Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													},
+													{
+															"id": "24c39b32-2d13-11ea-978f-2e728ce88125",
+															"platform": "IRIS",
+															"commission": 70,
+															"reward_address": "iaa16se3zaex588aqa6e0mgnps92a005mjm95d56jx",
+															"staking_platform_id": [
+																	{
+																			"id": "cba566c6-35ae-11ea-978f-2e728ce88125",
+																			"symbol": "XTZ"
+																	},
+																	{
+																			"id": "63c41ef1-6534-4f9e-b0c1-8433b2e186ce",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "bc7d5358-a429-461b-afe5-b67e6763567c",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "050b71b7-3914-4368-9e6c-a57ec5cb8d08",
+																			"symbol": "Tst"
+																	}
+															],
+															"updated_by": 64,
+															"updated_at": "2020-04-22T04:07:28.715Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													}
+											],
+											"offset": 0,
+											"limit": 10,
+											"total": 4
+									}
  *             }
  *       400:
  *         description: Error
@@ -146,22 +202,30 @@ module.exports = route;
 													{
 															"id": "3c3ed477-a40e-439c-97ff-a404498ed5c2",
 															"platform": "ETH",
-															"commission": 68
+															"commission": 68,
+															"reward_address": "",
+															"staking_platform_id": ""
 													},
 													{
 															"id": "ac098ffd-1ff3-47c5-9244-38eda2dcfc59",
 															"platform": "ETH",
-															"commission": 69
+															"commission": 69,
+															"reward_address": "",
+															"staking_platform_id": ""
 													},
 													{
 															"id": "f62634d4-30f9-11ea-aec2-2e728ce88125",
 															"platform": "ATOM",
-															"commission": 69
+															"commission": 69,
+															"reward_address": "",
+															"staking_platform_id": ""
 													},
 													{
-															"id": "24c39b32-2d13-11ea-978f-2e728ce88125",
+														"id": "24c39b32-2d13-11ea-978f-2e728ce88125",
 															"platform": "IRIS",
-															"commission": 70
+															"commission": 70,
+															"reward_address": "",
+															"staking_platform_id": ""
 													}
 											],
 											"updated_by": 64
@@ -180,8 +244,9 @@ module.exports = route;
 														"platform": "ETH",
 														"commission": 68,
 														"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+														"staking_platform_id": "83675dbc-7a2e-40b8-a97b-867d1fa90319",
 														"updated_by": 64,
-														"updated_at": "2020-04-16T08:29:47.998Z",
+														"updated_at": "2020-04-22T04:51:59.412Z",
 														"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
 												},
 												{
@@ -189,8 +254,9 @@ module.exports = route;
 														"platform": "ETH",
 														"commission": 69,
 														"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+														"staking_platform_id": "96a29602-257d-4041-85c4-ea0fb17e0e67",
 														"updated_by": 64,
-														"updated_at": "2020-04-16T08:29:48.954Z",
+														"updated_at": "2020-04-22T04:52:01.134Z",
 														"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
 												},
 												{
@@ -199,7 +265,7 @@ module.exports = route;
 														"commission": 69,
 														"reward_address": "cosmos1suvplzztw7kn4ntn9pcduxz2lxfjfy5akd3uk0",
 														"updated_by": 64,
-														"updated_at": "2020-04-16T08:29:49.493Z",
+														"updated_at": "2020-04-22T04:52:02.087Z",
 														"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
 												},
 												{
@@ -208,7 +274,7 @@ module.exports = route;
 														"commission": 70,
 														"reward_address": "iaa16se3zaex588aqa6e0mgnps92a005mjm95d56jx",
 														"updated_by": 64,
-														"updated_at": "2020-04-16T08:29:50.051Z",
+														"updated_at": "2020-04-22T04:52:03.219Z",
 														"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
 												}
 										]
@@ -265,12 +331,12 @@ module.exports = route;
                     "data": {
 												"items": [
 														{
-																"id": "3c3ed477-a40e-439c-97ff-a404498ed5c2",
-																"platform": "ETH",
-																"commission": 68,
-																"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+																"id": "f62634d4-30f9-11ea-aec2-2e728ce88125",
+																"platform": "ATOM",
+																"commission": 69,
+																"reward_address": "cosmos1suvplzztw7kn4ntn9pcduxz2lxfjfy5akd3uk0",
 																"updated_by": 64,
-																"updated_at": "2020-04-16T08:29:47.998Z",
+																"updated_at": "2020-04-22T04:52:02.087Z",
 																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
 														},
 														{
@@ -278,25 +344,20 @@ module.exports = route;
 																"platform": "ETH",
 																"commission": 69,
 																"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+																"staking_platform_id": "96a29602-257d-4041-85c4-ea0fb17e0e67",
 																"updated_by": 64,
-																"updated_at": "2020-04-16T08:29:48.954Z",
+																"updated_at": "2020-04-22T04:52:01.134Z",
 																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
 														},
 														{
-																"id": "f62634d4-30f9-11ea-aec2-2e728ce88125",
-																"platform": "ATOM",
-																"commission": 21,
-																"reward_address": "cosmos1suvplzztw7kn4ntn9pcduxz2lxfjfy5akd3uk0",
-																"updated_by": 17,
-																"updated_at": "2020-04-15T08:00:09.242Z"
-														},
-														{
-																"id": "f62634d4-30f9-11ea-aec2-2e728ce88125",
-																"platform": "ATOM",
-																"commission": 111,
-																"reward_address": "cosmos1suvplzztw7kn4ntn9pcduxz2lxfjfy5akd3uk0",
-																"updated_by": 17,
-																"updated_at": "2020-04-15T08:03:00.830Z"
+																"id": "3c3ed477-a40e-439c-97ff-a404498ed5c2",
+																"platform": "ETH",
+																"commission": 68,
+																"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+																"staking_platform_id": "83675dbc-7a2e-40b8-a97b-867d1fa90319",
+																"updated_by": 64,
+																"updated_at": "2020-04-22T04:51:59.412Z",
+																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
 														}
 												],
 												"offset": 0,
@@ -355,30 +416,59 @@ module.exports = route;
  *           application/json:
  *             {
  *                 "data": {
-												"items": [
-														{
-																"id": "3c3ed477-a40e-439c-97ff-a404498ed5c2",
-																"platform": "ETH",
-																"commission": 68,
-																"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
-																"updated_by": 64,
-																"updated_at": "2020-04-16T08:29:47.998Z",
-																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-														},
-														{
-																"id": "ac098ffd-1ff3-47c5-9244-38eda2dcfc59",
-																"platform": "ETH",
-																"commission": 69,
-																"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
-																"updated_by": 64,
-																"updated_at": "2020-04-16T08:29:48.954Z",
-																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-														}
-												],
-												"offset": 0,
-												"limit": 10,
-												"total": 2
-										}
+											"items": [
+													{
+															"id": "3c3ed477-a40e-439c-97ff-a404498ed5c2",
+															"platform": "ETH",
+															"commission": 68,
+															"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+															"staking_platform_id": "83675dbc-7a2e-40b8-a97b-867d1fa90319",
+															"updated_by": 64,
+															"updated_at": "2020-04-22T04:51:59.412Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													},
+													{
+															"id": "ac098ffd-1ff3-47c5-9244-38eda2dcfc59",
+															"platform": "ETH",
+															"commission": 69,
+															"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+															"staking_platform_id": "96a29602-257d-4041-85c4-ea0fb17e0e67",
+															"updated_by": 64,
+															"updated_at": "2020-04-22T04:52:01.134Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													},
+													{
+															"id": "eb56566b-dc6e-477b-a271-f712e887ea2c",
+															"platform": "ETH",
+															"commission": 11,
+															"reward_address": "",
+															"staking_platform_id": [
+																	{
+																			"id": "cba566c6-35ae-11ea-978f-2e728ce88125",
+																			"symbol": "XTZ"
+																	},
+																	{
+																			"id": "63c41ef1-6534-4f9e-b0c1-8433b2e186ce",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "bc7d5358-a429-461b-afe5-b67e6763567c",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "050b71b7-3914-4368-9e6c-a57ec5cb8d08",
+																			"symbol": "Tst"
+																	}
+															],
+															"updated_by": 10,
+															"updated_at": "2020-04-16T11:06:39.390Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													}
+											],
+											"offset": 0,
+											"limit": 10,
+											"total": 3
+									}
  *             }
  *       400:
  *         description: Error
@@ -431,8 +521,26 @@ module.exports = route;
 														"platform": "ETH",
 														"commission": 68,
 														"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+														"staking_platform_id": [
+																{
+																			"id": "cba566c6-35ae-11ea-978f-2e728ce88125",
+																			"symbol": "XTZ"
+																	},
+																	{
+																			"id": "63c41ef1-6534-4f9e-b0c1-8433b2e186ce",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "bc7d5358-a429-461b-afe5-b67e6763567c",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "050b71b7-3914-4368-9e6c-a57ec5cb8d08",
+																			"symbol": "Tst"
+																	}
+														],
 														"updated_by": 64,
-														"updated_at": "2020-04-16T08:29:47.998Z",
+														"updated_at": "2020-04-22T04:51:59.412Z",
 														"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
 												},
 												{
@@ -440,8 +548,9 @@ module.exports = route;
 														"platform": "ETH",
 														"commission": 69,
 														"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+														"staking_platform_id": "96a29602-257d-4041-85c4-ea0fb17e0e67",
 														"updated_by": 64,
-														"updated_at": "2020-04-16T08:29:48.954Z",
+														"updated_at": "2020-04-22T04:52:01.134Z",
 														"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
 												}
 										]
@@ -492,48 +601,86 @@ module.exports = route;
  *           application/json:
  *             {
  *                 "data": {
-												"items": [
-														{
-																"id": "f62634d4-30f9-11ea-aec2-2e728ce88125",
-																"platform": "ATOM",
-																"commission": 69,
-																"reward_address": "cosmos1suvplzztw7kn4ntn9pcduxz2lxfjfy5akd3uk0",
-																"updated_by": 64,
-																"updated_at": "2020-04-16T08:29:49.493Z",
-																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-														},
-														{
-																"id": "3c3ed477-a40e-439c-97ff-a404498ed5c2",
-																"platform": "ETH",
-																"commission": 68,
-																"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
-																"updated_by": 64,
-																"updated_at": "2020-04-16T08:29:47.998Z",
-																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-														},
-														{
-																"id": "ac098ffd-1ff3-47c5-9244-38eda2dcfc59",
-																"platform": "ETH",
-																"commission": 69,
-																"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
-																"updated_by": 64,
-																"updated_at": "2020-04-16T08:29:48.954Z",
-																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-														},
-														{
-																"id": "24c39b32-2d13-11ea-978f-2e728ce88125",
-																"platform": "IRIS",
-																"commission": 70,
-																"reward_address": "iaa16se3zaex588aqa6e0mgnps92a005mjm95d56jx",
-																"updated_by": 64,
-																"updated_at": "2020-04-16T08:29:50.051Z",
-																"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-														}
-												],
-												"offset": 0,
-												"limit": 10,
-												"total": 4
-										}
+											"items": [
+													{
+															"id": "f62634d4-30f9-11ea-aec2-2e728ce88125",
+															"platform": "ATOM",
+															"commission": 69,
+															"reward_address": "cosmos1suvplzztw7kn4ntn9pcduxz2lxfjfy5akd3uk0",
+															"staking_platform_id": [
+																	{
+																			"id": "cba566c6-35ae-11ea-978f-2e728ce88125",
+																			"symbol": "XTZ"
+																	},
+																	{
+																			"id": "63c41ef1-6534-4f9e-b0c1-8433b2e186ce",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "bc7d5358-a429-461b-afe5-b67e6763567c",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "050b71b7-3914-4368-9e6c-a57ec5cb8d08",
+																			"symbol": "Tst"
+																	}
+															],
+															"updated_by": 64,
+															"updated_at": "2020-04-22T04:07:27.929Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													},
+													{
+															"id": "3c3ed477-a40e-439c-97ff-a404498ed5c2",
+															"platform": "ETH",
+															"commission": 68,
+															"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+															"staking_platform_id": "83675dbc-7a2e-40b8-a97b-867d1fa90319",
+															"updated_by": 64,
+															"updated_at": "2020-04-22T04:07:25.381Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													},
+													{
+															"id": "ac098ffd-1ff3-47c5-9244-38eda2dcfc59",
+															"platform": "ETH",
+															"commission": 69,
+															"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
+															"staking_platform_id": "96a29602-257d-4041-85c4-ea0fb17e0e67",
+															"updated_by": 64,
+															"updated_at": "2020-04-22T04:07:27.049Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													},
+													{
+															"id": "24c39b32-2d13-11ea-978f-2e728ce88125",
+															"platform": "IRIS",
+															"commission": 70,
+															"reward_address": "iaa16se3zaex588aqa6e0mgnps92a005mjm95d56jx",
+															"staking_platform_id": [
+																	{
+																			"id": "cba566c6-35ae-11ea-978f-2e728ce88125",
+																			"symbol": "XTZ"
+																	},
+																	{
+																			"id": "63c41ef1-6534-4f9e-b0c1-8433b2e186ce",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "bc7d5358-a429-461b-afe5-b67e6763567c",
+																			"symbol": "INFT"
+																	},
+																	{
+																			"id": "050b71b7-3914-4368-9e6c-a57ec5cb8d08",
+																			"symbol": "Tst"
+																	}
+															],
+															"updated_by": 64,
+															"updated_at": "2020-04-22T04:07:28.715Z",
+															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
+													}
+											],
+											"offset": 0,
+											"limit": 10,
+											"total": 4
+									}
  *             }
  *       400:
  *         description: Error

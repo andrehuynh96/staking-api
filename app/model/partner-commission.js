@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0
     },
+    staking_platform_id: {
+      type: DataTypes.UUID,
+      allowNull: true
+    },
     partner_updated_by: {
       type: DataTypes.UUID,
       allowNull: true
