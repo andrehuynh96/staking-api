@@ -6,40 +6,40 @@ const { update } = require('./validator');
 const route = express.Router();
 
 route.get(
-	"/partners/:partner_id/commissions",
-	authenticate,
-	controller.getAll
+  "/partners/:partner_id/commissions",
+  authenticate,
+  controller.getAll
 );
 
 route.get(
-	'/partners/:partner_id/commissions/histories',
-	authenticate,
-	controller.getHis
+  '/partners/:partner_id/commissions/histories',
+  authenticate,
+  controller.getHis
 );
 
 route.post(
-	'/partners/:partner_id/commissions',
-	authenticate,
-	validator(update),
-	controller.update
+  '/partners/:partner_id/commissions',
+  authenticate,
+  validator(update),
+  controller.update
 );
 
 route.get(
-	"/partners/commissions/:platform",
-	authenticate,
-	controller.getAllByPlatform
+  "/partners/commissions/:platform",
+  authenticate,
+  controller.getAllByPlatform
 );
 
 route.get(
-	"/partners/:partner_id/commissions/:platform",
-	authenticate,
-	controller.get
+  "/partners/:partner_id/commissions/:platform",
+  authenticate,
+  controller.get
 );
 
 route.get(
-	"/me/commissions",
-	authenticate,
-	controller.getAllByPartner
+  "/me/commissions",
+  authenticate,
+  controller.getAllByPartner
 );
 
 
@@ -80,76 +80,13 @@ module.exports = route;
 											"items": [
 													{
 															"id": "f62634d4-30f9-11ea-aec2-2e728ce88125",
-															"platform": "ATOM",
+                              "platform": "ATOM",
+                              "symbol": "ATOM",
 															"commission": 69,
 															"reward_address": "cosmos1suvplzztw7kn4ntn9pcduxz2lxfjfy5akd3uk0",
-															"staking_platform_id": [
-																	{
-																			"id": "cba566c6-35ae-11ea-978f-2e728ce88125",
-																			"symbol": "XTZ"
-																	},
-																	{
-																			"id": "63c41ef1-6534-4f9e-b0c1-8433b2e186ce",
-																			"symbol": "INFT"
-																	},
-																	{
-																			"id": "bc7d5358-a429-461b-afe5-b67e6763567c",
-																			"symbol": "INFT"
-																	},
-																	{
-																			"id": "050b71b7-3914-4368-9e6c-a57ec5cb8d08",
-																			"symbol": "Tst"
-																	}
-															],
+															"staking_platform_id": "cba566c6-35ae-11ea-978f-2e728ce88125",
 															"updated_by": 64,
 															"updated_at": "2020-04-22T04:07:27.929Z",
-															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-													},
-													{
-															"id": "3c3ed477-a40e-439c-97ff-a404498ed5c2",
-															"platform": "ETH",
-															"commission": 68,
-															"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
-															"staking_platform_id": "83675dbc-7a2e-40b8-a97b-867d1fa90319",
-															"updated_by": 64,
-															"updated_at": "2020-04-22T04:07:25.381Z",
-															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-													},
-													{
-															"id": "ac098ffd-1ff3-47c5-9244-38eda2dcfc59",
-															"platform": "ETH",
-															"commission": 69,
-															"reward_address": "0x61179C42C57BFE59C5CecA25B3B66f6Ee3b15cD7",
-															"staking_platform_id": "96a29602-257d-4041-85c4-ea0fb17e0e67",
-															"updated_by": 64,
-															"updated_at": "2020-04-22T04:07:27.049Z",
-															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
-													},
-													{
-															"id": "24c39b32-2d13-11ea-978f-2e728ce88125",
-															"platform": "IRIS",
-															"commission": 70,
-															"reward_address": "iaa16se3zaex588aqa6e0mgnps92a005mjm95d56jx",
-															"staking_platform_id": [
-																	{
-																			"id": "cba566c6-35ae-11ea-978f-2e728ce88125",
-																			"symbol": "XTZ"
-																	},
-																	{
-																			"id": "63c41ef1-6534-4f9e-b0c1-8433b2e186ce",
-																			"symbol": "INFT"
-																	},
-																	{
-																			"id": "bc7d5358-a429-461b-afe5-b67e6763567c",
-																			"symbol": "INFT"
-																	},
-																	{
-																			"id": "050b71b7-3914-4368-9e6c-a57ec5cb8d08",
-																			"symbol": "Tst"
-																	}
-															],
-															"updated_by": 64,
-															"updated_at": "2020-04-22T04:07:28.715Z",
 															"partner_updated_by": "ed483de6-2d14-11ea-978f-2e728ce88125"
 													}
 											],

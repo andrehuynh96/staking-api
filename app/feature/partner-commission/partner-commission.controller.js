@@ -1,8 +1,9 @@
 
 const logger = require("app/lib/logger");
-const Platform = require("app/model").staking_platforms;
+const StakingPlatform = require("app/model").staking_platforms;
 const PartnerCommission = require("app/model").partner_commissions;
 const PartnerCommissionHis = require("app/model").partner_commissions_his;
+const StakingPlatformStatus = require("app/model/value-object/staking-platform-status");
 const mapper = require('app/feature/response-schema/partner-commission.response-schema');
 const database = require('app/lib/database').instanse;
 const { Op } = require("sequelize");
@@ -12,16 +13,17 @@ module.exports = {
     try {
       logger.info('partner-commission::all');
       const { query: { offset, limit }, params: { partner_id } } = req;
-      const platformList = await _getFreePlatforms();
       const where = { partner_id: partner_id };
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
-      const { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
+      let { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
+      let stakingPlatformIds = partner_commissions.map(x => x.staking_platform_id);
+      partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
+      let defaultPlatfrom = await _getPlatformNotConfig(stakingPlatformIds);
+      let result = partner_commissions.concat(defaultPlatfrom);
+
       return res.ok({
-        items: partner_commissions.map(item => {
-          if (!item.staking_platform_id) item.staking_platform_id = platformList;
-          return mapper(item);
-        }),
+        items: mapper(result),
         offset: off,
         limit: lim,
         total: total
@@ -39,9 +41,11 @@ module.exports = {
       const where = { partner_id: partner_id };
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
-      const { count: total, rows: partner_commissions_his } = await PartnerCommissionHis.findAndCountAll({ offset: off, limit: lim, where: where, order: [['updated_at', 'DESC']] });
+      let { count: total, rows: partner_commissions_his } = await PartnerCommissionHis.findAndCountAll({ offset: off, limit: lim, where: where, order: [['updated_at', 'DESC']] });
+      let stakingPlatformIds = partner_commissions_his.map(x => x.staking_platform_id);
+      partner_commissions_his = await _getSymbol(partner_commissions_his, stakingPlatformIds);
       return res.ok({
-        items: partner_commissions_his.map(item => mapper(item)),
+        items: mapper(partner_commissions_his),
         offset: off,
         limit: lim,
         total: total
@@ -62,6 +66,9 @@ module.exports = {
       transaction = await database.transaction();
       for (let item of items) {
         if (!item.id) {
+          if (item.id == null || item.id == "") {
+            delete item.id;
+          }
           item.created_by = updated_by;
           item.updated_by = updated_by;
           item.partner_id = partner_id;
@@ -87,9 +94,10 @@ module.exports = {
       }
       let insertedCommissions = await PartnerCommission.bulkCreate(insertedItems, { transaction });
       let partner_commissions = insertedCommissions.concat(updatedCommissions);
-      logger.info('partner-commission::update::partner-commission::', JSON.stringify(partner_commissions));
       await transaction.commit();
-      return res.ok(partner_commissions.map(item => mapper(item)));
+      let stakingPlatformIds = partner_commissions.map(x => x.staking_platform_id);
+      partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
+      return res.ok(mapper(partner_commissions));
     }
     catch (err) {
       logger.error("update commission fail:", err);
@@ -101,16 +109,15 @@ module.exports = {
     try {
       logger.info('partner-commission::all::getAllByPlatform');
       const { query: { offset, limit }, params: { platform } } = req;
-      const platformList = await _getFreePlatforms();
       const where = { platform };
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
-      const { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
+      let { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
+      let stakingPlatformIds = partner_commissions.map(x => x.staking_platform_id);
+      partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
+
       return res.ok({
-        items: partner_commissions.map(item => {
-          if (!item.staking_platform_id) item.staking_platform_id = platformList;
-          return mapper(item);
-        }),
+        items: mapper(partner_commissions),
         offset: off,
         limit: lim,
         total: total
@@ -125,15 +132,14 @@ module.exports = {
     try {
       logger.info('partner-commission::get');
       const { params: { partner_id, platform } } = req;
-      const platformList = await _getFreePlatforms();
       const where = { platform, partner_id };
       let response = await PartnerCommission.findAll({
         where
       });
-      return res.ok(response.map(item => {
-        if (!item.staking_platform_id) item.staking_platform_id = platformList;
-        return mapper(item);
-      }));
+      let stakingPlatformIds = response.map(x => x.staking_platform_id);
+      response = await _getSymbol(response, stakingPlatformIds);
+
+      return res.ok(mapper(response));
     }
     catch (err) {
       logger.error("get commission fail:", err);
@@ -144,16 +150,14 @@ module.exports = {
     try {
       logger.info('partner-commission::all::getAllByPartner');
       const { query: { offset, limit } } = req;
-      const platformList = await _getFreePlatforms();
       const where = { partner_id: req.user.client_id };
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
-      const { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
+      let { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
+      let stakingPlatformIds = partner_commissions.map(x => x.staking_platform_id);
+      partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
       return res.ok({
-        items: partner_commissions.map(item => {
-          if (!item.staking_platform_id) item.staking_platform_id = platformList;
-          return mapper(item);
-        }),
+        items: mapper(partner_commissions),
         offset: off,
         limit: lim,
         total: total
@@ -166,18 +170,51 @@ module.exports = {
   }
 }
 
-const _getFreePlatforms = async () => {
-  let platformId = await PartnerCommission.findAll({
-    attributes: ['staking_platform_id'],
-    where: {}
-  });
-  let ret = await Platform.findAll({
-    attributes: ['id', 'symbol'],
+const _getPlatformNotConfig = async (stakingPlatformIds) => {
+  let result = await StakingPlatform.findAll({
+    attributes: ['id', 'platform', 'symbol', 'symbol'],
     where: {
-      [Op.not]: {
-        id: platformId.map(ele => ele.dataValues.staking_platform_id).filter(ele => ele)
-      }
+      id: {
+        [Op.notIn]: stakingPlatformIds
+      },
+      status: StakingPlatformStatus.ENABLED
     }
   })
-  return ret.map(ele => { return { id: ele.dataValues.id, symbol: ele.dataValues.symbol } });
+
+  if (result && result.length > 0) {
+    result = result.map(x => {
+      return {
+        id: "",
+        commission: 0,
+        reward_address: "",
+        staking_platform_id: x.id,
+        platform: x.platform,
+        symbol: x.symbol,
+      }
+    });
+    return result;
+  }
+
+  return [];
+
+}
+
+const _getSymbol = async (commissions, stakingPlatformIds) => {
+  let result = await StakingPlatform.findAll({
+    attributes: ['id', 'platform', 'symbol'],
+    where: {
+      id: {
+        [Op.in]: stakingPlatformIds
+      }
+    }
+  });
+
+  for (let e of commissions) {
+    let i = result.filter(x => x.id == e.staking_platform_id);
+    if (i && i.length > 0) {
+      e.symbol = i[0].symbol
+    }
+  }
+
+  return commissions;
 }
