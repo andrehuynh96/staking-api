@@ -33,7 +33,7 @@ module.exports = {
       const where = { partner_id: partner_id };
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
-      const { count: total, rows: partner_commissions_his } = await PartnerCommissionHis.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
+      const { count: total, rows: partner_commissions_his } = await PartnerCommissionHis.findAndCountAll({ offset: off, limit: lim, where: where, order: [['updated_at', 'DESC']] });
       return res.ok({
         items: partner_commissions_his.map(item => mapper(item)),
         offset: off,
