@@ -4,6 +4,9 @@ const TxMemo = require('app/model').partner_tx_memos;
 const Partner = require('app/model').partners;
 const mapper = require('app/feature/response-schema/partner-tx-memo.response-schema');
 const database = require('app/lib/database').instanse;
+const StakingPlatform = require("app/model").staking_platforms;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
   all: async (req, res, next) => {
@@ -21,8 +24,13 @@ module.exports = {
       let offset = req.query.offset ? parseInt(req.query.offset) : 0;
       const where = { partner_id: req.params.partner_id, default_flg: true };
       const { count: total, rows: partner_tx_memos } = await TxMemo.findAndCountAll({ limit, offset, where: where, order: [['platform', 'ASC']] });
+
+      let platforms = partner_tx_memos.map(x => x.platform);
+      let defaultPlatfrom = await _getPlatform(platforms);
+      let result = partner_tx_memos.concat(defaultPlatfrom);
+
       return res.ok({
-        items: partner_tx_memos.map(item => mapper(item)),
+        items: mapper(result),
         offset: offset,
         limit: limit,
         total: total
@@ -62,20 +70,20 @@ module.exports = {
           item.updated_by = user_id;
           item.partner_id = partner_id;
           item.default_flg = true;
+          item.partner_updated_by = partner_id
           insertedItems.push(item);
           if (txMemo && txMemo.id) updatedItems.push(txMemo.id);
         }
       }
       let partner_tx_memos = await TxMemo.bulkCreate(insertedItems, { transaction });
-      console.log(user_id)
       await TxMemo.update({
         default_flg: false,
         updated_by: user_id
       }, {
-        where: {
-          id: updatedItems
-        }
-      }, { transaction });
+          where: {
+            id: updatedItems
+          }
+        }, { transaction });
       logger.info('partner-tx-memo::update::partner-tx-memo::', JSON.stringify(partner_tx_memos));
       await transaction.commit();
       return res.ok({
@@ -113,4 +121,29 @@ module.exports = {
       next(error);
     }
   },
+}
+
+
+async function _getPlatform(platformDefaults = []) {
+  let platforms = await StakingPlatform.findAll({
+    where: {
+      deleted_flg: false,
+      using_memo_flg: true,
+      platform: {
+        [Op.notIn]: platformDefaults
+      }
+    }
+  });
+  if (platforms && platforms.length > 0) {
+    platforms = platforms.map(x => {
+      return {
+        platform: x.platform,
+        memo: "",
+        id: x.id
+      }
+    });
+    return platforms;
+  }
+
+  return [];
 }
