@@ -30,8 +30,11 @@ module.exports = {
             if (!commission) {
                 return res.badRequest(res.__("PARTNER_COMMISSION_NOT_FOUND"), "PARTNER_COMMISSION_NOT_FOUND");
             }
+            if (commission.reward_address.toLowerCase() == body.reward_address.toLowerCase()) {
+                return res.badRequest(res.__("REWARD_ADDRESS_NOT_SUITABLE"), "REWARD_ADDRESS_NOT_SUITABLE");
+            }
             if (!verifyAddress(commission.platform, body.reward_address)) {
-                return res.badRequest(res.__("ADDRESS_INVALID"), "ADDRESS_INVALID");
+                return res.badRequest(res.__("REWARD_ADDRESS_INVALID"), "REWARD_ADDRESS_INVALID");
             }
             let data = {
                 ...body,
