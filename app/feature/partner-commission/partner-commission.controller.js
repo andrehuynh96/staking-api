@@ -27,7 +27,7 @@ module.exports = {
       let defaultPlatfrom = await _getPlatformNotConfig(stakingPlatformIds);
       let result = partner_commissions.concat(defaultPlatfrom);
       return res.ok({
-        items: result ? mapper(result) : [],
+        items: result && result.length > 0 ? mapper(result) : [],
         offset: off,
         limit: lim,
         total: total
@@ -51,7 +51,7 @@ module.exports = {
         partner_commissions_his = await _getSymbol(partner_commissions_his, stakingPlatformIds);
       }
       return res.ok({
-        items: partner_commissions_his ? mapper(partner_commissions_his) : [],
+        items: partner_commissions_his && partner_commissions_his.length ? mapper(partner_commissions_his) : [],
         offset: off,
         limit: lim,
         total: total
@@ -130,7 +130,7 @@ module.exports = {
         partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
       }
       return res.ok({
-        items: partner_commissions ? mapper(partner_commissions) : [],
+        items: partner_commissions && partner_commissions.length ? mapper(partner_commissions) : [],
         offset: off,
         limit: lim,
         total: total
@@ -176,7 +176,7 @@ module.exports = {
       }
 
       return res.ok({
-        items: partner_commissions ? mapper(partner_commissions) : [],
+        items: partner_commissions && partner_commissions.length ? mapper(partner_commissions) : [],
         offset: off,
         limit: lim,
         total: total
