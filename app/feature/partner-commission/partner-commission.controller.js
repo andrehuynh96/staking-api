@@ -19,11 +19,13 @@ module.exports = {
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
       let { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
-      let stakingPlatformIds = partner_commissions.map(x => x.staking_platform_id);
-      partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
+      let stakingPlatformIds = [];
+      if (partner_commissions && partner_commissions.length > 0) {
+        stakingPlatformIds = partner_commissions.map(x => x.staking_platform_id);
+        partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
+      }
       let defaultPlatfrom = await _getPlatformNotConfig(stakingPlatformIds);
       let result = partner_commissions.concat(defaultPlatfrom);
-
       return res.ok({
         items: mapper(result),
         offset: off,
@@ -44,8 +46,10 @@ module.exports = {
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
       let { count: total, rows: partner_commissions_his } = await PartnerCommissionHis.findAndCountAll({ offset: off, limit: lim, where: where, order: [['updated_at', 'DESC']] });
-      let stakingPlatformIds = partner_commissions_his.map(x => x.staking_platform_id);
-      partner_commissions_his = await _getSymbol(partner_commissions_his, stakingPlatformIds);
+      if (partner_commissions_his && partner_commissions_his.length > 0) {
+        let stakingPlatformIds = partner_commissions_his.map(x => x.staking_platform_id);
+        partner_commissions_his = await _getSymbol(partner_commissions_his, stakingPlatformIds);
+      }
       return res.ok({
         items: mapper(partner_commissions_his),
         offset: off,
@@ -121,9 +125,10 @@ module.exports = {
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
       let { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
-      let stakingPlatformIds = partner_commissions.map(x => x.staking_platform_id);
-      partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
-
+      if (partner_commissions && partner_commissions.length > 0) {
+        let stakingPlatformIds = partner_commissions.map(x => x.staking_platform_id);
+        partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
+      }
       return res.ok({
         items: mapper(partner_commissions),
         offset: off,
@@ -144,8 +149,11 @@ module.exports = {
       let response = await PartnerCommission.findAll({
         where
       });
-      let stakingPlatformIds = response.map(x => x.staking_platform_id);
-      response = await _getSymbol(response, stakingPlatformIds);
+      if (response && response.length > 0) {
+        let stakingPlatformIds = response.map(x => x.staking_platform_id);
+        response = await _getSymbol(response, stakingPlatformIds);
+      }
+
 
       return res.ok(mapper(response));
     }
@@ -162,8 +170,11 @@ module.exports = {
       const off = parseInt(offset) || 0;
       const lim = parseInt(limit) || 10;
       let { count: total, rows: partner_commissions } = await PartnerCommission.findAndCountAll({ offset: off, limit: lim, where: where, order: [['platform', 'ASC']] });
-      let stakingPlatformIds = partner_commissions.map(x => x.staking_platform_id);
-      partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
+      if (partner_commissions && partner_commissions.length > 0) {
+        let stakingPlatformIds = partner_commissions.map(x => x.staking_platform_id);
+        partner_commissions = await _getSymbol(partner_commissions, stakingPlatformIds);
+      }
+
       return res.ok({
         items: mapper(partner_commissions),
         offset: off,
