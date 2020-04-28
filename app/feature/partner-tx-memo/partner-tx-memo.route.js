@@ -7,22 +7,22 @@ const router = express.Router();
 
 
 router.get(
-    '/partners/:partner_id/memos',
-    authenticate,
-    controller.all
-  );
-  
-  router.post(
-    '/partners/:partner_id/memos',
-    authenticate,
-    validator(create),
-    controller.create
-  );
-  router.get(
-    '/partners/:partner_id/memos/histories',
-    authenticate,
-    controller.getHis
-  );
+  '/partners/:partner_id/memos',
+  authenticate,
+  controller.all
+);
+
+router.post(
+  '/partners/:partner_id/memos',
+  authenticate,
+  validator(create),
+  controller.create
+);
+router.get(
+  '/partners/:partner_id/memos/histories',
+  authenticate,
+  controller.getHis
+);
 
 module.exports = router;
 
@@ -90,7 +90,7 @@ module.exports = router;
                     "total": 3
                 }
             }
- *             
+ *
  *       400:
  *         description: Error
  *         schema:

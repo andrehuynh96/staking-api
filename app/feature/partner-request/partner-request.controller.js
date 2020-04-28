@@ -10,11 +10,17 @@ const Permission = require('app/model').permissions;
 const RolePermission = require('app/model').role_permissions;
 const Partner = require('app/model').partners;
 const verifyAddress = require('app/lib/verify-address');
+const StakingPlatform = require('app/model').staking_platforms;
 module.exports = {
     create: async (req, res, next) => {
         try {
             let {params: {commission_id }, body} = req;
             let verifyToken = Buffer.from(uuidV4()).toString('base64');
+            let partner = await Partner.findOne({
+                where: {
+                    id: req.user.client_id
+                }
+            });
             let commission = await PartnerCommission.findOne({
                 where: {
                     id: commission_id,
@@ -24,8 +30,11 @@ module.exports = {
             if (!commission) {
                 return res.badRequest(res.__("PARTNER_COMMISSION_NOT_FOUND"), "PARTNER_COMMISSION_NOT_FOUND");
             }
+            if (commission.reward_address.toLowerCase() == body.reward_address.toLowerCase()) {
+                return res.badRequest(res.__("REWARD_ADDRESS_NOT_SUITABLE"), "REWARD_ADDRESS_NOT_SUITABLE");
+            }
             if (!verifyAddress(commission.platform, body.reward_address)) {
-                return res.badRequest(res.__("ADDRESS_INVALID"), "ADDRESS_INVALID");
+                return res.badRequest(res.__("REWARD_ADDRESS_INVALID"), "REWARD_ADDRESS_INVALID");
             }
             let data = {
                 ...body,
@@ -33,10 +42,17 @@ module.exports = {
                 partner_commission_id: commission_id,
                 verify_token: verifyToken
             }
+            let stakingPlatform = await StakingPlatform.findOne({
+                where: {
+                    platform: commission.platform
+                }
+            })
             await PartnerRequest.create(data);
             return res.ok({
                 verify_token: verifyToken,
-                platform: commission.platform
+                platform: commission.platform,
+                partner: partner.name,
+                icon: stakingPlatform ? stakingPlatform.icon : null
             });
         } catch (error) {
             logger.error(error);
@@ -60,6 +76,10 @@ module.exports = {
             });
             if (!partnerRequest) {
                 return res.badRequest(res.__("TOKEN_INVALID"), "TOKEN_INVALID", { fields: ["verify_token"] });
+            }
+
+            if (partnerRequest.status == 1 || partnerRequest.status == 3) {
+                return res.badRequest(res.__("TOKEN_USED"), "TOKEN_USED", { fields: ["verify_token"] });
             }
             let commission = await PartnerCommission.findOne({
                 where: {
@@ -93,17 +113,17 @@ module.exports = {
                 });
 
                 if (permission) {
-                    let rolePermission = await RolePermission.findOne({
+                    let rolePermissions = await RolePermission.findAll({
                         where: {
                             permission_id: permission.id
                         }
                     })
-                    if (rolePermission) {
+                    if (rolePermissions.length > 0) {
                         let include = [
                             {
                                 model: UserRole,
                                 where: {
-                                    role_id: rolePermission.role_id
+                                    role_id: rolePermissions.map(e => e.role_id)
                                 },
                             }
                         ];
@@ -117,16 +137,47 @@ module.exports = {
                     }
                 }
             }
+            let stakingPlatform = await StakingPlatform.findOne({
+                where: {
+                    platform: commission.platform
+                }
+            })
             await transaction.commit();
             return res.ok({
                 partner: partner.name,
+                partner_id: partner.id,
                 platform: commission.platform,
                 address: partnerRequest.reward_address,
-                emails: emails
+                emails: emails,
+                icon: stakingPlatform ? stakingPlatform.icon : null
             });
         } catch (error) {
             logger.error(error);
             if (transaction) await transaction.rollback();
+            next(error);
+        }
+    },
+    checkToken : async (req, res, next) => {
+        try {
+            let token = req.params.token;
+            let partnerRequest = await PartnerRequest.findOne({
+                where: {
+                    partner_id: req.user.client_id,
+                    verify_token: token
+                }
+            });
+            if (!partnerRequest) {
+                return res.badRequest(res.__("TOKEN_INVALID"), "TOKEN_INVALID", { fields: ["verify_token"] });
+            }
+            let status = 'VALID';
+            if (partnerRequest.status == 1 || partnerRequest.status == 3) {
+                status = 'USED'
+            }
+            return res.ok({
+                token_sts: status
+            })
+        } catch (error) {
+            logger.error(error);
             next(error);
         }
     }
