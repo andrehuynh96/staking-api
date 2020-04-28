@@ -5,20 +5,15 @@ const PartnerAPIKey = require("app/model").partner_api_keys;
 module.exports = {
     get: async (req, res, next) => {
         try {
-            let apiKey = req.user.api_key
-            let partnerApiKey = await PartnerAPIKey.findOne({
-                where: {
-                    api_key: apiKey
-                }
-            })
-            if (!partnerApiKey) {
-                return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT", { fields: ['token'] });
-            }
+            let partner_id = req.user.client_id
             let partner = await Partner.findOne({
                 where: {
-                    id: partnerApiKey.partner_id
+                    id: partner_id
                 }
             })
+            if (!partner) {
+                return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT", { fields: ['token'] });
+            }
             return res.ok(partner)
         }
         catch (err) {
