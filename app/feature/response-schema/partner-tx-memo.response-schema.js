@@ -8,7 +8,7 @@ const destObject = {
     default_flg: 'default_flg',
     updated_by: 'updated_by',
     updatedAt: 'updated_at',
-    updated_by_user_name: 'updated_by_user_name'
+    partner_updated_by: 'partner_updated_by'
   },
   array: {
     '[].id': '[].id',
@@ -17,7 +17,7 @@ const destObject = {
     '[].default_flg': '[].default_flg',
     '[].updated_by': '[].updated_by',
     '[].updatedAt': '[].updated_at',
-    '[].updated_by_user_name': '[].updated_by_user_name'
+    '[].partner_updated_by': '[].partner_updated_by'
   }
 };
 

@@ -63,7 +63,7 @@ module.exports = route;
  *       - application/json
  *     responses:
  *       200:
- *         description: Ok 
+ *         description: Ok
  *         examples:
  *           application/json:
  *             {
@@ -75,6 +75,7 @@ module.exports = route;
                         "transaction_index": "0",
                         "deposit_id": "5",
                         "plan_id": "83675dbc-7a2e-40b8-a97b-867d1fa90319",
+                        "plan_name":"Standard",
                         "pool_id": "b46d6e7e-7fd2-4862-96e9-d6046fc8b397",
                         "partner_id": "ed483de6-2d14-11ea-978f-2e728ce88125",
                         "token_addr": "0x90A537b2904f47d958f8340B128c06b3768153BC",
@@ -89,7 +90,7 @@ module.exports = route;
                         "token_icon": "https://terraform-state-web-wallet.s3.ap-southeast-1.amazonaws.com/images/default-1584074982149.jpg",
                         "validator_fee": 20,
                         "created_at": "2020-03-16 12:24:43.91+09",
-                        "withdraw": null
+                        "withdraw": null,
                     },
                     {
                         "block_number": "7039055",
@@ -179,7 +180,7 @@ module.exports = route;
  *       - application/json
  *     responses:
  *       200:
- *         description: Ok 
+ *         description: Ok
  *         examples:
  *           application/json:
  *             {
@@ -261,7 +262,7 @@ module.exports = route;
  *       - application/json
  *     responses:
  *       200:
- *         description: Ok 
+ *         description: Ok
  *         examples:
  *           application/json:
  *             {
