@@ -24,6 +24,7 @@
   "author": "infinito",
   "license": "ISC",
   "dependencies": {
+    "@cityofzion/neon-core": "^4.7.2",
     "@panva/jose": "^1.9.2",
     "axios": "^0.19.0",
     "bech32": "^1.1.4",
