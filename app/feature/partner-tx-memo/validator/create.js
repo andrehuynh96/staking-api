@@ -10,4 +10,4 @@ const schema = Joi.object().keys({
   user_id: Joi.number().required()
 });
 
-module.exports = schema;
+module.exports = schema;"DELEGATE", "UNDELEGATE"

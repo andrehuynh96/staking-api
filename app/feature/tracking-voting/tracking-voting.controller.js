@@ -11,7 +11,6 @@ module.exports = async (req, res, next) => {
         partner_id: req.user.client_id
       }
     });
-
     if (!memo) {
       return res.badRequest(res.__("NOT_FOUND_MEMO"), "NOT_FOUND_MEMO");
     }
@@ -33,6 +32,7 @@ module.exports = async (req, res, next) => {
       partner_id: req.user.client_id,
       memo: req.body.memo,
       type: req.body.type,
+      balance: req.body.amount || 0,
     });
     if (result) {
       return res.ok(true);
