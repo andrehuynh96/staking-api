@@ -6,18 +6,33 @@ const ApiKeyStatus = require("app/model/value-object/api-key-status");
 module.exports = {
   revokeAPIKey: async (req, res, next) => {
     try {
-      let key = await ClientKey.update({
-        actived_flg: false
-      }, {
+      let { id: partnerId, key: apiKey } = req.params;
+
+      let partner = await Partner.findOne({
         where: {
-          api_key: req.user.api_key,
-          partner_id: req.user.client_id,
-          actived_flg: true
+          id: partnerId
+        }
+      });
+      if (req.user.client_id != req.params.id && partner.parent_id != req.user.client_id)
+        return res.badRequest(res.__("NOT_FOUND_CLIENT"), "NOT_FOUND_CLIENT", { fields: ['id'] });
+
+      let key = await ClientKey.findOne({
+        where: {
+          api_key: apiKey,
+          partner_id: partnerId
         }
       });
       if (!key) {
         return res.badRequest(res.__("NOT_FOUND_API_KEY"), "NOT_FOUND_API_KEY");
       }
+
+      key = await ClientKey.update({
+        actived_flg: false
+      }, {
+        where: {
+          id: key.id
+        }
+      });
       return res.ok(true);
     }
     catch (err) {

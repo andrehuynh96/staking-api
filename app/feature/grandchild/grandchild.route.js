@@ -1,6 +1,6 @@
 const express = require("express");
 const controller = require("./grandchild.controller");
-const { create } = require("./validator");
+const { create, update } = require("./validator");
 const validator = require("app/middleware/validator.middleware");
 const authenticate = require('app/middleware/authenticate.middleware');
 const route = express.Router();
@@ -14,6 +14,17 @@ route.post("/grandchild",
 route.get("/grandchild",
   authenticate,
   controller.getAll
+);
+
+route.put("/grandchild/:id",
+  validator(update),
+  authenticate,
+  controller.update
+);
+
+route.get("/grandchild/:id",
+  authenticate,
+  controller.get
 );
 
 module.exports = route;
@@ -86,6 +97,8 @@ module.exports = route;
  *           $ref: '#/definitions/500'
  */
 
+/*********************************************************************/
+
 /**
  * @swagger
  * /api/v1/grandchild:
@@ -157,6 +170,125 @@ module.exports = route;
                     "limit": 5,
                     "total": 3
                     }
+ *             }
+ *       400:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/400'
+ *       401:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/401'
+ *       404:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/404'
+ *       500:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/500'
+ */
+
+/*********************************************************************/
+
+/**
+ * @swagger
+ * /api/v1/grandchild/{id}:
+ *   put:
+ *     summary: update grandchild
+ *     tags:
+ *       - Grandchild
+ *     description: update grandchild
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         type: string
+ *       - name: data
+ *         in: body
+ *         required: true
+ *         description: submit data JSON to update.
+ *         schema:
+ *            type: object
+ *            example:
+ *                  {
+                        "name": "sua lai ten",
+                        updated_by: 10
+ *                  }
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Ok
+ *         examples:
+ *           application/json:
+ *             {
+ *                 "data": {
+                        "id": "4ab88f58-c25a-4ee2-836b-7f020e42bd81",
+                        "email": "trinhdn@blockchainlabs.asia",
+                        "name": "sua lai ten",
+                        "parent_id": "ed483de6-2d14-11ea-978f-2e728ce88125",
+                        "partner_type": "CHILD",
+                        "actived_flg": true,
+                        "deleted_flg": false,
+                        "created_by": 10,
+                        "updated_by": 0,
+                        "createdAt": "2020-04-07T07:06:50.571Z",
+                        "updatedAt": "2020-04-07T07:18:27.243Z"
+                    }
+ *             }
+ *       400:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/400'
+ *       401:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/401'
+ *       404:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/404'
+ *       500:
+ *         description: Error
+ *         schema:
+ *           $ref: '#/definitions/500'
+ */
+
+/*********************************************************************/
+
+/**
+ * @swagger
+ * /api/v1/grandchild/{id}:
+ *   get:
+ *     summary: get info of a grandchild
+ *     tags:
+ *       - Grandchild
+ *     description: get info of a grandchild
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         type: string
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Ok
+ *         examples:
+ *           application/json:
+ *             {
+ *                "data": {
+                      "id": "4ab88f58-c25a-4ee2-836b-7f020e42bd81",
+                      "email": "trinhdn@blockchainlabs.asia",
+                      "name": "sua lai ten khac",
+                      "parent_id": "ed483de6-2d14-11ea-978f-2e728ce88125",
+                      "partner_type": "CHILD",
+                      "actived_flg": true,
+                      "deleted_flg": false,
+                      "created_by": 10,
+                      "updated_by": 10,
+                      "createdAt": "2020-04-07T07:06:50.571Z",
+                      "updatedAt": "2020-04-07T08:28:52.677Z"
+                  }
  *             }
  *       400:
  *         description: Error

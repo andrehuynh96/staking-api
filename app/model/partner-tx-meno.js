@@ -29,8 +29,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       default: 0
     },
+    updated_by: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      default: 0
+    },
+    partner_updated_by: {
+      type: DataTypes.UUID,
+      allowNull: true
+    }
   }, {
-      underscored: true,
-      timestamps: true,
-    });
+    underscored: true,
+    timestamps: true,
+  });
 } 

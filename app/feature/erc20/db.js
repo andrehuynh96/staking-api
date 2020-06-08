@@ -1,7 +1,7 @@
 const db = require("app/model").sequelize;
 
 async function getDeposit(where, offset, limit) {
-    var q = `
+  var q = `
         SELECT 
             extract(epoch from d.block_time) as block_time,
             d.block_number,
@@ -31,6 +31,7 @@ async function getDeposit(where, offset, limit) {
             s.duration,
             s.duration_type,
             s.reward_percentage,
+            s.name as plan_name,
             p.name as token_name,
             p.symbol as token_symbol,
             p.icon as token_icon,
@@ -50,37 +51,37 @@ async function getDeposit(where, offset, limit) {
         OFFSET ${offset}
         LIMIT ${limit}
     `;
-    var rs = await db.query(q, { type: db.QueryTypes.SELECT });
-    if (rs) {
+  var rs = await db.query(q, { type: db.QueryTypes.SELECT });
+  if (rs) {
 
-        rs = _formatWithdrawData(rs);
-    }
-    return rs;
+    rs = _formatWithdrawData(rs);
+  }
+  return rs;
 }
 
 function _formatWithdrawData(data) {
-    var prefix = 'withdrawData_'
-    var transformed = data.map((row) => {
-        var withdraw = {}
-        for (var k in row) {
-            if (k.startsWith("withdrawData_")) {
-                withdraw[k.substr(prefix.length)] = row[k];
-                delete row[k];
-            }
-        }
-        row.withdraw = withdraw;
-        if (!row.withdraw.block_number) {
-            row.withdraw = null
-        }
-        return row;
-    });
+  var prefix = 'withdrawData_'
+  var transformed = data.map((row) => {
+    var withdraw = {}
+    for (var k in row) {
+      if (k.startsWith("withdrawData_")) {
+        withdraw[k.substr(prefix.length)] = row[k];
+        delete row[k];
+      }
+    }
+    row.withdraw = withdraw;
+    if (!row.withdraw.block_number) {
+      row.withdraw = null
+    }
+    return row;
+  });
 
-    return transformed;
+  return transformed;
 }
 
 async function getHistoryOfAddress(where, withdrawWhere, offset, limit) {
-    //TODO: UNION query's performance is not good with a large data
-    var q = `
+  //TODO: UNION query's performance is not good with a large data
+  var q = `
         SELECT * FROM (
             SELECT extract(epoch from block_time) as block_time, block_number, block_hash, transaction_hash, transaction_index, log_index, deposit_id, token_addr, depositor_addr, recipient_addr, amount, 'withdraw' AS type FROM erc20_withdraws WHERE ${withdrawWhere}
             UNION
@@ -92,17 +93,17 @@ async function getHistoryOfAddress(where, withdrawWhere, offset, limit) {
         OFFSET ${offset}
         LIMIT ${limit}
     `;
-    var rs = await db.query(q, { type: db.QueryTypes.SELECT });
-    return rs;
+  var rs = await db.query(q, { type: db.QueryTypes.SELECT });
+  return rs;
 }
 
 // Get aggregation info of an address
 async function getAggregationInfoOfAddr(depositorAddr, tokenAddr) {
-    var where = '';
-    if (tokenAddr) {
-        where = `WHERE t.token_addr = '${tokenAddr}'`;
-    }
-    var q = `
+  var where = '';
+  if (tokenAddr) {
+    where = `WHERE t.token_addr = '${tokenAddr}'`;
+  }
+  var q = `
         SELECT t.token_addr, sum(t.deposit_amount) as total_deposit, sum(t.withdraw_amount) as total_withdraw, sum(t.reward) as total_reward
         FROM (
 
@@ -120,12 +121,12 @@ async function getAggregationInfoOfAddr(depositorAddr, tokenAddr) {
         ${where}
         GROUP BY t.token_addr
     `;
-    var rs = await db.query(q, { type: db.QueryTypes.SELECT });
-    return rs;
+  var rs = await db.query(q, { type: db.QueryTypes.SELECT });
+  return rs;
 }
 
 module.exports = {
-    getHistoryOfAddress: getHistoryOfAddress,
-    getDeposit: getDeposit,
-    getAggregationInfoOfAddr: getAggregationInfoOfAddr
+  getHistoryOfAddress: getHistoryOfAddress,
+  getDeposit: getDeposit,
+  getAggregationInfoOfAddr: getAggregationInfoOfAddr
 }
