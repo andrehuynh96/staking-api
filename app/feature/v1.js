@@ -16,4 +16,7 @@ router.use(require("./erc20/plan/plan.route"));
 router.use(require("./erc20/deposit/erc20.route"));
 router.use(require("./partner-request/partner-request.route"));
 
+// account contribute
+router.use(require("./account-contribution/account-contribution.route"))
+
 module.exports = router;

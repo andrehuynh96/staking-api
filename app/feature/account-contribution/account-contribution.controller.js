@@ -1,9 +1,9 @@
 const logger = require("app/lib/logger");
 const config = require("app/config");
-const accountContributionMapper = require("app/feature/respone-schema/account-contribution.response-schema");
+const accountContributionMapper = require("app/feature/response-schema/account-contribution.response-schema");
 const CosmosAccountContribution = require("app/model").cosmos_account_contributions;
-const IrisAccountContribution = require("app/model/staking").iris_account_contributions;
-const ONTStakingContribute = require("app/model/staking").ont_staking_contributions;
+const IrisAccountContribution = require("app/model").iris_account_contributions;
+const ONTStakingContribute = require("app/model").ont_staking_contributions;
 const TransactionStatus = require("app/model/value-object/transaction-status")
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -17,14 +17,19 @@ module.exports = {
       if(!symbol)
         return res.ok()
       switch(symbol.toLowerCase()){
-        case 'cosmos':
+        case 'atom':
           const { count: total, rows: items } = await CosmosAccountContribution.findAndCountAll(
           {
             limit,
             offset,
             where:{
               status: TransactionStatus.CONFIRMED,
-              calculate_reward: false
+              calculate_reward:  {
+                [Op.or]: {
+                  [Op.eq]: false,
+                  [Op.eq]: null
+                }
+              }
             },
             order: [['block_from', 'ASC']]
           })
@@ -35,38 +40,48 @@ module.exports = {
             total: total
           });  
         case 'iris':
-          const { count: total, rows: items } = await IrisAccountContribution.findAndCountAll(
+          const { count: totalIris, rows: itemsIris } = await IrisAccountContribution.findAndCountAll(
           {
             limit,
             offset,
             where:{
               status: TransactionStatus.CONFIRMED,
-              calculate_reward: false
+              calculate_reward: {
+                [Op.or]: {
+                  [Op.eq]: false,
+                  [Op.eq]: null
+                }
+              }
             },
             order: [['block_from', 'ASC']]
           })
           return res.ok({
-            items: accountContributionMapper(items) && items.length > 0 ? accountContributionMapper(items) : [],
+            items: accountContributionMapper(itemsIris) && itemsIris.length > 0 ? accountContributionMapper(itemsIris) : [],
             offset: offset,
             limit: limit,
-            total: total
+            total: totalIris
           });  
         case 'ont':
-          const { count: total, rows: items } = await ONTStakingContribute.findAndCountAll(
+          const { count: totalOnt, rows: itemsOnt } = await ONTStakingContribute.findAndCountAll(
           {
             limit,
             offset,
             where:{
               status: TransactionStatus.CONFIRMED,
-              calculate_reward: false
+              calculate_reward: {
+                [Op.or]: {
+                  [Op.eq]: false,
+                  [Op.eq]: null
+                }
+              }
             },
             order: [['block_from', 'ASC']]
           })
           return res.ok({
-            items: accountContributionMapper(items) && items.length > 0 ? accountContributionMapper(items) : [],
+            items: accountContributionMapper(itemsOnt) && itemsOnt.length > 0 ? accountContributionMapper(itemsOnt) : [],
             offset: offset,
             limit: limit,
-            total: total
+            total: totalOnt
           });          
         default:
           return res.ok({
@@ -89,7 +104,7 @@ module.exports = {
       if(!ids || ids.length < 1)
         return res.ok(false);
       switch(symbol.toLowerCase()){
-        case 'cosmos':
+        case 'atom':
           await CosmosAccountContribution.update({
             calculate_reward: true
           },{
