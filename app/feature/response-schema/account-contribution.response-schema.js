@@ -14,7 +14,7 @@ const destObject = {
     distribute_commission_id: 'distribute_commission_id',
     calculate_reward: 'calculate_reward',
     updatedAt: 'updated_at',
-    createdAt: 'createdAt',
+    createdAt: 'created_at',
   },
   array: {
     '[].id': 'id',
@@ -29,7 +29,7 @@ const destObject = {
     '[].distribute_commission_id': 'distribute_commission_id',
     '[].calculate_reward': 'calculate_reward',
     '[].updatedAt': 'updated_at',
-    '[].createdAt': 'createdAt',
+    '[].createdAt': 'created_at',
   }
 };
 
