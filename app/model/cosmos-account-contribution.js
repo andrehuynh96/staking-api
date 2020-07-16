@@ -55,8 +55,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       default: false,
     },
+    affiliate_reward_id: {
+      type: DataTypes.STRING(128),
+      allowNull: true
+    },
   }, {
-      underscored: true,
-      timestamps: true,
-    });
+    underscored: true,
+    timestamps: true,
+  });
 } 
