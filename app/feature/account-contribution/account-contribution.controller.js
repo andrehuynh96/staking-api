@@ -28,7 +28,7 @@ module.exports = {
                   [Op.or]: [false, null]
                 }
               },
-              order: [['block_from', 'ASC']]
+              order: [['created_at', 'ASC']]
             })
           return res.ok({
             items: items && items.length > 0 ? accountContributionMapper(items) : [],
@@ -47,7 +47,7 @@ module.exports = {
                   [Op.or]: [false, null]
                 }
               },
-              order: [['block_from', 'ASC']]
+              order: [['created_at', 'ASC']]
             })
           return res.ok({
             items: itemsIris && itemsIris.length > 0 ? accountContributionMapper(itemsIris) : [],
@@ -66,7 +66,7 @@ module.exports = {
                   [Op.or]: [false, null]
                 }
               },
-              order: [['block_from', 'ASC']]
+              order: [['created_at', 'ASC']]
             })
           return res.ok({
             items: itemsOnt && itemsOnt.length > 0 ? accountContributionMapper(itemsOnt) : [],
@@ -100,36 +100,36 @@ module.exports = {
             calculate_reward: true,
             affiliate_reward_id: req.body.affiliate_reward_id
           }, {
-            where: {
-              id: {
-                [Op.in]: ids
+              where: {
+                id: {
+                  [Op.in]: ids
+                }
               }
-            }
-          })
+            })
           return res.ok(true);
         case 'iris':
           await IrisAccountContribution.update({
             calculate_reward: true,
             affiliate_reward_id: req.body.affiliate_reward_id
           }, {
-            where: {
-              id: {
-                [Op.in]: ids
+              where: {
+                id: {
+                  [Op.in]: ids
+                }
               }
-            }
-          })
+            })
           return res.ok(true);
         case 'ont':
           await ONTStakingContribute.update({
             calculate_reward: true,
             affiliate_reward_id: req.body.affiliate_reward_id
           }, {
-            where: {
-              id: {
-                [Op.in]: ids
+              where: {
+                id: {
+                  [Op.in]: ids
+                }
               }
-            }
-          })
+            })
           return res.ok(true);
         default:
           return res.ok(false);
