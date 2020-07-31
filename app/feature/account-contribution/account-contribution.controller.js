@@ -55,7 +55,7 @@ module.exports = {
             limit: limit,
             total: totalIris
           });
-        case 'ont':
+        case 'ong':
           const { count: totalOnt, rows: itemsOnt } = await ONTStakingContribute.findAndCountAll(
             {
               limit,
@@ -119,7 +119,7 @@ module.exports = {
               }
             })
           return res.ok(true);
-        case 'ont':
+        case 'ong':
           await ONTStakingContribute.update({
             calculate_reward: true,
             affiliate_reward_id: req.body.affiliate_reward_id
