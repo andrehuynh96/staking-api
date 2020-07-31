@@ -1,20 +1,19 @@
 const express = require("express");
-const controller = require("./tracking-voting.controller");
-const requestSchema = require("./tracking-voting.request-schema");
+const controller = require("./account-contribution.controller");
+const requestSchema = require("./account-contribution.request-schema");
 const validator = require("app/middleware/validator.middleware");
 const authenticate = require('app/middleware/authenticate.middleware');
 const route = express.Router();
 
-route.post("/voting",
-  validator(requestSchema),
+route.get("/accountcontribution/:symbol",
   authenticate,
-  controller.track
+  controller.get
 )
 
-route.post("/voting/3rd",
+route.post("/accountcontribution/:symbol",
   validator(requestSchema),
   authenticate,
-  controller.track3rd
+  controller.set
 )
 
 
@@ -24,41 +23,47 @@ route.post("/voting/3rd",
 
 /**
  * @swagger
- * /api/v1/voting:
- *   post:
- *     summary: tracking voting
+ * /api/v1/accountcontribution/{symbol}:
+ *   get:
+ *     summary: get list of account contribute, symbols [ATOM, IRIS, ONT]
  *     tags:
- *       - Voting
- *     description: Voting
+ *       - Account contribution
+ *     description: get list of account contribute 
  *     parameters:
  *       - in: header
  *         name: Authorization
  *         type: string
  *         required: true
  *         description: Bearer {token}
- *       - in: body
- *         name: data
- *         description: Data for login.
- *         schema:
- *            type: object
- *            required: 
- *            example: 
- *               {
-                        "tx_id":"3f76680510bcca07e7e011dcc1effb079d1d0a34",
-                        "voter_address":"cosmos18vwj2myc5l7taspq2nrmscldq7gzuxlv9m586h",
-                        "memo":"Infinito:ATOM",
-                        "type":"DELEGATE|UNDELEGATE",
-                        "amount":100
-                  } 
+ *       - in: path
+ *         name: symbol
+ *         type: string
+ *         required: true
+ *       - name: offset
+ *         in: query
+ *         type: integer
+ *         format: int32
+ *       - name: limit
+ *         in: query
+ *         type: integer
+ *         format: int32
  *     produces:
  *       - application/json
  *     responses:
  *       200:
- *         description: Ok 
+ *         description: Ok
  *         examples:
  *           application/json:
  *             {
- *                 "data": true
+ *                 "data": {
+											"items": [
+													{
+													}
+											],
+											"offset": 0,
+											"limit": 10,
+											"total": 4
+									}
  *             }
  *       400:
  *         description: Error
@@ -80,11 +85,11 @@ route.post("/voting/3rd",
 
  /**
  * @swagger
- * /api/v1/voting/3rd:
+ * /api/v1/accountcontribution/{symbol}:
  *   post:
- *     summary: tracking voting for 3rd party
+ *     summary: update contribution status, symbols [ATOM, IRIS, ONT]
  *     tags:
- *       - Voting
+ *       - Account contribution
  *     description: Voting
  *     parameters:
  *       - in: header
@@ -92,20 +97,20 @@ route.post("/voting/3rd",
  *         type: string
  *         required: true
  *         description: Bearer {token}
+ *       - in: path
+ *         name: symbol
+ *         type: string
+ *         required: true
  *       - in: body
- *         name: data
+ *         name: ids
  *         description: Data for login.
  *         schema:
  *            type: object
  *            required: 
  *            example: 
  *               {
-                        "tx_id":"3f76680510bcca07e7e011dcc1effb079d1d0a34",
-                        "voter_address":"cosmos18vwj2myc5l7taspq2nrmscldq7gzuxlv9m586h",
-                        "memo":"Infinito:ATOM",
-                        "type":"DELEGATE|UNDELEGATE",
-                        "amount":100
-                  } 
+ *                  ids: ['id']
+                } 
  *     produces:
  *       - application/json
  *     responses:
