@@ -3,6 +3,7 @@ const config = require("app/config");
 const accountContributionMapper = require("app/feature/response-schema/account-contribution.response-schema");
 const CosmosAccountContribution = require("app/model").cosmos_account_contributions;
 const IrisAccountContribution = require("app/model").iris_account_contributions;
+const HarmonyAccountContribution = require("app/model").harmony_account_contributions;
 const ONTStakingContribute = require("app/model").ont_staking_contributions;
 const TransactionStatus = require("app/model/value-object/transaction-status")
 const Sequelize = require('sequelize');
@@ -17,6 +18,14 @@ module.exports = {
       if (!symbol)
         return res.ok()
       switch (symbol.toLowerCase()) {
+        case 'one':
+          const { count: totalHarmony, rows: itemsHarmony } = await _getHarmonyAccountContributions(offset, limit);
+          return res.ok({
+            items: itemsHarmony && itemsHarmony.length > 0 ? accountContributionMapper(itemsHarmony) : [],
+            offset: offset,
+            limit: limit,
+            total: totalHarmony
+          });
         case 'atom':
           const { count: total, rows: items } = await CosmosAccountContribution.findAndCountAll(
             {
@@ -95,6 +104,9 @@ module.exports = {
       if (!ids || ids.length < 1)
         return res.ok(false);
       switch (symbol.toLowerCase()) {
+        case 'one': 
+          await _updatedHarmonyAccountContributions(ids, req.body.affiliate_reward_id);
+           return res.ok(true);
         case 'atom':
           await CosmosAccountContribution.update({
             calculate_reward: true,
@@ -140,4 +152,34 @@ module.exports = {
       next(err);
     }
   }
+}
+
+async function _getHarmonyAccountContributions( offset, limit ) {
+  const { count: totalHarmony, rows: itemsHarmony } = await HarmonyAccountContribution.findAndCountAll(
+    {
+      limit,
+      offset,
+      where: {
+        status: TransactionStatus.CONFIRMED,
+        calculate_reward: {
+          [Op.or]: [false, null]
+        }
+      },
+      order: [['created_at', 'ASC']]
+    });
+
+    return { count: totalHarmony, rows: itemsHarmony };
+}
+
+async function _updatedHarmonyAccountContributions( ids, affiliate_reward_id ) {
+  await HarmonyAccountContribution.update({
+    calculate_reward: true,
+    affiliate_reward_id: affiliate_reward_id
+  }, {
+      where: {
+        id: {
+          [Op.in]: ids
+        }
+      }
+    })
 }
