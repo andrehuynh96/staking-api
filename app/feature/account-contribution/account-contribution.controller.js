@@ -19,7 +19,7 @@ module.exports = {
         return res.ok()
       switch (symbol.toLowerCase()) {
         case 'one':
-          const { count: totalHarmony, rows: itemsHarmony } = await _GetHarmonyAccountContributions(offset, limit);
+          const { count: totalHarmony, rows: itemsHarmony } = await _getHarmonyAccountContributions(offset, limit);
           return res.ok({
             items: itemsHarmony && itemsHarmony.length > 0 ? accountContributionMapper(itemsHarmony) : [],
             offset: offset,
@@ -105,7 +105,7 @@ module.exports = {
         return res.ok(false);
       switch (symbol.toLowerCase()) {
         case 'one': 
-          await _UpdatedHarmonyAccountContributions(ids, req.body.affiliate_reward_id);
+          await _updatedHarmonyAccountContributions(ids, req.body.affiliate_reward_id);
            return res.ok(true);
         case 'atom':
           await CosmosAccountContribution.update({
@@ -154,7 +154,7 @@ module.exports = {
   }
 }
 
-async function _GetHarmonyAccountContributions( offset, limit ) {
+async function _getHarmonyAccountContributions( offset, limit ) {
   const { count: totalHarmony, rows: itemsHarmony } = await HarmonyAccountContribution.findAndCountAll(
     {
       limit,
@@ -171,10 +171,10 @@ async function _GetHarmonyAccountContributions( offset, limit ) {
     return { count: totalHarmony, rows: itemsHarmony };
 }
 
-async function _UpdatedHarmonyAccountContributions( ids, affiliateRewardId ) {
+async function _updatedHarmonyAccountContributions( ids, affiliate_reward_id ) {
   await HarmonyAccountContribution.update({
     calculate_reward: true,
-    affiliate_reward_id: affiliateRewardId
+    affiliate_reward_id: affiliate_reward_id
   }, {
       where: {
         id: {
