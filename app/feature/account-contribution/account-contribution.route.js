@@ -25,7 +25,7 @@ route.post("/accountcontribution/:symbol",
  * @swagger
  * /api/v1/accountcontribution/{symbol}:
  *   get:
- *     summary: get list of account contribute, symbols [ATOM, IRIS, ONT]
+ *     summary: get list of account contribute, symbols [ATOM, IRIS, ONT, XTZ]
  *     tags:
  *       - Account contribution
  *     description: get list of account contribute 
@@ -87,7 +87,7 @@ route.post("/accountcontribution/:symbol",
  * @swagger
  * /api/v1/accountcontribution/{symbol}:
  *   post:
- *     summary: update contribution status, symbols [ATOM, IRIS, ONT]
+ *     summary: update contribution status, symbols [ATOM, IRIS, ONT, XTZ]
  *     tags:
  *       - Account contribution
  *     description: Voting
@@ -109,7 +109,8 @@ route.post("/accountcontribution/:symbol",
  *            required: 
  *            example: 
  *               {
- *                  ids: ['id']
+ *                  ids: ['id'],
+ * 									affiliate_reward_id: ""
                 } 
  *     produces:
  *       - application/json
