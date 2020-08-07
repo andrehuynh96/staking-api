@@ -1,7 +1,7 @@
 
 const TransactionStatus = require("./value-object/transaction-status");
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define("harmony_account_contributions", {
+  return sequelize.define("harmony_staking_contributions", {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
