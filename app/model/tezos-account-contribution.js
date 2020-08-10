@@ -1,7 +1,7 @@
 
 const TransactionStatus = require("./value-object/transaction-status");
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define("harmony_account_contributions", {
+  return sequelize.define("tezos_account_contributions", {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -16,12 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(36),
       allowNull: true
     },
-    block_from: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    },
-    block_to: {
+    cycle: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
@@ -53,12 +48,12 @@ module.exports = (sequelize, DataTypes) => {
     calculate_reward: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
-      default: false,
+      defaultValue: false,
     },
     affiliate_reward_id: {
       type: DataTypes.STRING(128),
       allowNull: true
-    },
+    }
   }, {
       underscored: true,
       timestamps: true,
