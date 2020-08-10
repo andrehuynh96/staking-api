@@ -63,6 +63,11 @@ const config = {
     public: fs.readFileSync(path.resolve(__dirname, "../../key/public.key"), "utf8")
   },
   platform: process.env.PLATFORM ? process.env.PLATFORM.split(",") : ["ATOM"],
+  sdk: {
+    baseUrl: process.env.SDK_URL,
+    apiKey: process.env.SDK_API_KEY,
+    secretKey: process.env.SDK_SECRET_KEY
+  },
   insight: {
     ATOM: {
       server: process.env.MULTICHAIN,
@@ -87,7 +92,9 @@ const config = {
       ],
     },
   },
-  enableSeed: process.env.ENABLE_SEED == "1"
+  enableSeed: process.env.ENABLE_SEED == "1",
+  tezosUrlServer: process.env.TEZOS_SERVER_URL,
+  ONTUrlServer: process.env.ONT_SERVER_URL
 };
 
 module.exports = config;
