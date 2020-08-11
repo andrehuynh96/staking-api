@@ -98,7 +98,7 @@ const config = {
   },
   enableSeed: process.env.ENABLE_SEED == "1",
   tezosUrlServer: process.env.TEZOS_SERVER_URL,
-  ONTUrlServer: process.env.ONT_SERVER_URL
+  ontUrlServer: process.env.ONT_SERVER_URL
 };
 
 module.exports = config;

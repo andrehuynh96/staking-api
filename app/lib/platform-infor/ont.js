@@ -22,7 +22,7 @@ module.exports = {
 
 async function _getTransaction(tx_id) {
   try {
-    const path = config.ONTUrlServer + `/v2/transactions/${tx_id}`;
+    const path = config.ontUrlServer + `/v2/transactions/${tx_id}`;
     const data = await _makeRequest(path, 'GET', null);
     const transfers = data.result.detail.transfers;
     if(transfers){
