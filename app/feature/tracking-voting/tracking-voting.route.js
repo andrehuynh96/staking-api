@@ -7,13 +7,13 @@ const route = express.Router();
 
 route.post("/voting",
   validator(requestSchema),
-  //authenticate,
+  authenticate,
   controller.track
 )
 
 route.post("/voting/3rd",
   validator(requestSchema),
-  //authenticate,
+  authenticate,
   controller.track3rd
 )
 
