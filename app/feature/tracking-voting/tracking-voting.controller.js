@@ -58,37 +58,37 @@ module.exports = {
       if (!memo) {
         return res.badRequest(res.__("NOT_FOUND_MEMO"), "NOT_FOUND_MEMO");
       }
+      
+      let old = await TrackingVote.findOne({
+        where: {
+          tx_id: req.body.tx_id,
+          platform: memo.platform
+        }
+      });
+      
       const platformBalance = await PlatformInfor.getPlatformBalance({platform: memo.platform, tx_id: req.body.tx_id, address: req.body.voter_address});
-      console.log('platformBalance',platformBalance);
-      return res.ok(true);
-      // let old = await TrackingVote.findOne({
-      //   where: {
-      //     tx_id: req.body.tx_id,
-      //     platform: memo.platform
-      //   }
-      // });
-   
-      // if (old) {
-      //   return res.badRequest(res.__("TX_REGISTERED_ALREADY"), "TX_REGISTERED_ALREADY");
-      // }
-      // const platformBalance = await PlatformInfor.getPlatformBalance({platform: memo.platform, tx_id: req.body.tx_id});
-      // if(platformBalance != req.body.amount){
-      //   return res.badRequest(res.__("TX_AMOUNT_INCORRECT"), "TX_AMOUNT_INCORRECT");
-      // }
-      // let result = await TrackingVote.create({
-      //   tx_id: req.body.tx_id,
-      //   voter_address: req.body.voter_address,
-      //   platform: memo.platform,
-      //   partner_id: req.user.client_id,
-      //   memo: req.body.memo,
-      //   type: req.body.type,
-      //   balance: req.body.amount || 0,
-      // });
-      // if (result) {
-      //   return res.ok(true);
-      // }
+      if(platformBalance != req.body.amount){
+        return res.badRequest(res.__("TX_AMOUNT_INCORRECT"), "TX_AMOUNT_INCORRECT");
+      }
 
-      // return res.serverInternalError();
+      if (old) {
+        return res.badRequest(res.__("TX_REGISTERED_ALREADY"), "TX_REGISTERED_ALREADY");
+      }
+      
+      let result = await TrackingVote.create({
+        tx_id: req.body.tx_id,
+        voter_address: req.body.voter_address,
+        platform: memo.platform,
+        partner_id: req.user.client_id,
+        memo: req.body.memo,
+        type: req.body.type,
+        balance: req.body.amount || 0,
+      });
+      if (result) {
+        return res.ok(true);
+      }
+
+      return res.serverInternalError();
     }
     catch (err) {
       logger.error("tracking voting 3rd party fail:", err);
