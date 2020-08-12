@@ -31,6 +31,7 @@ module.exports = {
           balance = await ont.getAmountOfTransaction({ tx_id: tx_id });
           break;
         default:
+          balance = 0;
           logger.info('method of platform no found');
           break;
       }
