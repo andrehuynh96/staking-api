@@ -27,7 +27,7 @@ module.exports = {
       }
       return amount;
     }catch (err) {
-      logger.info('infinito getAmountTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
+      logger.error('infinito getAmountTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
       throw err;
     }
   }
@@ -52,7 +52,7 @@ async function _getAmountOfTransactionIRIS(platform, tx_id){
     }
     return null;
   }catch (err) {
-    logger.info('infinito getAmountTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
+    logger.error('infinito getAmountTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
     throw err;
   }
 }
@@ -76,7 +76,7 @@ async function _getAmountOfTransactionATOM(platform, tx_id){
     }
     return null;
   }catch (err) {
-    logger.info('infinito getAmountTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
+    logger.error('infinito getAmountTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
     throw err;
   }
 }
@@ -89,7 +89,7 @@ async function _getTransaction (platform, tx_id){
     return data
   }
   catch (err) {
-    logger.info('infinito api.getTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
+    logger.error('infinito api.getTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
     throw err;
   }
 }

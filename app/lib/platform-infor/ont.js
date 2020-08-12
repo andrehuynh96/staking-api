@@ -14,7 +14,7 @@ module.exports = {
       }
       return null;
     } catch (err) {
-      logger.info('ONT getAmountOfTransaction no found data with platform and tx_id' + tx_id, err);
+      logger.error('ONT getAmountOfTransaction no found data with platform and tx_id' + tx_id, err);
         return null;
     }
   }
@@ -33,7 +33,7 @@ async function _getTransaction(tx_id) {
     }
     return null;
   } catch (err) {
-    logger.info('ONT getTransaction no found data with platform and tx_id' + tx_id, err);
+    logger.error('ONT getTransaction no found data with platform and tx_id' + tx_id, err);
       return null;
   }
 }

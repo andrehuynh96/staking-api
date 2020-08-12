@@ -15,7 +15,7 @@ module.exports = {
         return bigN(result.value).div(1e18).toFixed();
       }
     } catch (err) {
-      logger.info('Harmony getAmountOfTransaction no found data with tx_id' + tx_id, err);
+      logger.error('Harmony getAmountOfTransaction no found data with tx_id' + tx_id, err);
       return null;
     }
   }
@@ -29,7 +29,7 @@ async function _getTransaction(tx_id){
     })
     return info.result;
   } catch (err) {
-    logger.info('Harmony getTransaction no found data with tx_id' + tx_id, err);
+    logger.error('Harmony getTransaction no found data with tx_id' + tx_id, err);
     return null;
   }
 }

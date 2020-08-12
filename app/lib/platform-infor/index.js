@@ -16,7 +16,6 @@ module.exports = {
   getPlatformBalance: async ({ platform, tx_id, address }) => {
     let balance = null;
     try {
-      console.log('platform', platform)
       switch(platform.toLowerCase()) {
         case 'iris':
         case 'atom':
@@ -35,11 +34,11 @@ module.exports = {
           logger.info('method of platform no found');
           break;
       }
-      console.log('getPlatformBalance', balance);
+      logger.info('getPlatformBalance' + balance);
       return balance;
     }
     catch (err) {
-      logger.info('api.getTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
+      logger.error('api.getTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
       throw err;
     }
   }

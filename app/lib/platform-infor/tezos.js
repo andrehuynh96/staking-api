@@ -15,7 +15,7 @@ module.exports = {
       }
       return null;
     } catch (err) {
-      logger.info('Tezos getAmountOfTransaction no found data with platform and tx_id' + from_address, err);
+      logger.error('Tezos getAmountOfTransaction no found data with platform and tx_id' + from_address, err);
         return null;
     }
   }
@@ -27,7 +27,7 @@ async function _getTransaction(from_address){
     const data = await _makeRequest(path, 'GET', null);
     return data;
   } catch (err) {
-    logger.info('Tezos getTransaction no found data with platform and tx_id' + from_address, err);
+    logger.error('Tezos getTransaction no found data with platform and tx_id' + from_address, err);
       return null;
   }
 }
