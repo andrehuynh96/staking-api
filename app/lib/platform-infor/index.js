@@ -18,8 +18,9 @@ module.exports = {
     try {
       switch(platform.toLowerCase()) {
         case 'iris':
+        case 'ada':
         case 'atom':
-          balance = await ibp.getAmountOfTransaction({ platform: platform, tx_id: tx_id });
+          balance = await ibp.getAmountOfTransaction({ platform: platform, tx_id: tx_id, address: address });
           break;
         case 'one': 
           balance = await one.getAmountOfTransaction({ tx_id: tx_id });
