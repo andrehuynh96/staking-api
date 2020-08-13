@@ -44,7 +44,7 @@ async function _getAmountOfTransactionADA(address){
     }
     return null;
   }catch (err) {
-    logger.error('infinito getAmountTransaction no found data with platform and tx_id' + platform + '/' + tx_id, err);
+    logger.error('infinito ADA getAmountTransaction no found data with address' + address, err);
     throw err;
   }
 }
