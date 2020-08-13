@@ -32,6 +32,7 @@ module.exports = {
           break;
         default:
           logger.info('method of platform no found');
+          balance = -1; // platform has not yet support.
           break;
       }
       logger.info('getPlatformBalance' + balance);
