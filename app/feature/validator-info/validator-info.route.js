@@ -1,11 +1,11 @@
 const express = require('express');
 const authenticate = require('app/middleware/authenticate.middleware');
-const controller = require('./validator.controller');
+const controller = require('./validator-info.controller');
 
 const router = express.Router();
 
 router.get(
-  '/validators/:platform',
+  '/validators-info/:platform',
   authenticate,
   controller.get
 );
@@ -19,9 +19,9 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/v1/validators/{platform}:
+ * /api/v1/validators-info/{platform}:
  *   get:
- *     summary: validator list
+ *     summary: validator info list
  *     tags:
  *       - Validator
  *     description:

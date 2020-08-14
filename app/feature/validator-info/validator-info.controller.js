@@ -1,7 +1,7 @@
 const logger = require('app/lib/logger');
 const config = require('app/config');
 const Validator = require('app/model').validators;
-const mapper = require('app/feature/response-schema/validator.response-schema');
+const mapper = require('app/feature/response-schema/validator-info.response-schema');
 
 module.exports = {
   get: async (req, res, next) => {
