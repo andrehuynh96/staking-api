@@ -87,7 +87,7 @@ const config = {
       ],
     },
   },
-  enableSeed: process.env.ENABLE_SEED == "1"
+  enableSeed: process.env.ENABLE_SEED == "1",
 };
 
 module.exports = config;
