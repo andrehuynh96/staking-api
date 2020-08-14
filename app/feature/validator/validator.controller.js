@@ -13,7 +13,7 @@ module.exports = {
       let where = {
         platform: platform
       };
-      let items = await Validator.findAll({where: where});
+      let items = await Validator.findAll({where: where, order: [['order', 'ASC']]});
 
       return res.ok(mapper(items));
     }

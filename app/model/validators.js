@@ -17,7 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     estimate_earn_per_year: {
       type: DataTypes.NUMERIC,
       allowNull: true,
-    }
+    },
+    order: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
   }, {
       underscored: true,
       timestamps: true,

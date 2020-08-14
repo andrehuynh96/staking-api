@@ -5,12 +5,14 @@ const destObject = {
     '[].id': '[].id',
     '[].address': '[].address',
     '[].estimate_earn_per_year': '[].estimate_earn_per_year',
+    '[].order': '[].order',
     '[].createdAt': '[].created_at',   
   },
   single: {
     'id': 'id',
     'address': 'address',
     'estimate_earn_per_year': 'estimate_earn_per_year',
+    'order': 'order',
     'createdAt': 'created_at'
   }
 };
