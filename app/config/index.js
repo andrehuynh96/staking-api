@@ -63,15 +63,6 @@ const config = {
     public: fs.readFileSync(path.resolve(__dirname, "../../key/public.key"), "utf8")
   },
   platform: process.env.PLATFORM ? process.env.PLATFORM.split(",") : ["ATOM"],
-  sdk: {
-    baseUrl: process.env.INFINITO_SDK_URL,
-    apiKey: process.env.INFINITO_SDK_API_KEY,
-    secretKey: process.env.INFINITO_SDK_SECRET_KEY
-  },
-  one: {
-    baseUrl: process.env.ONE_SDK_URL,
-    testnet: process.env.TEST_NET
-  },
   insight: {
     ATOM: {
       server: process.env.MULTICHAIN,
