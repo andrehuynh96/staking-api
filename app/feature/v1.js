@@ -20,6 +20,6 @@ router.use(require("./partner-request/partner-request.route"));
 router.use(require("./account-contribution/account-contribution.route"))
 
 // validator
-router.use(require("./validator/validator.route"))
+router.use(require("./validator-info/validator-info.route"))
 
 module.exports = router;

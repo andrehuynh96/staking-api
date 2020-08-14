@@ -94,12 +94,11 @@ const config = {
           params: ['address'],
         }
       ],
-    }
+    },
   },
   enableSeed: process.env.ENABLE_SEED == "1",
   tezosUrlServer: process.env.TEZOS_SERVER_URL,
-  ontUrlServer: process.env.ONT_SERVER_URL,
-  atomUrlServer: process.env.ATOM_SERVER_URL
+  ontUrlServer: process.env.ONT_SERVER_URL
 };
 
 module.exports = config;
