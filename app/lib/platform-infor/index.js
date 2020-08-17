@@ -46,6 +46,7 @@ module.exports = {
     }
   }
 };
+
 function waitting(ms) {
   const date = Date.now();
   let currentDate = null;
