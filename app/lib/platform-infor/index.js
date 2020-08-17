@@ -14,6 +14,7 @@ const api = new InfinitoApi(opts);
 
 module.exports = {
   getPlatformBalance: async ({ platform, tx_id, address }) => {
+    await waitting(3);
     let balance = null;
     try {
       switch(platform.toLowerCase()) {
@@ -36,7 +37,7 @@ module.exports = {
           balance = -1; // platform has not yet support.
           break;
       }
-      logger.info('getPlatformBalance' + balance);
+      logger.info('getPlatformBalance value' + balance);
       return balance;
     }
     catch (err) {
@@ -45,3 +46,10 @@ module.exports = {
     }
   }
 };
+function waitting(ms) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < ms*1000);
+}

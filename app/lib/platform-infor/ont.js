@@ -24,11 +24,13 @@ async function _getTransaction(tx_id) {
   try {
     const path = config.ontUrlServer + `/v2/transactions/${tx_id}`;
     const data = await _makeRequest(path, 'GET', null);
-    const transfers = data.result.detail.transfers;
-    if(transfers){
-      const txDetail = transfers.filter(el=>el.asset_name=='ont');
-      if(txDetail.length > 0){
-        return txDetail[0];
+    if(data.result && data.result.detail){
+      const transfers = data.result.detail.transfers;
+      if(transfers){
+        const txDetail = transfers.filter(el=>el.asset_name=='ont');
+        if(txDetail.length > 0){
+          return txDetail[0];
+        }
       }
     }
     return null;
