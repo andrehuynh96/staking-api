@@ -17,15 +17,15 @@ module.exports = {
     await waitting(3);
     let balance = null;
     try {
-      switch(platform.toLowerCase()) {
+      switch (platform.toLowerCase()) {
         case 'iris':
         // case 'ada':
         case 'atom':
           balance = await ibp.getAmountOfTransaction({ platform: platform, tx_id: tx_id, address: address });
           break;
-        case 'one': 
-          balance = await one.getAmountOfTransaction({ tx_id: tx_id });
-          break;
+        // case 'one': 
+        //   balance = await one.getAmountOfTransaction({ tx_id: tx_id });
+        //   break;
         case 'xtz':
           balance = await xtz.getAmountOfTransaction({ from_address: address });
           break;
@@ -52,5 +52,5 @@ function waitting(ms) {
   let currentDate = null;
   do {
     currentDate = Date.now();
-  } while (currentDate - date < ms*1000);
+  } while (currentDate - date < ms * 1000);
 }
