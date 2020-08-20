@@ -17,7 +17,9 @@ module.exports = {
       let items = await PlatformVote.findAll({
         where: {
           status: {
-            [Op.in]: [StakingPlatformStatus.COMMING_SOON, StakingPlatformStatus.ENABLED]
+            [Op.in]: [StakingPlatformStatus.COMMING_SOON,
+            StakingPlatformStatus.ENABLED,
+            StakingPlatformStatus.NOT_SUPPORT_AFFILIATE]
           }
         },
         raw: true
