@@ -26,9 +26,9 @@ module.exports = {
         // case 'one': 
         //   balance = await one.getAmountOfTransaction({ tx_id: tx_id });
         //   break;
-        case 'xtz':
-          balance = await xtz.getAmountOfTransaction({ from_address: address });
-          break;
+        // case 'xtz':
+        //   balance = await xtz.getAmountOfTransaction({ from_address: address });
+        //   break;
         case 'ont':
           balance = await ont.getAmountOfTransaction({ tx_id: tx_id });
           break;
