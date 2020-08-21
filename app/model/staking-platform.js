@@ -104,7 +104,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false
     },
-      using_memo_flg: {
+    using_memo_flg: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    affiliate_flg: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false
