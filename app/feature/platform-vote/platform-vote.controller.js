@@ -18,8 +18,7 @@ module.exports = {
         where: {
           status: {
             [Op.in]: [StakingPlatformStatus.COMMING_SOON,
-            StakingPlatformStatus.ENABLED,
-            StakingPlatformStatus.NOT_SUPPORT_AFFILIATE]
+            StakingPlatformStatus.ENABLED]
           }
         },
         raw: true
