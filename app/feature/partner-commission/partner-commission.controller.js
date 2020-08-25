@@ -10,6 +10,7 @@ const { Op } = require("sequelize");
 const bech32 = require("bech32");
 const WAValidator = require("wallet-address-validator");
 const NeonCore = require('@cityofzion/neon-core');
+const verifyAddress = require('app/lib/verify-address');
 
 module.exports = {
   getAll: async (req, res, next) => {
@@ -234,17 +235,7 @@ function _checkListAddress(data) {
         continue;
       }
 
-      let valid = false;
-      if (e.platform == "ATOM") {
-        valid = _verifyCosmosAddress(e.reward_address);
-      } else if (e.platform == "IRIS") {
-        valid = _verifyIrisAddress(e.reward_address);
-      } else if (e.platform == "ONT" || e.platform == "ONG") {
-        valid = _verifyOntAddress(e.reward_address);
-      } else {
-        valid = WAValidator.validate(e.reward_address, e.platform, "testnet");
-        valid = valid ? true : WAValidator.validate(e.reward_address, e.platform);
-      }
+      let valid = verifyAddress(e.platform, e.reward_address);
       if (!valid) {
         errorMessage = `invalid address of ${e.platform}!`;
         break;
