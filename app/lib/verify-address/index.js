@@ -2,7 +2,7 @@ const web3Util = require('web3-utils');
 const bech32 = require('bech32');
 const logger = require('app/lib/logger');
 const NeonCore = require('@cityofzion/neon-core');
-const WAValidator = require("wallet-address-validator");
+const WAValidator = require("multicoin-address-validator");
 
 module.exports = (platform, address) => {
   if (platform == 'ATOM') {
