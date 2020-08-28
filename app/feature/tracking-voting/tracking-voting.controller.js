@@ -1,7 +1,7 @@
 const logger = require('app/lib/logger');
 const TrackingVote = require("app/model").tracking_votes;
 const PartnerMeno = require("app/model").partner_tx_memos;
-const PlatformInfor = require("app/lib/platform-infor");
+//const PlatformInfor = require("app/lib/platform-infor");
 
 module.exports = {
   track: async (req, res, next) => {
