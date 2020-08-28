@@ -92,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     erc20_validator_fee: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       allowNull: true
     },
     validator_address: {
@@ -104,7 +104,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false
     },
-      using_memo_flg: {
+    using_memo_flg: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    affiliate_flg: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false
