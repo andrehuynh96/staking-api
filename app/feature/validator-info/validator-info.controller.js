@@ -7,14 +7,16 @@ module.exports = {
   get: async (req, res, next) => {
     try {
       logger.info('validator::list');
-      let platform = req.params.platform ? req.params.platform.toUpperCase() : null
-      if(!platform)
-        throw 'Missing platform'
+      let platform = req.params.platform ? req.params.platform.toUpperCase() : null;
+      if (!platform) {
+        return res.badRequest(res.__("NOT_FOUND_PLATFORM"), "NOT_FOUND_PLATFORM");
+      }
+
+      platform = (platform = "ADA") ? "TADA" : platform;
       let where = {
         platform: platform
       };
-      let items = await Validator.findAll({where: where, order: [['order', 'ASC']]});
-
+      let items = await Validator.findAll({ where: where, order: [['order', 'ASC']] });
       return res.ok(mapper(items));
     }
     catch (err) {
