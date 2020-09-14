@@ -25,9 +25,13 @@ database.init(async err => {
       return;
     }
     require('app/model');
-    database.instanse.sync({ force: false }).then(() => {
-      logger.info('Resync data model and do not drop any data');
+    require('app/model/tezos');
+    database.db().staking.sync({ force: false }).then(() => {
+      logger.info(`Resync staking data model and do not drop any data`);
       require('app/model/seed');
+    });
+    database.db().tezos.sync({ force: false }).then(() => {
+      logger.info(`Resync tezos data model and do not drop any data`);
     });
 
     app.set('trust proxy', 1);
