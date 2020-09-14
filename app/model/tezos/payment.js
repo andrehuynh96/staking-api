@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(255),
       allowNull: false
     },
+    amount: {
+      type: DataTypes.NUMBER,
+      allowNull: false,
+    },
     hash: {
       type: DataTypes.STRING(255),
       allowNull: false
