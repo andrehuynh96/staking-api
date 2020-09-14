@@ -5,7 +5,9 @@ const PartnerCommission = require("app/model").partner_commissions;
 const PartnerCommissionHis = require("app/model").partner_commissions_his;
 const StakingPlatformStatus = require("app/model/value-object/staking-platform-status");
 const mapper = require('app/feature/response-schema/partner-commission.response-schema');
-const database = require('app/lib/database').instanse;
+const database = require('app/lib/database').db().staking;
+
+
 const { Op } = require("sequelize");
 const bech32 = require("bech32");
 const WAValidator = require("wallet-address-validator");

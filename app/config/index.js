@@ -21,7 +21,7 @@ const config = {
     appenders: ['CONSOLE', 'FILE', 'ERROR_ONLY'],
   },
   db: {
-    postpres: {
+    staking: {
       database: process.env.POSTPRES_DB_NAME,
       username: process.env.POSTPRES_DB_USER,
       password: process.env.POSTPRES_DB_PASS,
@@ -31,8 +31,20 @@ const config = {
         dialect: 'postgres',
         logging: false
       }
+    },
+    tezos: {
+      database: process.env.TEZOS_DISTRIBUTION_DB_NAME,
+      username: process.env.TEZOS_DISTRIBUTION_DB_USER,
+      password: process.env.TEZOS_DISTRIBUTION_DB_PASS,
+      options: {
+        host: process.env.TEZOS_DISTRIBUTION_DB_HOST,
+        port: process.env.TEZOS_DISTRIBUTION_DB_PORT,
+        dialect: 'postgres',
+        logging: false
+      }
     }
   },
+
   redis: {
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT,
