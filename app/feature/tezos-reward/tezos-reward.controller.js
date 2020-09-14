@@ -1,22 +1,22 @@
 const logger = require('app/lib/logger');
-const Payment = require('app/model/tezos_reward').payments;
+const Payment = require('app/model/tezos').payments;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
-const moment = require('moment')
+const moment = require('moment');
+const BigNumber = require('bignumber.js');
 module.exports = {
     get: async(req,res,next)=> {
         try {
             const address = req.params.address;
-            const today = new Date();
+            const today =  moment.utc().format();
             const startDay =moment(today).startOf('date').toDate();
-            const endDay = moment(today).endDay('date').toDate();
             let amount = 0;
             const tezosRewards = await Payment.findAll({
                 where: {
                     address: address,
                     created_at: {
                         [Op.gte]: startDay,
-                        [Op.lt]: endDay
+                        [Op.lt]: today
                     },
                     hash: { [Op.notILike]: 'none'},
                     paid: 1
@@ -24,13 +24,13 @@ module.exports = {
             });
             if (tezosRewards.length > 0) {
                 tezosRewards.forEach(item=> {
-                    amount += item.amount;
+                    amount += BigNumber(item.amount).toNumber();
                 });
+                return res.ok({ amount: amount });
             }
             else {
-                return amount;
+                return res.ok({ amount: 0 });
             }
-            return amount;
         } catch (error) {
             logger.error('ger tezos reward fail',error);
             next(error);
