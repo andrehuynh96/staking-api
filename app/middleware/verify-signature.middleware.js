@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const logger = require("app/lib/logger");
-const ClientKey = require("app/model").client_keys;
+const ClientKey = require("app/model").partner_api_keys;
 const Redis = require("app/lib/redis").client();
 const RedisResourse = require("app/resource/redis");
 
@@ -8,22 +8,37 @@ module.exports = async (req, res, next) => {
   try {
     const signature = req.get('x-signature');
     const time = req.get('x-time');
-    const apiKey = req.user.api_key;
-    if (!signature) {
-      return res.badRequest();
+    let apiKey;
+    if (req.user && req.user.api_key) {
+      apiKey = req.user.api_key;
+    }
+    else {
+      apiKey = req.body.api_key;
+    }
+
+    if (!signature || !time) {
+      return res.badRequest(res.__("NOT_FOUND"), "NOT_FOUND", { fields: ['x-time', 'x-signature'] });
     }
 
     let key = await _getKey(apiKey);
-    const content = `${key.secret}/n${req.method.toUpperCase()}/n${req.url}/n${JSON.stringify(req.body)}/n${time}`;
+    const content = `${key.secret_key}
+${req.method.toUpperCase()}
+${req.originalUrl}
+${JSON.stringify(req.body)}
+${time}`;
+
     const hash = crypto
       .createHash('sha256')
       .update(content)
       .digest('hex');
 
-    if (hash != req.body.checksum) {
-      return res.badRequest('Wrong checksum.');
+    console.log('content', content);
+    console.log('hash', hash);
+    console.log('signature', signature);
+    if (hash != signature) {
+      return res.badRequest(res.__("WRONG_CHECKSUM"), "WRONG_CHECKSUM");
     }
-
+    next();
   }
   catch (err) {
     logger.error("verify signature fail:", err);
@@ -40,7 +55,8 @@ async function _getKey(apiKey) {
 
   let key = await ClientKey.findOne({
     where: {
-      client_key: apiKey
+      api_key: apiKey,
+      actived_flg: true
     }
   });
 
