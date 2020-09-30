@@ -13,12 +13,10 @@ module.exports = {
       }
 
       platform = (platform == "ADA") ? "TADA" : platform;
-
       let where = {
         platform: platform
       };
       let items = await Validator.findAll({ where: where, order: [['order', 'ASC']] });
-
       return res.ok(mapper(items));
     }
     catch (err) {
