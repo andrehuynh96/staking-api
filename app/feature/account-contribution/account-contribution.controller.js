@@ -3,12 +3,21 @@ const accountContributionMapper = require("app/feature/response-schema/account-c
 const CosmosAccountContribution = require("app/model").cosmos_account_contributions;
 const IrisAccountContribution = require("app/model").iris_account_contributions;
 const HarmonyStakingContribution = require("app/model").harmony_staking_contributions;
-const ONTStakingContribute = require("app/model").ont_staking_contributions;
-const TezosAccountContribute = require("app/model").tezos_account_contributions;
+const ONTStakingContribution = require("app/model").ont_staking_contributions;
+const TezosAccountContribution = require("app/model").tezos_account_contributions;
+const AdaStakingContribution = require("app/model").ada_staking_contributions;
 const TransactionStatus = require("app/model/value-object/transaction-status")
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
-const Model = { 'one': HarmonyStakingContribution, 'atom': CosmosAccountContribution, 'iris': IrisAccountContribution, 'ong': ONTStakingContribute, 'xtz': TezosAccountContribute };
+const Model = { 
+  'one': HarmonyStakingContribution, 
+  'atom': CosmosAccountContribution, 
+  'iris': IrisAccountContribution, 
+  'ong': ONTStakingContribution, 
+  'xtz': TezosAccountContribution,
+  'ada': AdaStakingContribution,
+  'tada': AdaStakingContribution
+};
 
 module.exports = {
   get: async (req, res, next) => {
@@ -35,7 +44,6 @@ module.exports = {
     try {
       let symbol = req.params.symbol;
       let ids = req.body.ids;
-      console.log(Model);
       if (!ids || ids.length < 1)
         return res.ok(false);
       if (!Model[symbol.toLowerCase()])
