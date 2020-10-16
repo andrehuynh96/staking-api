@@ -12,7 +12,7 @@ module.exports = {
         return res.badRequest(res.__("NOT_FOUND_PLATFORM"), "NOT_FOUND_PLATFORM");
       }
 
-      platform = (platform == "ADA") ? "TADA" : platform;
+      platform = (platform == "ADA") ? ["ADA", "TADA"] : platform;
       let where = {
         platform: platform
       };
