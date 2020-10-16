@@ -3,7 +3,7 @@ const controller = require("./tezos-reward.controller");
 const authenticate = require('app/middleware/authenticate.middleware');
 const router = express.Router();
 
-router.get('/tezos-rewards/:address',
+router.get('/tezos-rewards',
     authenticate,
     controller.get
 );
@@ -26,8 +26,12 @@ module.exports = router;
  *         type: string
  *         required: true
  *         description: Bearer {token}
- *       - in: path
+ *       - in: query
  *         name: address
+ *         type: string
+ *         required: true
+ *       - in: query
+ *         name: date
  *         type: string
  *         required: true
  *     produces:

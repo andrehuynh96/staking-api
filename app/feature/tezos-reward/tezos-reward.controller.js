@@ -7,9 +7,9 @@ const BigNumber = require('bignumber.js');
 module.exports = {
     get: async(req,res,next)=> {
         try {
-            const address = req.params.address;
-            const today =  moment.utc().format();
-            const startDay =moment(today).startOf('date').toDate();
+            const { address, date } = req.query;
+            const today =  date? moment.utc(date).format() : moment.utc().format();
+            const startDay = moment(today).startOf('date').toDate();
             let amount = 0;
             const tezosRewards = await Payment.findAll({
                 where: {
