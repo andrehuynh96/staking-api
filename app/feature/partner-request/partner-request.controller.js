@@ -87,7 +87,7 @@ module.exports = {
         }
       })
 
-      transaction = await database.instanse.transaction();
+      transaction = await database.transaction();
       await PartnerRequest.update({
         status: status,
         email_confirmed: email
@@ -96,7 +96,8 @@ module.exports = {
             partner_id: req.user.client_id,
             id: partnerRequest.id
           },
-        }, { transaction });
+          transaction
+        });
       let emails = [];
       if (status == PartnerRequestStatus.DONE) {
         await PartnerCommission.update({
@@ -105,8 +106,9 @@ module.exports = {
             where: {
               id: partnerRequest.partner_commission_id,
               partner_id: req.user.client_id
-            }
-          }, { transaction })
+            },
+            transaction
+          })
       } else {
         let permission = await Permission.findOne({
           where: {
