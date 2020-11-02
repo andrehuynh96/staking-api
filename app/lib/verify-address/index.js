@@ -3,21 +3,36 @@ const bech32 = require('bech32');
 const logger = require('app/lib/logger');
 const NeonCore = require('@cityofzion/neon-core');
 const WAValidator = require("multicoin-address-validator");
+const { isValidAddress: isValidHarmonyAddress } = require('@harmony-js/utils');
 
 module.exports = (platform, address) => {
+  if (platform === 'TADA') {
+    platform = 'ADA';
+  }
+
   if (platform == 'ATOM') {
     return verifyCosmosAddress(address);
-  } else if (platform == 'IRIS') {
-    return verifyIrisAddress(address);
-  } else if (platform == 'ETH') {
-    return verifyEthAddress(address);
-  } else if (platform == "ONT" || platform == "ONG") {
-    return verifyOntAddress(address);
-  } else {
-    let valid = WAValidator.validate(address, platform, "testnet");
-    valid = valid ? true : WAValidator.validate(address, platform);
-    return valid;
   }
+
+  if (platform == 'IRIS') {
+    return verifyIrisAddress(address);
+  }
+
+  if (platform == 'ETH') {
+    return verifyEthAddress(address);
+  }
+
+  if (platform == "ONT" || platform == "ONG") {
+    return verifyOntAddress(address);
+  }
+
+  if (platform == 'ONE') {
+    return verifyHarmonyAddress(address);
+  }
+
+  const valid = WAValidator.validate(address, platform.toLowerCase(), "testnet") || WAValidator.validate(address, platform.toLowerCase());
+
+  return valid;
 }
 
 const verifyCosmosAddress = (address) => {
@@ -54,9 +69,18 @@ const verifyEthAddress = (address) => {
   }
 }
 
-const verifyOntAddress = (address) = (address) => {
+const verifyOntAddress = (address) => {
   try {
     return NeonCore.wallet.isAddress(address);
+  } catch (e) {
+    logger.error(e);
+    return false;
+  }
+}
+
+const verifyHarmonyAddress = (address) => {
+  try {
+    return isValidHarmonyAddress(address);
   } catch (e) {
     logger.error(e);
     return false;
