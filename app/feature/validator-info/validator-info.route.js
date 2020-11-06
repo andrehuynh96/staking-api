@@ -29,6 +29,10 @@ module.exports = router;
  *       - name: platform
  *         in: path
  *         type: string
+ *       - name: status
+ *         in: query
+ *         type: string
+ *         description: all|active|deactive
  *     produces:
  *       - application/json
  *     responses:

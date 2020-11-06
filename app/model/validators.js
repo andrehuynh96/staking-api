@@ -1,5 +1,7 @@
+const Status = require("./value-object/validator-status");
+
 module.exports = (sequelize, DataTypes) => {
-  const Wallet = sequelize.define("validators", {
+  const Model = sequelize.define("validators", {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -22,10 +24,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    name: {
+      type: DataTypes.STRING(1024),
+      allowNull: true,
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: Status.ENABLED,
+    },
   }, {
       underscored: true,
       timestamps: true,
     });
 
-  return Wallet;
+  return Model;
 } 
