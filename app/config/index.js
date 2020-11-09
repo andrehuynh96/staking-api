@@ -2,9 +2,18 @@
 require('dotenv').config();
 const fs = require("fs");
 const path = require('path');
+const pkg = require('../../package.json');
+
 const logFolder = process.env.LOG_FOLDER || './public/logs';
 
 const config = {
+  app: {
+    name: process.env.APP_NAME || 'staking-api',
+    version: pkg.version,
+    description: pkg.description,
+    buildNumber: process.env.BUILD_NUMBER || process.env.CI_JOB_ID || '',
+    port: parseInt(process.env.PORT || process.env.APP_PORT),
+  },
   logger: {
     console: {
       enable: true,
@@ -110,7 +119,12 @@ const config = {
   },
   enableSeed: process.env.ENABLE_SEED == "1",
   tezosUrlServer: process.env.TEZOS_SERVER_URL,
-  ontUrlServer: process.env.ONT_SERVER_URL
+  ontUrlServer: process.env.ONT_SERVER_URL,
+  hangoutError: {
+    isEnabled: process.env.HANGOUT_ERROR_IS_ENABLED === 'true',
+    logLevel: process.env.HANGOUT_ERROR_LOG_LEVEL || 'error',
+    webhookUrl: process.env.HANGOUT_ERROR_CHANEL_WEBHOOK_URL,
+  },
 };
 
 module.exports = config;
