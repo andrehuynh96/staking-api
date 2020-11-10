@@ -9,6 +9,7 @@ const http = require('http');
 const database = require('app/lib/database');
 const logger = require('app/lib/logger');
 const redis = require('app/lib/redis');
+const loader = require('app/loader');
 
 const app = express();
 app.use(morgan('dev'));
@@ -24,6 +25,7 @@ database.init(async err => {
       logger.error(`Redis start fail:`, err);
       return;
     }
+
     require('app/model');
     require('app/model/tezos');
     database.db().staking.sync({ force: false }).then(() => {
@@ -34,6 +36,7 @@ database.init(async err => {
       logger.info(`Resync tezos data model and do not drop any data`);
     });
 
+    loader.init(app);
     app.set('trust proxy', 1);
     app.use('/', require('app/index'));
     app.use(express.static('public'));
