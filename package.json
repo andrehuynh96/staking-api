@@ -25,7 +25,6 @@
   "license": "ISC",
   "dependencies": {
     "@cityofzion/neon-core": "^4.7.2",
-    "@kevit/log4js-hangout": "^1.0.3",
     "@harmony-js/core": "^0.1.51",
     "@harmony-js/network": "^0.1.51",
     "@harmony-js/utils": "^0.1.48",
@@ -59,7 +58,7 @@
     "pg-hstore": "^2.3.3",
     "redis": "^2.8.0",
     "rootpath": "^0.1.2",
-    "staking-logging": "^0.1.5",
+    "staking-logging": "^0.1.7",
     "sequelize": "^5.21.2",
     "sequelize-cli": "^5.5.1",
     "sequelize-temporalize": "^4.1.0",
