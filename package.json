@@ -58,7 +58,7 @@
     "pg-hstore": "^2.3.3",
     "redis": "^2.8.0",
     "rootpath": "^0.1.2",
-    "staking-logging": "^0.1.7",
+    "staking-logging": "^0.1.8",
     "sequelize": "^5.21.2",
     "sequelize-cli": "^5.5.1",
     "sequelize-temporalize": "^4.1.0",
