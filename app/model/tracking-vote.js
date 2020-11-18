@@ -38,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0
     },
+    stake_address: {
+      type: DataTypes.STRING(256),
+      allowNull: true,
+    },
     day: {
       type: DataTypes.INTEGER,
       allowNull: true
@@ -55,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
-      underscored: true,
-      timestamps: true,
-    });
+    underscored: true,
+    timestamps: true,
+  });
 } 
