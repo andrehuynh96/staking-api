@@ -1,9 +1,9 @@
 const express = require('express');
-const controller = require("./tezos-reward.controller");
+const controller = require("./ada-reward.controller");
 const authenticate = require('app/middleware/authenticate.middleware');
 const router = express.Router();
 
-router.get('/tezos-rewards',
+router.post('/ada-rewards',
   authenticate,
   controller.get
 );
@@ -14,9 +14,9 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/v1/tezos-rewards:
- *   get:
- *     summary: tezos rewards
+ * /api/v1/ada-rewards:
+ *   post:
+ *     summary: ada rewards
  *     tags:
  *       - Reward
  *     description: Reward
@@ -26,14 +26,19 @@ module.exports = router;
  *         type: string
  *         required: true
  *         description: Bearer {token}
- *       - in: query
- *         name: address
- *         type: string
+ *       - in: body
+ *         name: data
+ *         description: Data for login.
  *         required: true
- *       - in: query
- *         name: date
- *         type: string
- *         required: true
+ *         schema:
+ *            type: object
+ *            required:
+ *            - api_key
+ *            example:
+ *               {
+                        "address":["addr1q8jshaxmyrgua3wl8p0pk88632rsd6g6aac8fccxg55t8vzmmsndrmkvnew5h7m9tatjyzudmz3rg6a8jsqhnthzd7qsa6awfz"],
+                        "date":"2020-11-19 10:23:42"
+                  }
  *     produces:
  *       - application/json
  *     responses:
@@ -42,7 +47,12 @@ module.exports = router;
  *         examples:
  *           application/json:
  *             {
- *                 "data": 0
+ *                 "data":[
+ *                      {
+ *                         "address":"",
+ *                         "amount": 100
+ *                      }
+ *                 ]
  *             }
  *       400:
  *         description: Error
