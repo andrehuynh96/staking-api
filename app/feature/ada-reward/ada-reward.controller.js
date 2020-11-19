@@ -7,7 +7,7 @@ const moment = require('moment');
 module.exports = {
   get: async (req, res, next) => {
     try {
-      let { address, date } = req.query;
+      let { address, date } = req.body;
       let toDate = date ? moment.utc(date) : moment.utc();
       let fromDate = date ? moment.utc(date) : moment.utc();
       toDate.utcOffset(0);
@@ -15,7 +15,6 @@ module.exports = {
       toDate.set({ hour: 23, minute: 59, second: 59 });
       fromDate.set({ hour: 0, minute: 0, second: 0 });
 
-      address = address.split(',');
       const result = await AdaRewardAddresses.findAll({
         attributes: [
           "address",
