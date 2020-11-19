@@ -22,5 +22,6 @@ router.use(require("./account-contribution/account-contribution.route"))
 // validator
 router.use(require("./validator-info/validator-info.route"))
 router.use(require("./tezos-reward/tezos-reward.route"))
+router.use(require("./ada-reward/ada-reward.route"))
 
 module.exports = router;

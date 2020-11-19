@@ -1,9 +1,9 @@
 const express = require('express');
-const controller = require("./tezos-reward.controller");
+const controller = require("./ada-reward.controller");
 const authenticate = require('app/middleware/authenticate.middleware');
 const router = express.Router();
 
-router.get('/tezos-rewards',
+router.get('/ada-rewards',
   authenticate,
   controller.get
 );
@@ -14,9 +14,9 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/v1/tezos-rewards:
+ * /api/v1/ada-rewards:
  *   get:
- *     summary: tezos rewards
+ *     summary: ada rewards
  *     tags:
  *       - Reward
  *     description: Reward
@@ -42,7 +42,12 @@ module.exports = router;
  *         examples:
  *           application/json:
  *             {
- *                 "data": 0
+ *                 "data":[
+ *                      {
+ *                         "address":"",
+ *                         "amount": 100
+ *                      }
+ *                 ]
  *             }
  *       400:
  *         description: Error

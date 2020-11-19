@@ -1,4 +1,3 @@
-
 const TransactionStatus = require("./value-object/transaction-status");
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define("ada_staking_contributions", {
@@ -20,24 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(36),
       allowNull: true
     },
-    block_from: {
+    cycle: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    },
-    block_to: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    },
-    total_vote: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-      defaultValue: 0
-    },
-    contribute_vote: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
+      allowNull: true,
       defaultValue: 0
     },
     amount: {
