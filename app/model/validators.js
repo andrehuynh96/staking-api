@@ -33,10 +33,34 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       defaultValue: Status.ENABLED,
     },
+    payment_address: {
+      type: DataTypes.STRING(256),
+      allowNull: true,
+    },
+    stake_address: {
+      type: DataTypes.STRING(256),
+      allowNull: true,
+    },
+    pool_id: {
+      type: DataTypes.STRING(256),
+      allowNull: true,
+    },
+    service_id: {
+      type: DataTypes.STRING(256),
+      allowNull: true,
+    },
+    key_id: {
+      type: DataTypes.STRING(256),
+      allowNull: true,
+    },
+    index: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    }
   }, {
-      underscored: true,
-      timestamps: true,
-    });
+    underscored: true,
+    timestamps: true,
+  });
 
   return Model;
 } 

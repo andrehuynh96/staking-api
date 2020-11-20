@@ -5,13 +5,21 @@ const destObject = {
     '[].id': '[].id',
     '[].address': '[].address',
     '[].estimate_earn_per_year': '[].estimate_earn_per_year',
+    '[].name': '[].name',
+    '[].payment_address': '[].payment_address',
+    '[].stake_address': '[].stake_address',
+    '[].pool_id': '[].pool_id',
     '[].order': '[].order',
-    '[].createdAt': '[].created_at',   
+    '[].createdAt': '[].created_at',
   },
   single: {
     'id': 'id',
     'address': 'address',
     'estimate_earn_per_year': 'estimate_earn_per_year',
+    'name': 'name',
+    'payment_address': 'payment_address',
+    'stake_address': 'stake_address',
+    'pool_id': 'pool_id',
     'order': 'order',
     'createdAt': 'created_at'
   }
