@@ -18,6 +18,7 @@ module.exports = {
       const result = await AdaRewardAddresses.findAll({
         attributes: [
           "address",
+          [Sequelize.fn("max", Sequelize.col('cycle_distribute')), "cycle_distribute"],
           [Sequelize.fn("sum", Sequelize.col('amount')), "amount"],
           [Sequelize.literal("CONCAT( DATE_PART('YEAR', date_reward), '-', TRIM(to_char(DATE_PART('MONTH', date_reward),'00')), '-', TRIM(to_char(DATE_PART('DAY',date_reward),'00')))"), "reward_date"]
         ],

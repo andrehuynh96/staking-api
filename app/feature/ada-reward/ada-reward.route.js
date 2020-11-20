@@ -37,7 +37,8 @@ module.exports = router;
  *            example:
  *               {
                         "address":["addr1q8jshaxmyrgua3wl8p0pk88632rsd6g6aac8fccxg55t8vzmmsndrmkvnew5h7m9tatjyzudmz3rg6a8jsqhnthzd7qsa6awfz"],
-                        "date":"2020-11-19 10:23:42"
+                        "date":"2020-11-19 10:23:42",
+                        "cycle_distribute": 230,
                   }
  *     produces:
  *       - application/json

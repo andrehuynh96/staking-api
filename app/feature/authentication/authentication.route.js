@@ -39,8 +39,8 @@ route.post("/accounts/authentication-3rd",
  *            - grant_type
  *            example: 
  *               {
-                        "api_key":"3f76680510bcca07e7e011dcc1effb079d1d0a34",
-                        "secret_key":"MWViNjVmOTMtMzU2NS00OTBiLWE3NzgtZjlhMzIzNTg0YjMw",
+                        "api_key":"41adf49b-7fd0-4794-94ac-390f455a477c",
+                        "secret_key":"6dkMJNXoj4JNYeEdlL0hzr4Znq8mDAWB",
                         "grant_type":"client_credentials"
                   } 
  *     produces:
