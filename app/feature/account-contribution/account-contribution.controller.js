@@ -59,33 +59,43 @@ module.exports = {
 }
 
 async function _getContributions(Model, offset, limit) {
-  if (!Model)
-    return { count: 0, rows: [] };
-  const { count: total, rows: items } = await Model.findAndCountAll(
-    {
-      limit,
-      offset,
-      where: {
-        status: TransactionStatus.CONFIRMED,
-        calculate_reward: {
-          [Op.or]: [false, null]
-        }
-      },
-      order: [['created_at', 'ASC']]
-    });
+  try {
+    if (!Model)
+      return { count: 0, rows: [] };
+    const { count: total, rows: items } = await Model.findAndCountAll(
+      {
+        limit,
+        offset,
+        where: {
+          status: TransactionStatus.CONFIRMED,
+          calculate_reward: {
+            [Op.or]: [false, null]
+          }
+        },
+        order: [['created_at', 'ASC']]
+      });
 
-  return { count: total, rows: items };
+    return { count: total, rows: items };
+  }
+  catch(err) {
+    throw err;
+  }
 }
 
 async function _updatedContributions(Model, ids, affiliate_reward_id) {
-  await Model.update({
-    calculate_reward: true,
-    affiliate_reward_id: affiliate_reward_id
-  }, {
-      where: {
-        id: {
-          [Op.in]: ids
+  try {
+    await Model.update({
+      calculate_reward: true,
+      affiliate_reward_id: affiliate_reward_id
+    }, {
+        where: {
+          id: {
+            [Op.in]: ids
+          }
         }
-      }
-    })
+      })
+  }
+  catch(err) {
+    throw err;
+  }
 }
